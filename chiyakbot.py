@@ -265,15 +265,15 @@ def rank_tag_command(bot, update):
 #AVSEE 태그로 영상 검색 기능
 def tag_search_command(bot, update):
     if update.message.text in '/tagsearch':
-        update.message.reply_text('검색할 태그를 뒤에 써주세요! 최소 2글자 이상이여야 하고, 반드시 한개의 태그만 검색 해야해요!\n가능예시)/tagsearch #여대생 \n불가능예시)/tagsearch #여대생 #거유')
+        update.message.reply_text('검색할 태그를 뒤에 써주세요! 최소 2글자 이상이여야 하고, 반드시 한개의 태그만 검색 해야해요!\n가능예시)/tagsearch 여대생 \n불가능예시)/tagsearch 여대생 거유')
     else:
         tag = update.message.text[10:]
         tag = tag.strip()
-        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=' + tag)
+        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=%23' + tag)
         html_tag = req_search_tag.text
         soup_tag = BeautifulSoup(html_tag, 'html.parser')
         is_empty = soup_tag.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
-        base_url = 'https://avsee04.tv/bbs/tag.php?q=' + tag + '&page={}'
+        base_url = 'https://avsee04.tv/bbs/tag.php?q=%23' + tag + '&page={}'
         global avnumlist_tag
         del avnumlist_tag[:]
         if len(is_empty) == 0:
