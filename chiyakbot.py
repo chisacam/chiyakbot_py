@@ -269,7 +269,7 @@ def tag_search_command(bot, update):
     else:
         tag = update.message.text[10:]
         tag = tag.strip()
-        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=%23' + tag)
+        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=' + tag)
         html_tag = req_search_tag.text
         soup_tag = BeautifulSoup(html_tag, 'html.parser')
         is_empty = soup_tag.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
