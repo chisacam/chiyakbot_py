@@ -35,7 +35,7 @@ def help_command(bot, update):
     id = check_id(bot, update)
     nick = check_nickname(bot, update)
     chiyak.sendMessage(id,"안녕하세요, " + nick + "님. 저는 아래 목록에 있는 기능들을 할 수 있어요!")
-    chiyak.sendMessage(id, "/를 붙여서 사용해야하는 기능들\n\n/about 자기소개\n/update 창원대 기숙사식단표 데이터 업데이트\n/dogfood 창원대 기숙사식단표(일주일) 보여주기\n/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능\n/tagrank avsee 태그랭킹 보여주기\n/tagsearch avsee 에서 해당 태그를 가지고있는 영상 상위 약 100개의 목록 가져오기\n/namesearch avsee 에서 배우 이름으로 영상 검색\n/getav 품번을 입력하면 해당 영상이 avsee에 존재할경우 영상링크와 썸네일을 가져오기\n\n기타기능\n\n=1+1 처럼 =다음에 수식을 쓰면 계산해주는 계산기\n'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능\n'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님")
+    chiyak.sendMessage(id, "/를 붙여서 사용해야하는 기능들\n\n/about 자기소개\n/update 창원대 기숙사식단표 데이터 업데이트\n/dogfood 창원대 기숙사식단표(일주일) 보여주기\n/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능\n/tagrank avsee 태그랭킹 보여주기\n/avsearch avsee 에서 태그나 배우이름으로 품번 가져오기\n/getav 품번을 입력하면 해당 영상이 avsee에 존재할경우 영상링크와 썸네일을 가져오기\n\n기타기능\n\n=1+1 처럼 =다음에 수식을 쓰면 계산해주는 계산기\n'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능\n'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님")
 
 #자기소개 기능
 def about_command(bot, update):
@@ -211,31 +211,6 @@ def dogfood_callback(bot, update):
         show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
         chiyak.core.edit_message_text(text=avnumlist_tag[4], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=show_markup)
 
-    elif data_selected.find('one') != -1:
-        button_list = build_button(["one", "two", "three", "four", "five", "그만보기"])
-        show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
-        chiyak.core.edit_message_text(text=avnumlist_name[0], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=show_markup)
-
-    elif data_selected.find('two') != -1:
-        button_list = build_button(["one", "two", "three", "four", "five", "그만보기"])
-        show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
-        chiyak.core.edit_message_text(text=avnumlist_name[1], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=show_markup)
-
-    elif data_selected.find('three') != -1:
-        button_list = build_button(["one", "two", "three", "four", "five", "그만보기"])
-        show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
-        chiyak.core.edit_message_text(text=avnumlist_name[2], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=show_markup)
-
-    elif data_selected.find('four') != -1:
-        button_list = build_button(["one", "two", "three", "four", "five", "그만보기"])
-        show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
-        chiyak.core.edit_message_text(text=avnumlist_name[3], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=show_markup)
-
-    elif data_selected.find('five') != -1:
-        button_list = build_button(["one", "two", "three", "four", "five", "그만보기"])
-        show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
-        chiyak.core.edit_message_text(text=avnumlist_name[4], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=show_markup)
-
 #AVSEE 태그 랭킹 데이터 업데이트
 def tag_update(bot, update):
     req_popular_tag = requests.get('https://avsee04.tv/bbs/tag.php?sort=popular')
@@ -262,18 +237,20 @@ def rank_tag_command(bot, update):
     update.message.reply_text("각 페이지당 상위 20개씩의 태그를 보여줘요!")
     update.message.reply_text("원하는 페이지를 선택해주세요!", reply_markup=show_markup)
 
-#AVSEE 태그로 영상 검색 기능
-def tag_search_command(bot, update):
-    if update.message.text in '/tagsearch':
-        update.message.reply_text('검색할 태그를 뒤에 써주세요! 최소 2글자 이상이여야 하고, 반드시 한개의 태그만 검색 해야해요!\n가능예시)/tagsearch 여대생 \n불가능예시)/tagsearch 여대생 거유')
+#AVSEE 영상 품번 검색 기능
+def av_search_command(bot, update):
+    if update.message.text in '/avsearch':
+        update.message.reply_text('검색할 태그를 뒤에 써주세요! 최소 2글자 이상이여야 하고, 반드시 한개의 태그만 검색 해야해요!\n가능예시)/avsearch #여대생 or /avsearch 아스카 키라라\n불가능예시)/avsearch #여대생 #거유 or /avsearch #아스카 키라라')
     else:
         tag = update.message.text[10:]
         tag = tag.strip()
-        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=%23' + tag)
+        tag = tag.replace('#', '%23')
+        tag = tag.replace(' ', '+')
+        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=' + tag)
         html_tag = req_search_tag.text
         soup_tag = BeautifulSoup(html_tag, 'html.parser')
         is_empty = soup_tag.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
-        base_url = 'https://avsee04.tv/bbs/tag.php?q=%23' + tag + '&page={}'
+        base_url = 'https://avsee04.tv/bbs/tag.php?q=' + tag + '&page={}'
         global avnumlist_tag
         del avnumlist_tag[:]
         if len(is_empty) == 0:
@@ -303,20 +280,20 @@ def tag_search_command(bot, update):
             update.message.reply_text("원하는 페이지를 선택하세요!", reply_markup=show_markup)
         else:
             chiyak.sendMessage(check_id(bot, update), "검색결과가 하나도 없어요!")
-
+'''
 #AVSEE 제목으로 영상 검색 기능
 def name_search_command(bot, update):
     if update.message.text in '/namesearch':
-        update.message.reply_text('검색할 태그를 뒤에 써주세요! 최소 2글자 이상이여야 해요!\n예시)/namesearch 아스카 키라라 \n')
+        update.message.reply_text('검색할 배우 이름을 뒤에 써주세요! 최소 2글자 이상이여야 해요!\n예시)/namesearch 아스카 키라라\n')
     else:
         name = update.message.text[11:]
         name = name.strip()
         name = name.replace(' ', '+')
-        req_search_name = requests.get('https://avsee04.tv/bbs/search.php?sfl=wr_subject&stx=' + name)
+        req_search_name = requests.get('https://avsee04.tv/bbs/search.php?gr_id=video&sfl=wr_subject&stx=' + name)
         html_name = req_search_name.text
         soup_name = BeautifulSoup(html_name, 'html.parser')
-        is_empty = soup_name.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
-        base_url = 'https://avsee04.tv/bbs/search.php?sfl=wr_subject&stx=' + name + '&page={}'
+        is_empty = soup_name.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > p')
+        base_url = 'https://avsee04.tv/bbs/search.php?gr_id=video&sfl=wr_subject&stx=' + name + '&page={}'
         global avnumlist_name
         del avnumlist_name[:]
         if len(is_empty) == 0:
@@ -352,7 +329,7 @@ def name_search_command(bot, update):
             update.message.reply_text("원하는 페이지를 선택하세요!", reply_markup=show_markup)
         else:
             chiyak.sendMessage(check_id(bot, update), "검색결과가 하나도 없어요!")
-
+'''
 #AVSEE 품번의 영상링크, 정보 가져오는 기능
 def getav_command(bot, update):
     if update.message.text in '/getav':
@@ -360,27 +337,30 @@ def getav_command(bot, update):
     else:
         text = update.message.text[6:]
         text = text.strip()
-        req_get_target = requests.get('https://avsee04.tv/bbs/search.php?stx=' + text)
+        req_get_target = requests.get('https://avsee04.tv/bbs/search.php?gr_id=video&sfl=wr_subject&stx=' + text)
         html_target = req_get_target.text
         soup_target = BeautifulSoup(html_target, 'html.parser')
-        target = soup_target.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.search-media > div.media > div.media-body > a')[0]
-        target_url = 'https://avsee04.tv/bbs/' + target.get('href')[2:]
-        
-        req_get_av = requests.get(target_url)
-        html_av = req_get_av.text
-        soup_av = BeautifulSoup(html_av, 'html.parser')
-        avinfo = soup_av.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.view-wrap > section > article > div.view-padding > div.view-content')[0].text
-        avinfo = avinfo.strip()
-#        driver = webdriver.Chrome('./chromedriver')
-#        driver.get(target_url)
-#        driver.implicitly_wait(30)
-#        avframe = driver.find_element_by_tag_name('iframe')
-#        driver.switch_to_frame(avframe)
-#        req_video = driver.page_source
-#        driver.quit()
-#        soup_video = BeautifulSoup(req_video, 'html.parser')
-#        av = soup_video.select('body > div#player > div.jw-wrapper.jw-reset > div.jw-media.jw-reset > video.jw-video.jw-reset')[0].get('src')
-        chiyak.sendMessage(check_id(bot,update), avinfo + '\n\n' + target_url)
+        is_empty = soup_target.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > p')
+        if len(is_empty) == 0:
+            target = soup_target.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.search-media > div.media > div.media-body > a')[0]
+            target_url = 'https://avsee04.tv/bbs/' + target.get('href')[2:]
+            req_get_av = requests.get(target_url)
+            html_av = req_get_av.text
+            soup_av = BeautifulSoup(html_av, 'html.parser')
+            avinfo = soup_av.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.view-wrap > section > article > div.view-padding > div.view-content')[0].text
+            avinfo = avinfo.strip()
+#           driver = webdriver.Chrome('./chromedriver')
+#           driver.get(target_url)
+#           driver.implicitly_wait(30)
+#           avframe = driver.find_element_by_tag_name('iframe')
+#           driver.switch_to_frame(avframe)
+#           req_video = driver.page_source
+#           driver.quit()
+#           soup_video = BeautifulSoup(req_video, 'html.parser')
+#           av = soup_video.select('body > div#player > div.jw-wrapper.jw-reset > div.jw-media.jw-reset > video.jw-video.jw-reset')[0].get('src')
+            chiyak.sendMessage(check_id(bot,update), avinfo + '\n\n' + target_url)
+        else:
+            chiyak.sendMessage(check_id(bot,update), "이 사이트에는 없는 영상이에요!")
 
 #선택장애 치료 기능
 def pick_command(bot, update):
@@ -429,7 +409,7 @@ chiyak.add_cmdhandler('pick', pick_command)
 chiyak.add_cmdhandler('exit', exit_command)
 chiyak.add_messagehandler(messagedetecter)
 chiyak.add_cmdhandler('tagrank', rank_tag_command)
-chiyak.add_cmdhandler('tagsearch', tag_search_command)
-chiyak.add_cmdhandler('namesearch', name_search_command)
+chiyak.add_cmdhandler('avsearch', av_search_command)
+#chiyak.add_cmdhandler('namesearch', name_search_command)
 chiyak.add_cmdhandler('getav', getav_command)
 chiyak.start()
