@@ -238,7 +238,7 @@ def dogfood_callback(bot, update):
 
 #AVSEE 태그 랭킹 데이터 업데이트
 def tag_update(bot, update):
-    req_popular_tag = requests.get('https://avsee03.tv/bbs/tag.php?sort=popular')
+    req_popular_tag = requests.get('https://avsee04.tv/bbs/tag.php?sort=popular')
     html_p = req_popular_tag.text
     soup_p = BeautifulSoup(html_p, 'html.parser')
     tag_list = soup_p.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.row > div.col-sm-3.col-xs-6 > div.ellipsis > a')
@@ -269,12 +269,11 @@ def tag_search_command(bot, update):
     else:
         tag = update.message.text[10:]
         tag = tag.strip()
-        tag = tag.replace('#', '')
-        req_search_tag = requests.get('https://avsee03.tv/bbs/tag.php?stx=%23' + tag)
+        req_search_tag = requests.get('https://avsee04.tv/bbs/tag.php?stx=%23' + tag)
         html_tag = req_search_tag.text
         soup_tag = BeautifulSoup(html_tag, 'html.parser')
         is_empty = soup_tag.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
-        base_url = 'https://avsee03.tv/bbs/tag.php?q=%23' + tag + '&page={}'
+        base_url = 'https://avsee04.tv/bbs/tag.php?q=' + tag + '&page={}'
         global avnumlist_tag
         del avnumlist_tag[:]
         if len(is_empty) == 0:
@@ -313,11 +312,11 @@ def name_search_command(bot, update):
         name = update.message.text[11:]
         name = name.strip()
         name = name.replace(' ', '+')
-        req_search_name = requests.get('https://avsee03.tv/bbs/search.php?sfl=wr_subject&stx=' + name)
+        req_search_name = requests.get('https://avsee04.tv/bbs/search.php?sfl=wr_subject&stx=' + name)
         html_name = req_search_name.text
         soup_name = BeautifulSoup(html_name, 'html.parser')
         is_empty = soup_name.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
-        base_url = 'https://avsee03.tv/bbs/search.php?sfl=wr_subject&stx=' + name + '&page={}'
+        base_url = 'https://avsee04.tv/bbs/search.php?sfl=wr_subject&stx=' + name + '&page={}'
         global avnumlist_name
         del avnumlist_name[:]
         if len(is_empty) == 0:
@@ -361,11 +360,11 @@ def getav_command(bot, update):
     else:
         text = update.message.text[6:]
         text = text.strip()
-        req_get_target = requests.get('https://avsee03.tv/bbs/search.php?stx=' + text)
+        req_get_target = requests.get('https://avsee04.tv/bbs/search.php?stx=' + text)
         html_target = req_get_target.text
         soup_target = BeautifulSoup(html_target, 'html.parser')
         target = soup_target.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.search-media > div.media > div.media-body > a')[0]
-        target_url = 'https://avsee03.tv/bbs/' + target.get('href')[2:]
+        target_url = 'https://avsee04.tv/bbs/' + target.get('href')[2:]
         
         req_get_av = requests.get(target_url)
         html_av = req_get_av.text
