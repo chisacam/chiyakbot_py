@@ -262,6 +262,13 @@ def av_search_command(bot, update):
                 req_search = requests.get(url)
                 html_search = req_search.text
                 soup_search = BeautifulSoup(html_search, 'html.parser')
+                is_empty = soup_search.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > p')
+                if len(is_empty) != 0:
+                    if count != 0:
+                        avnumlist_tag.append(text)
+                        text = ''
+                        count = 0
+                    break
                 avlist = soup_search.select('body > div#thema_wrapper > div.wrapper > div#content_wrapper > div.content > div.at-content > div#at-wrap > div#at-main > div.tagbox-media > div.media > div.media-body > div.media-heading > a > b')
                 for avnum in avlist:
                     text = text + "\n" + avnum.text
