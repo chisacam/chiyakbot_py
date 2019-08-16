@@ -390,6 +390,12 @@ def exit_command(bot, update):
         update.message.reply_text("안녕히 계세요!")
         chiyak.core.leave_chat(update.message.chat.id)
 
+def delMessage_command(bot, update):
+    if update.message.from_user.id == 46674072:
+        target_id = update.message.reply_to_message.message_id
+        target_group = update.message.reply_to_message.chat.id
+        chiyak.core.deleteMessage(target_group, target_id)
+
 #메세지 감지가 필요한 기능들
 def messagedetecter(bot, update):
     #채팅창 계산기 기능
@@ -423,4 +429,5 @@ chiyak.add_cmdhandler('tagrank', rank_tag_command)
 chiyak.add_cmdhandler('avsearch', av_search_command)
 #chiyak.add_cmdhandler('namesearch', name_search_command)
 chiyak.add_cmdhandler('getav', getav_command)
+chiyak.add_cmdhandler('delMessage', delMessage_command)
 chiyak.start()
