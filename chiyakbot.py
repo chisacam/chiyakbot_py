@@ -274,7 +274,11 @@ def av_search_command(bot, update):
                     avnumlist_tag.append(text)
                     text = ''
                     count = 0
-                
+            leng = len(avnumlist_tag)
+            if leng < 5:
+                for i in range(leng + 1, 6):
+                    avnumlist_tag.append("이 페이지에는 아무것도 없어요!")
+                    
             button_list = build_button(["첫번째", "두번째", "세번째", "네번째", "다섯번째", "그만보기"])
             show_markup = InlineKeyboardMarkup(build_menu(button_list, len(button_list) - 1))
             update.message.reply_text("원하는 페이지를 선택하세요!", reply_markup=show_markup)
