@@ -34,8 +34,8 @@ def check_nickname(bot, update):
 def help_command(bot, update):
     id = check_id(bot, update)
     nick = check_nickname(bot, update)
-    chiyak.sendMessage(id,"안녕하세요, " + nick + "님. 저는 아래 목록에 있는 기능들을 할 수 있어요!")
-    chiyak.sendMessage(id, "/를 붙여서 사용해야하는 기능들\n\n/about 자기소개\n/update 창원대 기숙사식단표 데이터 업데이트\n/dogfood 창원대 기숙사식단표(일주일) 보여주기\n/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능\n/tagrank avsee 태그랭킹 보여주기\n/avsearch avsee 에서 태그나 배우이름으로 품번 가져오기\n/getav 품번을 입력하면 해당 영상이 avsee에 존재할경우 영상링크와 썸네일을 가져오기\n\n기타기능\n\n=1+1 처럼 =다음에 수식을 쓰면 계산해주는 계산기\n'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능\n'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님")
+    chiyak.sendMessage(id,"안녕하세요, " + nick + "님. 저는 아래 목록에 있는 일을 할 수 있어요!")
+    chiyak.sendMessage(id, "/를 붙여서 사용해야하는 기능들\n\n/about 자기소개\n/update 창원대 기숙사식단표 업데이트\n/dogfood 창원대 기숙사식단표 보여주기\n/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능\n/tagrank avsee 태그랭킹 보여주기\n/avsearch 태그나 배우이름으로 품번 가져오기\n/getav 품번을 입력하면 영상링크 가져오기\n\n기타기능\n\n=1+1 처럼 =다음에 수식을 쓰면 계산해주는 계산기\n'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능\n'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님")
 
 #자기소개 기능
 def about_command(bot, update):
