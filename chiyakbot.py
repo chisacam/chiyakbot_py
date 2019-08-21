@@ -9,6 +9,7 @@ avnumlist_tag = []
 avnumlist_name = []
 avnamecheck = re.compile('^[a-zA-Z]+[-][0-9]+')
 yn = ['그래.', '아니.']
+calc_p = re.compile('^=[0-9+[-]*/%!^( )]+')
 
 #유저 chat_id 가져오기
 def check_id(bot, update):
@@ -375,14 +376,28 @@ def getav_command(bot, update):
 
 #선택장애 치료 기능
 def pick_command(bot, update):
-    if update.message.text in '/pick':
+    is_correct = update.message.text.split(' ', 1)
+    if len(is_correct) == 1:
+        update.message.reply_text('구분자(공백, 콤마 등)를 포함해 /pick 뒤에 써주세요!\nex) /pick 1,2,3,4 or /pick 1 2 3 4')
+    else:
+        text = is_correct[1]
+        text = text.strip()
+        if ',' in text:
+            picklist = text.split(',')
+            pick = random.randint(0, len(picklist))
+            update.message.reply_text(picklist[pick])
+        else:
+            picklist = text.split(' ')
+            pick = random.randint(0, len(picklist))
+            update.message.reply_text(picklist[pick])
+    '''if update.message.text in '/pick@chiyakbot':
         update.message.reply_text('구분자(공백, 콤마 등)를 포함해 /pick 뒤에 써주세요!\nex) /pick 1,2,3,4 or /pick 1 2 3 4')
     else:
         text = update.message.text[5:]
         text = text.strip()
         picklist = re.findall(r"[\w']+", text)
         pick = random.randint(0,len(picklist))
-        update.message.reply_text(picklist[pick])
+        update.message.reply_text(picklist[pick])'''
 
 #채팅방 퇴장 기능
 def exit_command(bot, update):
@@ -399,7 +414,6 @@ def delMessage_command(bot, update):
 #메세지 감지가 필요한 기능들
 def messagedetecter(bot, update):
     #채팅창 계산기 기능
-    calc_p = re.compile('^=[0-9+[-]*/%!^( )]+')
     is_calc = calc_p.match(update.message.text)
     if is_calc:
         result = eval(update.message.text[1:])
