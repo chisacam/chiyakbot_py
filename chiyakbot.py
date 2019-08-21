@@ -387,7 +387,7 @@ def pick_command(bot, update):
             pick = random.choice(picklist)
             update.message.reply_text(pick)
 
-        if ' ' in text:
+        elif ' ' in text:
             picklist = text.split(' ')
             pick = random.choice(picklist)
             update.message.reply_text(pick)
