@@ -377,27 +377,20 @@ def getav_command(bot, update):
 #선택장애 치료 기능
 def pick_command(bot, update):
     is_correct = update.message.text.split(' ', 1)
-    if len(is_correct) == 1:
+    if len(is_correct) <= 1:
         update.message.reply_text('구분자(공백, 콤마 등)를 포함해 /pick 뒤에 써주세요!\nex) /pick 1,2,3,4 or /pick 1 2 3 4')
     else:
         text = is_correct[1]
         text = text.strip()
         if ',' in text:
             picklist = text.split(',')
-            pick = random.randint(0, len(picklist))
-            update.message.reply_text(picklist[pick])
-        else:
+            pick = random.choice(picklist)
+            update.message.reply_text(pick)
+
+        if ' ' in text:
             picklist = text.split(' ')
-            pick = random.randint(0, len(picklist))
-            update.message.reply_text(picklist[pick])
-    '''if update.message.text in '/pick@chiyakbot':
-        update.message.reply_text('구분자(공백, 콤마 등)를 포함해 /pick 뒤에 써주세요!\nex) /pick 1,2,3,4 or /pick 1 2 3 4')
-    else:
-        text = update.message.text[5:]
-        text = text.strip()
-        picklist = re.findall(r"[\w']+", text)
-        pick = random.randint(0,len(picklist))
-        update.message.reply_text(picklist[pick])'''
+            pick = random.choice(picklist)
+            update.message.reply_text(pick)
 
 #채팅방 퇴장 기능
 def exit_command(bot, update):
