@@ -1,4 +1,4 @@
-import telegram, sys
+import telegram
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 
 class TelegramBot:
@@ -16,7 +16,6 @@ class TelegramBot:
         self.updater.dispatcher.stop()
         self.updater.job_queue.stop()
         self.updater.stop()
-        sys.exit(1)
 
 class chiyakbot(TelegramBot):
     def __init__(self):

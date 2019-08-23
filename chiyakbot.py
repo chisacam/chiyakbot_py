@@ -41,8 +41,9 @@ def about_command(bot, update):
 
 #정지 기능
 def stop_command(bot, update):
-    chiyak.sendMessage(check_id(bot, update),"안녕히주무세요!")
-    chiyak.stop()
+    if update.message.from_user.id == 46674072:
+        chiyak.sendMessage(check_id(bot, update),"안녕히주무세요!")
+        chiyak.stop()
 
 #식단표 데이터 업데이트 기능
 def dogfood_update(bot, update):
@@ -402,10 +403,10 @@ def delMessage_command(bot, update):
         target_group = update.message.reply_to_message.chat.id
         chiyak.core.deleteMessage(target_group, target_id)
 
-calc_p = re.compile('^=[0-9+[-]*/%!^( )]+')
 #메세지 감지가 필요한 기능들
 def messagedetecter(bot, update):
     #채팅창 계산기 기능
+    calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
     is_calc = calc_p.match(update.message.text)
     if is_calc:
         result = eval(update.message.text[1:])
