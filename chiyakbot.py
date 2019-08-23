@@ -8,8 +8,6 @@ tags = []
 avnumlist_tag = []
 avnumlist_name = []
 avnamecheck = re.compile('^[a-zA-Z]+[-][0-9]+')
-yn = ['그래.', '아니.']
-calc_p = re.compile('^=[0-9+[-]*/%!^( )]+')
 
 #유저 chat_id 가져오기
 def check_id(bot, update):
@@ -34,19 +32,16 @@ def check_nickname(bot, update):
 #도움말 기능
 def help_command(bot, update):
     id = check_id(bot, update)
-    nick = check_nickname(bot, update)
-    chiyak.sendMessage(id,"안녕하세요, " + nick + "님. 저는 아래 목록에 있는 일을 할 수 있어요!")
+    chiyak.sendMessage(id,"안녕하세요, " + check_nickname(bot, update) + "님. 저는 아래 목록에 있는 일을 할 수 있어요!")
     chiyak.sendMessage(id, "/를 붙여서 사용해야하는 기능들\n\n/about 자기소개\n/update 창원대 기숙사식단표 업데이트\n/dogfood 창원대 기숙사식단표 보여주기\n/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능\n/tagrank avsee 태그랭킹 보여주기\n/avsearch 태그나 배우이름으로 품번 가져오기\n/getav 품번을 입력하면 영상링크 가져오기\n\n기타기능\n\n=1+1 처럼 =다음에 수식을 쓰면 계산해주는 계산기\n'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능\n'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님")
 
 #자기소개 기능
 def about_command(bot, update):
-    id = check_id(bot, update)
-    chiyak.sendMessage(id,"저는 다기능 대화형 봇인 치약봇이에요.")
+    chiyak.sendMessage(check_id(bot, update),"저는 다기능 대화형 봇인 치약봇이에요.")
 
 #정지 기능
 def stop_command(bot, update):
-    id = check_id(bot, update)
-    chiyak.sendMessage(id,"안녕히주무세요!")
+    chiyak.sendMessage(check_id(bot, update),"안녕히주무세요!")
     chiyak.stop()
 
 #식단표 데이터 업데이트 기능
@@ -240,7 +235,8 @@ def rank_tag_command(bot, update):
 
 #AVSEE 영상 품번 검색 기능
 def av_search_command(bot, update):
-    if update.message.text in '/avsearch':
+    is_correct = update.message.text.split(' ', 1)
+    if len(is_correct) <= 1:
         update.message.reply_text('검색할 태그를 뒤에 써주세요! 최소 2글자 이상이여야 하고, 반드시 한개의 태그만 검색 해야해요!\n가능예시)/avsearch #여대생 or /avsearch 아스카 키라라\n불가능예시)/avsearch #여대생 #거유 or /avsearch #아스카 키라라')
     else:
         tag = update.message.text[10:]
@@ -295,7 +291,8 @@ def av_search_command(bot, update):
 '''
 #AVSEE 제목으로 영상 검색 기능
 def name_search_command(bot, update):
-    if update.message.text in '/namesearch':
+    is_correct = update.message.text.split(' ', 1)
+    if len(is_correct) <= 1:
         update.message.reply_text('검색할 배우 이름을 뒤에 써주세요! 최소 2글자 이상이여야 해요!\n예시)/namesearch 아스카 키라라\n')
     else:
         name = update.message.text[11:]
@@ -344,7 +341,8 @@ def name_search_command(bot, update):
 '''
 #AVSEE 품번의 영상링크, 정보 가져오는 기능
 def getav_command(bot, update):
-    if update.message.text in '/getav':
+    is_correct = update.message.text.split(' ', 1)
+    if len(is_correct) <= 1:
         update.message.reply_text('명령어 뒤에 품번을 써주세요!\n예시)/getav SAM-572')
     else:
         text = update.message.text[6:]
@@ -404,6 +402,7 @@ def delMessage_command(bot, update):
         target_group = update.message.reply_to_message.chat.id
         chiyak.core.deleteMessage(target_group, target_id)
 
+calc_p = re.compile('^=[0-9+[-]*/%!^( )]+')
 #메세지 감지가 필요한 기능들
 def messagedetecter(bot, update):
     #채팅창 계산기 기능
@@ -419,8 +418,7 @@ def messagedetecter(bot, update):
     
     #소라고둥님
     if '마법의 소라고둥님' in update.message.text:
-        n = random.randint(0,1)
-        update.message.reply_text(yn[n])
+        update.message.reply_text(random.choice(['그래.', '아니.']))
 
 chiyak = chatbotmodel.chiyakbot()
 chiyak.add_cmdhandler('help', help_command)
