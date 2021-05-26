@@ -19,7 +19,7 @@ class TelegramBot:
 
 class chiyakbot(TelegramBot):
     def __init__(self):
-        self.token = '584670337:AAF0mxsBTQhLtwFjqiTCTjknegsmbb64Lh0'
+        self.token = '584670337:AAEp9NMHIV-EpECLBbCMkWA0sBt17UmWkd8'
         TelegramBot.__init__(self, '치약봇', self.token)
         self.updater.stop()
 
@@ -34,5 +34,5 @@ class chiyakbot(TelegramBot):
 
     def start(self):
         self.sendMessage(self.id, '안녕하세요! 일어났어요.')
-        self.updater.start_polling(timeout=5, clean=True)
+        self.updater.start_polling(timeout=5, drop_pending_updates=True)
         self.updater.idle()
