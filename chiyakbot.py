@@ -98,15 +98,15 @@ def messagedetecter(update, context):
     if is_calc:
         result = eval(update.message.text[1:])
         update.message.reply_text(result)
+    else:
+        # 확률대답 기능
+        if '확률은?' in update.message.text:
+            n = random.randint(0, 100)
+            update.message.reply_text("{}퍼센트".format(n))
 
-    # 확률대답 기능
-    if '확률은?' in update.message.text:
-        n = random.randint(0, 100)
-        update.message.reply_text("{}퍼센트".format(n))
-
-    # 소라고둥님
-    if '마법의 소라고둥님' in update.message.text:
-        update.message.reply_text(random.choice(['그래.', '아니.']))
+        # 소라고둥님
+        if '마법의 소라고둥님' in update.message.text:
+            update.message.reply_text(random.choice(['그래.', '아니.']))
 
 
 chiyak = chatbotmodel.chiyakbot()
