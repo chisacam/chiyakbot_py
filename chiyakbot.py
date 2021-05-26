@@ -3,6 +3,9 @@ import re
 import random
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
+# 전역변수
+calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
+
 # 유저 chat_id 가져오기
 
 
@@ -91,7 +94,6 @@ def delMessage_command(update, context):
 
 def messagedetecter(update, context):
     # 채팅창 계산기 기능
-    calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
     is_calc = calc_p.match(update.message.text)
     if is_calc:
         result = eval(update.message.text[1:])
