@@ -4,11 +4,14 @@ import chatbotmodel
 import re
 import random
 import requests
+import time
+import threading
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 # 전역변수
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
 ipad_model = re.compile('^M[0-9A-Z]{4}KH/A$')
+alert_users = {}
 # 유저 chat_id 가져오기
 
 
@@ -92,45 +95,107 @@ def delMessage_command(update, context):
         target_group = update.message.reply_to_message.chat.id
         chiyak.core.deleteMessage(target_group, target_id)
 
+def checkPickup_command(update, context):
+    is_correct = update.message.text.split(' ', 1)
+    print(is_correct)
+    if len(is_correct) <= 1:
+        result = checkPickup()
+        res = '''
+        이름 : {0}
+가격 : {1}
+학생가격 : {2}
+구매 : {3}
+픽업 : {4}
+[학생구매링크]({5})
+        '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+        update.message.reply_text(res, parse_mode='MarkdownV2')
+    else:
+        model = is_correct[1].strip()
+        if ipad_model.match(model):
+            result = checkPickup(model)
+            res = '''
+            이름 : {0}
+가격 : {1}
+학생가격 : {2}
+구매 : {3}
+픽업 : {4}
+[학생구매링크]({5})
+            '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+            update.message.reply_text(res, parse_mode='MarkdownV2')
+        else:
+            update.message.reply_text('으엑 퉤퉤퉤')
+
+
+class Worker(threading.Thread):
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+
+    def run(self):
+        while(True):
+            for model in alert_users.keys():
+                if checkPickupForLoop(model):
+                    for chatid in alert_users[model]:
+                        result = checkPickup(model)
+                        res = '''
+                        이름 : {0}
+가격 : {1}
+학생가격 : {2}
+구매 : {3}
+픽업 : {4}
+[학생구매링크]({5})
+                        '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+                        chiyak.core.sendMessage(chat_id=chatid, text=res, parse_mode='MarkdownV2')
+                    del alert_users[model][0:]
+            time.sleep(300)
+
+def checkPickupLoop(update, context):
+    chiyak.sendMessage(update.message.chat_id, '감시시작!')
+    t = Worker('cploop')
+    t.daemon = True
+    t.start()
+
+def checkPickupRegister(update, context):
+    is_correct = update.message.text.split(' ', 1)
+    if len(is_correct) <= 1:
+        if 'MHR43KH/A' not in alert_users:
+            alert_users['MHR43KH/A'] = []
+        alert_users['MHR43KH/A'].append(update.message.chat_id)
+        chiyak.sendMessage(update.message.chat_id, '등록했어요!')
+    else:
+        key = is_correct[1].strip()
+        if key not in alert_users:
+            alert_users[key] = []
+        alert_users[key].append(update.message.chat_id)
+        chiyak.sendMessage(update.message.chat_id, '등록했어요!')
+
+def checkPickupDelete(update, context):
+    is_correct = update.message.text.split(' ', 1)
+    if len(is_correct) <= 1:
+        alert_users['MHR43KH/A'].remove(update.message.chat_id)
+    else:
+        alert_users[is_correct[1].strip()].remove(update.message.chat_id)
+
 # 메세지 감지가 필요한 기능들
 
-
 def messagedetecter(update, context):
-    # 채팅창 계산기 기능
-    is_calc = calc_p.match(update.message.text)
-    if is_calc:
-        result = eval(update.message.text[1:])
-        update.message.reply_text(result)
-    else:
-        # 확률대답 기능
-        if '확률은?' in update.message.text:
-            n = random.randint(0, 100)
-            update.message.reply_text("{}퍼센트".format(n))
+    try:
+        # 채팅창 계산기 기능
+        is_calc = calc_p.match(update.message.text)
+        if is_calc:
+            result = eval(update.message.text[1:])
+            update.message.reply_text(result)
+        else:
+            # 확률대답 기능
+            if '확률은?' in update.message.text:
+                n = random.randint(0, 100)
+                update.message.reply_text("{}퍼센트".format(n))
 
-        # 소라고둥님
-        if '마법의 소라고둥님' in update.message.text:
-            update.message.reply_text(random.choice(['그래.', '아니.']))
-
-        if '픽업 떳냐?' in update.message.text:
-            model = update.message.text.split(' ')[0]
-            if ipad_model.match(model):
-                result = checkPickup(model)
-                res = '''
-                이름 : {0} \n
-                구매가능 : {1} \n
-                픽업가능 : {2} \n
-                가격 : {3} \n
-                '''.format(result['name'], result['isBuyable'], result['isPickable'], result['price'])
-                update.message.reply_text(res)
-            else:
-                result = checkPickup()
-                res = '''
-                이름 : {0} \n
-                구매가능 : {1} \n
-                픽업가능 : {2} \n
-                가격 : {3} \n
-                '''.format(result['name'], result['isBuyable'], result['isPickable'], result['price'])
-                update.message.reply_text(res)
+            # 소라고둥님
+            if '마법의 소라고둥님' in update.message.text:
+                update.message.reply_text(random.choice(['그래.', '아니.']))
+    except Exception as e:
+        print(e)
 
 
 def checkPickup(model='MHR43KH/A'):
@@ -138,33 +203,51 @@ def checkPickup(model='MHR43KH/A'):
         model)
     checkNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/ipad_pro&step=select&product={0}'.format(
         model)
+    checkUnivPriceURL = 'https://www.apple.com/kr-k12/shop/updateSummary?node=home%2Fshop_ipad%2Ffamily%2Fipad_pro&step=select&product={0}'.format(model)
     r = requests.get(checkPickURL)
     t = requests.get(checkNameURL)
+    u = requests.get(checkUnivPriceURL)
     d = r.json()
     n = t.json()
+    m = u.json()
     result = {}
-    if d['head']['status'] == '200' and d is not None:
+    if d['head']['status'] == '200' and d['body'] is not None:
         basePickDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
-        baseNameDict = n['body']['response']['summarySection']['summary']
+        baseNameDict = n['body']['response']['summarySection']
+        baseUnivDict = m['body']['response']['summarySection']
+        name = re.sub('[.+\\-(),]', '\\\\\\g<0>', baseNameDict['summary']['productTitle'])
         try:
-            result['name'] = baseNameDict['productTitle']
-            result['isPickable'] = basePickDict['storePickEligible']
-            result['isBuyable'] = baseNameDict['isBuyable']
-            result['price'] = baseNameDict['seoPrice']
+            result['name'] = '[*' + name + '*]({0})'.format(baseNameDict['baseURL'])
+            result['isPickable'] = '씹가능' if basePickDict['storePickEligible'] else '불가능'
+            result['isBuyable'] = '씹가능' if baseNameDict['summary']['isBuyable'] else '불가능'
+            result['price'] = format(round(int(baseNameDict['summary']['seoPrice'].split('.')[0]),0), ",")
+            result['univPrice'] = format(round(int(baseUnivDict['summary']['seoPrice'].split('.')[0]),0), ",")
+            result['link'] = baseNameDict['baseURL'].replace('kr', 'kr-k12')
             return result
         except Exception as e:
             print(e)
-            return '몬가이상함'
+            return '몬가이상함(exception)'
     else:
-        return '팀쿡이 안알랴줌'
+        return '팀쿡이 안알랴줌(4xx)'
 
+def checkPickupForLoop(model):
+    checkPickURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
+        model)
+    r = requests.get(checkPickURL)
+    d = r.json()
+    return d['body']['content']['pickupMessage']['pickupEligibility'][model]['storePickEligible']
 
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('cp', checkPickup_command)
+chiyak.add_cmdhandler('cpl', checkPickupLoop)
+chiyak.add_cmdhandler('cpr', checkPickupRegister)
+chiyak.add_cmdhandler('cpd', checkPickupDelete)
 chiyak.add_cmdhandler('help', help_command)
 chiyak.add_cmdhandler('about', about_command)
 chiyak.add_cmdhandler('stop', stop_command)
 chiyak.add_cmdhandler('pick', pick_command)
 chiyak.add_cmdhandler('exit', exit_command)
-chiyak.add_messagehandler(messagedetecter)
 chiyak.add_cmdhandler('del', delMessage_command)
+chiyak.add_messagehandler(messagedetecter)
+
 chiyak.start()
