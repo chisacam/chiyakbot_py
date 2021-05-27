@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+from tabnanny import check
 import chatbotmodel
 import re
 import random
@@ -6,7 +8,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 # 전역변수
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
-
+ipad_model = re.compile('^MH(N|R)[0-9A-Z]{2}KH/A$')
 # 유저 chat_id 가져오기
 
 
@@ -110,8 +112,11 @@ def messagedetecter(update, context):
             update.message.reply_text(random.choice(['그래.', '아니.']))
 
         if '픽업 떳냐?' in update.message.text:
-            isPickable = '떳다' if checkPickup() else '안떳다'
-            update.message.reply_text(isPickable)
+            model = update.message.text.split(' ')[0]
+            if ipad_model.match(model):
+                update.message.reply_text(checkPickup(model))
+            else:
+                update.message.reply_text(checkPickup())
 
 
 def checkPickup(model='MHR43KH/A'):
@@ -123,14 +128,14 @@ def checkPickup(model='MHR43KH/A'):
         try:
             print(d)
             if d['body']['content']['pickupMessage']['pickupEligibility'][model]['storePickEligible']:
-                return True
+                return '뜸'
             else:
-                return False
+                return '안뜸'
         except Exception as e:
             print(e)
-            return False
+            return '몬가이상함'
     else:
-        return False
+        return '팀쿡이 안알랴줌'
 
 
 chiyak = chatbotmodel.chiyakbot()
