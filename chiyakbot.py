@@ -132,7 +132,7 @@ def checkPickup(model='MHR43KH/A'):
             if baseDict['storePickEligible']:
                 return baseDict['storePickupProductTitle'] + '뜸'
             else:
-                return baseDict['storePickupProductTitle'] + '안뜸'
+                return model + '안뜸'
         except Exception as e:
             print(e)
             return '몬가이상함'
