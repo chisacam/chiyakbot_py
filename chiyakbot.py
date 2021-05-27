@@ -114,9 +114,9 @@ def messagedetecter(update, context):
         if '픽업 떳냐?' in update.message.text:
             model = update.message.text.split(' ')[0]
             if ipad_model.match(model):
-                update.message.reply_text(checkPickup(model))
+                update.message.reply_text(model + checkPickup(model))
             else:
-                update.message.reply_text(checkPickup())
+                update.message.reply_text('MHR43KH/A' + checkPickup())
 
 
 def checkPickup(model='MHR43KH/A'):
