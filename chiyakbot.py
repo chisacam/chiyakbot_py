@@ -115,15 +115,22 @@ def messagedetecter(update, context):
             model = update.message.text.split(' ')[0]
             if ipad_model.match(model):
                 result = checkPickup(model)
-                update.message.reply_text('''
+                res = '''
                 이름 : {0} \n
                 구매가능 : {1} \n
                 픽업가능 : {2} \n
                 가격 : {3} \n
-                '''.format(result['name'], result['isBuyable'], result['isPickable'], result['price']))
+                '''.format(result['name'], result['isBuyable'], result['isPickable'], result['price'])
+                update.message.reply_text(res)
             else:
                 result = checkPickup()
-                update.message.reply_text()
+                res = '''
+                이름 : {0} \n
+                구매가능 : {1} \n
+                픽업가능 : {2} \n
+                가격 : {3} \n
+                '''.format(result['name'], result['isBuyable'], result['isPickable'], result['price'])
+                update.message.reply_text(res)
 
 
 def checkPickup(model='MHR43KH/A'):
