@@ -166,13 +166,12 @@ def checkPickupRegister(update, context):
         if 'MHR43KH/A' not in alert_users:
             alert_users['MHR43KH/A'] = []
         alert_users['MHR43KH/A'].append(update.message.chat_id)
-        chiyak.sendMessage(update.message.chat_id, '등록했어요!')
     else:
         key = is_correct[1].strip()
         if key not in alert_users:
             alert_users[key] = []
         alert_users[key].append(update.message.chat_id)
-        chiyak.sendMessage(update.message.chat_id, '등록했어요!')
+    chiyak.sendMessage(update.message.chat_id, '등록했어요!')
 
 def checkPickupDelete(update, context):
     is_correct = update.message.text.split(' ', 1)
@@ -180,6 +179,7 @@ def checkPickupDelete(update, context):
         alert_users['MHR43KH/A'].remove(update.message.chat_id)
     else:
         alert_users[is_correct[1].strip()].remove(update.message.chat_id)
+    chiyak.sendMessage(update.message.chat_id, '해제했어요!')
 
 # 메세지 감지가 필요한 기능들
 
