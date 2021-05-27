@@ -114,25 +114,37 @@ def messagedetecter(update, context):
         if '픽업 떳냐?' in update.message.text:
             model = update.message.text.split(' ')[0]
             if ipad_model.match(model):
-                update.message.reply_text(checkPickup(model))
+                result = checkPickup(model)
+                update.message.reply_text('''
+                이름 : {0} \n
+                구매가능 : {1} \n
+                픽업가능 : {2} \n
+                가격 : {3} \n
+                '''.format(result['name'], result['isBuyable'], result['isPickable'], result['price']))
             else:
-                update.message.reply_text(checkPickup())
+                result = checkPickup()
+                update.message.reply_text()
 
 
 def checkPickup(model='MHR43KH/A'):
-    URL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
+    checkPickURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
         model)
-    r = requests.get(URL)
+    checkNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/ipad_pro&step=select&product={0}'.format(
+        model)
+    r = requests.get(checkPickURL)
+    t = requests.get(checkNameURL)
     d = r.json()
-    print(d)
+    n = t.json()
+    result = {}
     if d['head']['status'] == '200' and d is not None:
-        baseDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
+        basePickDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
+        baseNameDict = n['body']['response']['summarySection']['summary']
         try:
-            print(d)
-            if baseDict['storePickEligible']:
-                return baseDict['storePickupProductTitle'] + '뜸'
-            else:
-                return model + '안뜸'
+            result['name'] = baseNameDict['productTitle']
+            result['isPickable'] = basePickDict['storePickEligible']
+            result['isBuyable'] = baseNameDict['isBuyable']
+            result['price'] = baseNameDict['seoPrice']
+            return result
         except Exception as e:
             print(e)
             return '몬가이상함'
