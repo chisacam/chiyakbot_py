@@ -1,6 +1,7 @@
 import chatbotmodel
 import re
 import random
+import requests
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 # 전역변수
@@ -107,6 +108,29 @@ def messagedetecter(update, context):
         # 소라고둥님
         if '마법의 소라고둥님' in update.message.text:
             update.message.reply_text(random.choice(['그래.', '아니.']))
+
+        if '픽업 떳냐?' in update.message.text:
+            isPickable = '떳다' if checkPickup() else '안떳다'
+            update.message.reply_text(isPickable)
+
+
+def checkPickup(model='MHR43KH/A'):
+    URL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
+        model)
+    r = requests.get(URL)
+    d = r.json()
+    if d['head']['status'] == 200 and d is not None:
+        try:
+            print(d)
+            if d['body']['content']['pickupMessage']['pickupEligibility'][model]['storePickEligible']:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+            return False
+    else:
+        return False
 
 
 chiyak = chatbotmodel.chiyakbot()
