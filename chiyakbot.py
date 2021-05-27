@@ -146,10 +146,15 @@ class Worker(threading.Thread):
 [학생구매링크]({5})
                         '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
                         chiyak.core.sendMessage(chat_id=chatid, text=res, parse_mode='MarkdownV2')
+                        chiyak.core.sendMessage(chat_id=chatid, text=res, parse_mode='MarkdownV2')
+                        chiyak.core.sendMessage(chat_id=chatid, text=res, parse_mode='MarkdownV2')
                     del alert_users[model][0:]
             time.sleep(300)
 
 def checkPickupLoop(update, context):
+    if update.message.from_user.id != 46674072:
+        chiyak.sendMessage(update.message.chat_id, '저런! 주인놈이 아니네요!')
+        return
     chiyak.sendMessage(update.message.chat_id, '감시시작!')
     t = Worker('cploop')
     t.daemon = True
