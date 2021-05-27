@@ -124,7 +124,8 @@ def checkPickup(model='MHR43KH/A'):
         model)
     r = requests.get(URL)
     d = r.json()
-    if d['head']['status'] == 200 and d is not None:
+    print(d)
+    if d['head']['status'] == '200' and d is not None:
         try:
             print(d)
             if d['body']['content']['pickupMessage']['pickupEligibility'][model]['storePickEligible']:
