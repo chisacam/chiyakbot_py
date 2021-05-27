@@ -8,7 +8,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 # 전역변수
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
-ipad_model = re.compile('^MH(N|R)[0-9A-Z]{2}KH/A$')
+ipad_model = re.compile('^M[0-9A-Z]{4}KH/A$')
 # 유저 chat_id 가져오기
 
 
@@ -114,9 +114,9 @@ def messagedetecter(update, context):
         if '픽업 떳냐?' in update.message.text:
             model = update.message.text.split(' ')[0]
             if ipad_model.match(model):
-                update.message.reply_text(model + checkPickup(model))
+                update.message.reply_text(checkPickup(model))
             else:
-                update.message.reply_text('MHR43KH/A' + checkPickup())
+                update.message.reply_text(checkPickup())
 
 
 def checkPickup(model='MHR43KH/A'):
@@ -126,12 +126,13 @@ def checkPickup(model='MHR43KH/A'):
     d = r.json()
     print(d)
     if d['head']['status'] == '200' and d is not None:
+        baseDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
         try:
             print(d)
-            if d['body']['content']['pickupMessage']['pickupEligibility'][model]['storePickEligible']:
-                return '뜸'
+            if baseDict['storePickEligible']:
+                return baseDict['storePickupProductTitle'] + '뜸'
             else:
-                return '안뜸'
+                return baseDict['storePickupProductTitle'] + '안뜸'
         except Exception as e:
             print(e)
             return '몬가이상함'
