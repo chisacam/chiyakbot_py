@@ -113,8 +113,9 @@ def checkPickup_command(update, context):
         result = checkPickup()
     else:
         model = is_correct[1].strip()
+        prodType = is_correct[2].strip()
         if ipad_model.match(model):
-            result = checkPickup(model)
+            result = checkPickup(model, prodType)
         else:
             update.message.reply_text('으엑 퉤퉤퉤')
             return
@@ -234,17 +235,20 @@ def messagedetecter(update, context):
         print(e)
 
 
-def checkPickup(model='MHR43KH/A'):
+def checkPickup(model='MHR43KH/A', prodType='ipad'):
     checkPickURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
         model)
-    checkNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/ipad_pro&step=select&product={0}'.format(
+    checkIpadNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/ipad_pro&step=select&product={0}'.format(
+        model)
+    checkIphoneNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_iphone/family/iphone_12&step=select&igt=true&product={0}'.format(
         model)
     checkUnivPriceURL = 'https://www.apple.com/kr-k12/shop/updateSummary?node=home%2Fshop_ipad%2Ffamily%2Fipad_pro&step=select&product={0}'.format(
         model)
     baseBuyURL = 'https://www.apple.com/kr/shop/product/'
     baseUnivBuyURL = 'https://www.apple.com/kr-k12/shop/product/'
     r = requests.get(checkPickURL)
-    t = requests.get(checkNameURL)
+    t = requests.get(checkIpadNameURL if prodType ==
+                     'ipad' else checkIphoneNameURL)
     u = requests.get(checkUnivPriceURL)
     d = r.json()
     n = t.json()
