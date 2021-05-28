@@ -161,7 +161,7 @@ class Worker(threading.Thread):
                             chat_id=chatid, text=res, parse_mode='MarkdownV2')
                         chiyak.core.sendMessage(
                             chat_id=chatid, text=res, parse_mode='MarkdownV2')
-                    del alert_users[model][0:]
+                    del alert_users[model]
             with open(file_path, 'w') as outfile:
                 json.dump(alert_users, outfile, indent=4)
             time.sleep(300)
@@ -198,8 +198,13 @@ def checkPickupDelete(update, context):
     is_correct = update.message.text.split(' ', 1)
     if len(is_correct) <= 1:
         alert_users['MHR43KH/A'].remove(update.message.chat_id)
+        if len(alert_users['MHR43KH/A']) == 0:
+            del alert_users['MHR43KH/A']
     else:
-        alert_users[is_correct[1].strip()].remove(update.message.chat_id)
+        model = is_correct[1].strip()
+        alert_users[model].remove(update.message.chat_id)
+        if len(alert_users[model]) == 0:
+            del alert_users[model]
     with open(file_path, 'w') as outfile:
         json.dump(alert_users, outfile, indent=4)
         chiyak.sendMessage(update.message.chat_id, '해제했어요!')
