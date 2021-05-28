@@ -243,6 +243,8 @@ def checkPickup(model='MHR43KH/A'):
         model)
     checkUnivPriceURL = 'https://www.apple.com/kr-k12/shop/updateSummary?node=home%2Fshop_ipad%2Ffamily%2Fipad_pro&step=select&product={0}'.format(
         model)
+    baseBuyURL = 'https://www.apple.com/kr/shop/product/'
+    baseUnivBuyURL = 'https://www.apple.com/kr-k12/shop/product/'
     r = requests.get(checkPickURL)
     t = requests.get(checkNameURL)
     u = requests.get(checkUnivPriceURL)
@@ -256,16 +258,19 @@ def checkPickup(model='MHR43KH/A'):
         baseUnivDict = m['body']['response']['summarySection']
         name = re.sub('[.+\\-(),]', '\\\\\\g<0>',
                       baseNameDict['summary']['productTitle'])
+        buyURL = baseNameDict['baseURL'] if 'baseURL' in baseNameDict else baseBuyURL + model
+        univBuyURL = baseNameDict['baseURL'].replace(
+            'kr', 'kr-k12') if 'baseURL' in baseNameDict else baseUnivBuyURL + model
         try:
             result['name'] = '[*' + name + \
-                '*]({0})'.format(baseNameDict['baseURL'])
+                '*]({0})'.format(buyURL)
             result['isPickable'] = '씹가능' if basePickDict['storePickEligible'] else '불가능'
             result['isBuyable'] = '씹가능' if baseNameDict['summary']['isBuyable'] else '불가능'
             result['price'] = format(
                 round(int(baseNameDict['summary']['seoPrice'].split('.')[0]), 0), ",")
             result['univPrice'] = format(
                 round(int(baseUnivDict['summary']['seoPrice'].split('.')[0]), 0), ",")
-            result['link'] = baseNameDict['baseURL'].replace('kr', 'kr-k12')
+            result['link'] = univBuyURL
             return result
         except Exception as e:
             print(e)
