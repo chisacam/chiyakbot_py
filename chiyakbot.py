@@ -15,6 +15,30 @@ calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
 ipad_model = re.compile('^M[0-9A-Z]{4}KH/A$')
 alert_users = {}
 file_path = './registerd.json'
+available_modeltype = ['ipad_pro', 'ipad_air',
+                       'ipad_mini', 'ipad_10_2', 'iphone']
+helpText = """/를 붙여서 사용해야하는 기능들
+
+/about 자기소개
+/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능
+
+/cp [modelcode?] [modeltype?] 모델코드 입력하면 애플스토어 구매/픽업 가능여부 알려주는 기능
+modelcode가 없으면 기본값은 5세대 12.9 128 셀룰러 스페이스그레이 모델
+modeltype이 없으면 기본값은 ipad_pro, 가능한 모델타입은 아래와 같음
+{0}
+
+/cpr [modelcode] 모델코드 입력하면 애플스토어 픽업 가능할때 해당 채팅방에 알려주는 기능
+modelcode가 없으면 기본값은 5세대 12.9 128 셀룰러 스페이스그레이 모델
+
+'='다음에 수식을 쓰면 계산해주는 계산기
+ex) =1+1 or =2*2
+
+'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능
+ex) 오늘 일론머스크가 또 헛소리할 확률은?
+
+'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님
+ex) 마법의 소라고둥님 오늘 도지가 화성에 갈까요?
+""".format(available_modeltype)
 
 if os.path.exists(file_path):
     with open(file_path, "r") as json_file:
@@ -52,7 +76,7 @@ def help_command(update, context):
     id = check_id(update, context)
     chiyak.sendMessage(id, "안녕하세요, " + check_nickname(update,
                        context) + "님. 저는 아래 목록에 있는 일을 할 수 있어요!")
-    chiyak.sendMessage(id, "/를 붙여서 사용해야하는 기능들\n\n/about 자기소개\n/pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능\n\n=1+1 처럼 =다음에 수식을 쓰면 계산해주는 계산기\n'확률은?'을 뒤에 붙이면 랜덤확률을 말해주는 기능\n'마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님")
+    chiyak.sendMessage(id, helpText)
 
 # 자기소개 기능
 
@@ -238,7 +262,7 @@ def messagedetecter(update, context):
         print(e)
 
 
-def checkPickup(model='MHR43KH/A', prodType='ipad'):
+def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
     checkPickURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
         model)
     checkIpadNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/ipad_pro&step=select&product={0}'.format(
@@ -249,9 +273,12 @@ def checkPickup(model='MHR43KH/A', prodType='ipad'):
         model)
     baseBuyURL = 'https://www.apple.com/kr/shop/product/'
     baseUnivBuyURL = 'https://www.apple.com/kr-k12/shop/product/'
+    if prodType != 'ipad_pro' and prodType != 'iphone':
+        checkIpadNameURL.replace('ipad_pro', prodType)
+        checkUnivPriceURL.replace('ipad_pro', prodType)
     r = requests.get(checkPickURL)
-    t = requests.get(checkIpadNameURL if prodType ==
-                     'ipad' else checkIphoneNameURL)
+    t = requests.get(checkIpadNameURL if
+                     'ipad' in prodType else checkIphoneNameURL)
     u = requests.get(checkUnivPriceURL)
     d = r.json()
     n = t.json()
