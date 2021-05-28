@@ -107,9 +107,20 @@ def delMessage_command(update, context):
 
 def checkPickup_command(update, context):
     is_correct = update.message.text.split(' ', 1)
+    result = {}
     print(is_correct)
     if len(is_correct) <= 1:
         result = checkPickup()
+    else:
+        model = is_correct[1].strip()
+        if ipad_model.match(model):
+            result = checkPickup(model)
+        else:
+            update.message.reply_text('으엑 퉤퉤퉤')
+            return
+    if type(result) is str:
+        update.message.reply_text(result, parse_mode='MarkdownV2')
+    else:
         res = '''
         이름 : {0}
 가격 : {1}
@@ -119,21 +130,6 @@ def checkPickup_command(update, context):
 [*학생구매링크*]({5})
         '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
         update.message.reply_text(res, parse_mode='MarkdownV2')
-    else:
-        model = is_correct[1].strip()
-        if ipad_model.match(model):
-            result = checkPickup(model)
-            res = '''
-            이름 : {0}
-가격 : {1}
-학생가격 : {2}
-구매 : {3}
-픽업 : {4}
-[*학생구매링크*]({5})
-            '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
-            update.message.reply_text(res, parse_mode='MarkdownV2')
-        else:
-            update.message.reply_text('으엑 퉤퉤퉤')
 
 
 class Worker(threading.Thread):
@@ -147,6 +143,8 @@ class Worker(threading.Thread):
                 if checkPickupForLoop(model):
                     for chatid in alert_users[model]:
                         result = checkPickup(model)
+                        if type(result) is str:
+                            continue
                         res = '''
                         이름 : {0}
 가격 : {1}
@@ -261,6 +259,7 @@ def checkPickup(model='MHR43KH/A'):
         buyURL = baseNameDict['baseURL'] if 'baseURL' in baseNameDict else baseBuyURL + model
         univBuyURL = baseNameDict['baseURL'].replace(
             'kr', 'kr-k12') if 'baseURL' in baseNameDict else baseUnivBuyURL + model
+        print(buyURL, univBuyURL)
         try:
             result['name'] = '[*' + name + \
                 '*]({0})'.format(buyURL)
