@@ -250,7 +250,7 @@ def checkPickup(model='MHR43KH/A'):
     n = t.json()
     m = u.json()
     result = {}
-    if d['head']['status'] == '200' and 'body' in d:
+    if d['head']['status'] == '200' and 'body' in d and 'body' in n:
         basePickDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
         baseNameDict = n['body']['response']['summarySection']
         baseUnivDict = m['body']['response']['summarySection']
