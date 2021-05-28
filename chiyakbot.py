@@ -7,6 +7,7 @@ import requests
 import time
 import threading
 import json
+import os.path
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 # 전역변수
@@ -15,8 +16,9 @@ ipad_model = re.compile('^M[0-9A-Z]{4}KH/A$')
 alert_users = {}
 file_path = './registerd.json'
 
-with open(file_path, "r") as json_file:
-    alert_users = json.load(json_file)
+if os.path.exists(file_path):
+    with open(file_path, "r") as json_file:
+        alert_users = json.load(json_file)
 # 유저 chat_id 가져오기
 
 
