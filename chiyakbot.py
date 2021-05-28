@@ -161,8 +161,11 @@ class Worker(threading.Thread):
                             chat_id=chatid, text=res, parse_mode='MarkdownV2')
                         chiyak.core.sendMessage(
                             chat_id=chatid, text=res, parse_mode='MarkdownV2')
-                    del alert_users[model]
+                    del alert_users[model][0:]
             with open(file_path, 'w') as outfile:
+                emptylist = list(alert_users.keys())
+                for model in emptylist:
+                    del alert_users[model]
                 json.dump(alert_users, outfile, indent=4)
             time.sleep(300)
 
