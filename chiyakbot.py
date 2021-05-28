@@ -153,7 +153,7 @@ class Worker(threading.Thread):
 학생가격 : {2}
 구매 : {3}
 픽업 : {4}
-[학생구매링크]({5})
+[*학생구매링크*]({5})
                         '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
                         chiyak.core.sendMessage(
                             chat_id=chatid, text=res, parse_mode='MarkdownV2')
