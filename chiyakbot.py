@@ -19,6 +19,8 @@ file_path = './registerd.json'
 if os.path.exists(file_path):
     with open(file_path, "r") as json_file:
         alert_users = json.load(json_file)
+
+print(alert_users)
 # 유저 chat_id 가져오기
 
 
