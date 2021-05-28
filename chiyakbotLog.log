@@ -1,0 +1,281 @@
+{'MYFN2KH/A': [46674072], 'MHR43KH/A': [376017385]}
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+{'MYFN2KH/A': [], 'MHR43KH/A': [376017385]}
+['/cpr', 'MYFN2KH/A'] 46674072
+Exception in thread cploop:
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/3.9.5/lib/python3.9/threading.py", line 954, in _bootstrap_inner
+    self.run()
+  File "/home/ubuntu/chiyakbot_py/chiyakbot.py", line 146, in run
+    for model in alert_users.keys():
+RuntimeError: dictionary changed size during iteration
+{'MHR43KH/A': [376017385]}
+['/cpr', 'MYFN2KH/A'] 46674072
+['/cpr', 'MUQX2KH/A'] 46674072
+['/cp', 'MJQL3KH/A']
+'baseURL'
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/dispatcher.py", line 447, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/handler.py", line 160, in handle_update
+    return self.callback(update, context)
+  File "/home/ubuntu/chiyakbot_py/chiyakbot.py", line 133, in checkPickup_command
+    '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+TypeError: string indices must be integers
+{'MHR43KH/A': [376017385]}
+['/cpr', 'MYFN2KH/A'] 46674072
+['/cp', 'MYFN2KH/A']
+{'MHR43KH/A': [376017385]}
+['/cp']
+['/cp', 'MUQX2KH/A']
+['/cp', 'MJQL3KH/A']
+'baseURL'
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/dispatcher.py", line 447, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/handler.py", line 160, in handle_update
+    return self.callback(update, context)
+  File "/home/ubuntu/chiyakbot_py/chiyakbot.py", line 133, in checkPickup_command
+    '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+TypeError: string indices must be integers
+['/cp']
+['/cp', 'MXAT2KH/A']
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/dispatcher.py", line 447, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/handler.py", line 160, in handle_update
+    return self.callback(update, context)
+  File "/home/ubuntu/chiyakbot_py/chiyakbot.py", line 133, in checkPickup_command
+    '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+TypeError: string indices must be integers
+{'MHR43KH/A': [376017385]}
+['/cp', 'MXAT2KH/A']
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/dispatcher.py", line 447, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/handler.py", line 160, in handle_update
+    return self.callback(update, context)
+  File "/home/ubuntu/chiyakbot_py/chiyakbot.py", line 133, in checkPickup_command
+    '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+TypeError: string indices must be integers
+{'MHR43KH/A': [376017385]}
+['/cp', 'MJQL3KH/A']
+https://www.apple.com/kr/shop/product/MJQL3KH/A https://www.apple.com/kr-k12/shop/product/MJQL3KH/A
+['/cp', 'MXAT2KH/A']
+['/cpr'] 46674072
+['/cp']
+https://www.apple.com/kr/shop/buy-ipad/ipad-pro/12.9%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B7%B8%EB%A0%88%EC%9D%B4-wifi-cellular https://www.apple.com/kr-k12/shop/buy-ipad/ipad-pro/12.9%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B7%B8%EB%A0%88%EC%9D%B4-wifi-cellular
+['/cp', 'MU8F2KH/A']
+https://www.apple.com/kr/shop/product/MU8F2KH/A https://www.apple.com/kr-k12/shop/product/MU8F2KH/A
+['/cp', 'MJNP3KH/A']
+https://www.apple.com/kr/shop/buy-iphone/home/shop-ipad/family/ipad-pro/6.1%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%ED%8D%BC%ED%94%8C https://www.apple.com/kr-k12/shop/buy-iphone/home/shop-ipad/family/ipad-pro/6.1%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%ED%8D%BC%ED%94%8C
+['/cp', 'MJNP3KH/A']
+https://www.apple.com/kr/shop/buy-iphone/home/shop-ipad/family/ipad-pro/6.1%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%ED%8D%BC%ED%94%8C https://www.apple.com/kr-k12/shop/buy-iphone/home/shop-ipad/family/ipad-pro/6.1%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%ED%8D%BC%ED%94%8C
+{'MHR43KH/A': [376017385, 46674072]}
+['/cp', 'MJNP3KH/A', 'iphone']
+https://www.apple.com/kr/shop/buy-iphone/iphone-12/6.1%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%ED%8D%BC%ED%94%8C https://www.apple.com/kr-k12/shop/buy-iphone/iphone-12/6.1%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%ED%8D%BC%ED%94%8C
+['/cp', 'MHNH3KH/A']
+https://www.apple.com/kr/shop/buy-ipad/ipad-pro/12.9%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-256gb-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B7%B8%EB%A0%88%EC%9D%B4-wifi https://www.apple.com/kr-k12/shop/buy-ipad/ipad-pro/12.9%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-256gb-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B7%B8%EB%A0%88%EC%9D%B4-wifi
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+['/cp']
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+https://www.apple.com/kr/shop/buy-ipad/ipad-pro/12.9%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B7%B8%EB%A0%88%EC%9D%B4-wifi-cellular https://www.apple.com/kr-k12/shop/buy-ipad/ipad-pro/12.9%ED%98%95-%EB%94%94%EC%8A%A4%ED%94%8C%EB%A0%88%EC%9D%B4-128gb-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B7%B8%EB%A0%88%EC%9D%B4-wifi-cellular
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Error while getting Updates: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 520, in _network_loop_retry
+    if not action_cb():
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/ext/updater.py", line 471, in polling_action_cb
+    updates = self.bot.get_updates(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 127, in decorator
+    result = func(*args, **kwargs)
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 2761, in get_updates
+    result = self._post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/bot.py", line 259, in _post
+    return self.request.post(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 350, in post
+    result = self._request_wrapper(
+  File "/home/ubuntu/.pyenv/versions/telbot/lib/python3.9/site-packages/telegram/utils/request.py", line 277, in _request_wrapper
+    raise Conflict(message)
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running

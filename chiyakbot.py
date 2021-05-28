@@ -30,6 +30,9 @@ modeltype이 없으면 기본값은 ipad_pro, 가능한 모델타입은 아래�
 /cpr [modelcode] 모델코드 입력하면 애플스토어 픽업 가능할때 해당 채팅방에 알려주는 기능
 modelcode가 없으면 기본값은 5세대 12.9 128 셀룰러 스페이스그레이 모델
 
+/cpd [modelcode] 모델코드 입력하면 픽업 감시 취소
+modelcode가 없으면 5세대 12.9 128 셀룰러 스페이스 그레이 예약한것 취소
+
 '='다음에 수식을 쓰면 계산해주는 계산기
 ex) =1+1 or =2*2
 
@@ -227,11 +230,17 @@ def checkPickupRegister(update, context):
 def checkPickupDelete(update, context):
     is_correct = update.message.text.split(' ', 1)
     if len(is_correct) <= 1:
+        if 'MHR43KH/A' not in alert_users:
+            chiyak.sendMessage(update.message.chat_id, '예약하신 적이 없어요!')
+            return
         alert_users['MHR43KH/A'].remove(update.message.chat_id)
         if len(alert_users['MHR43KH/A']) == 0:
             del alert_users['MHR43KH/A']
     else:
         model = is_correct[1].strip()
+        if model not in alert_users:
+            chiyak.sendMessage(update.message.chat_id, '예약하신 적이 없어요!')
+            return
         alert_users[model].remove(update.message.chat_id)
         if len(alert_users[model]) == 0:
             del alert_users[model]
@@ -265,17 +274,15 @@ def messagedetecter(update, context):
 def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
     checkPickURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
         model)
-    checkIpadNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/ipad_pro&step=select&product={0}'.format(
-        model)
+    checkIpadNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/{0}&step=select&product={1}'.format(
+        prodType, model)
     checkIphoneNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_iphone/family/iphone_12&step=select&igt=true&product={0}'.format(
         model)
-    checkUnivPriceURL = 'https://www.apple.com/kr-k12/shop/updateSummary?node=home%2Fshop_ipad%2Ffamily%2Fipad_pro&step=select&product={0}'.format(
-        model)
+    checkUnivPriceURL = 'https://www.apple.com/kr-k12/shop/updateSummary?node=home%2Fshop_ipad%2Ffamily%2F{0}&step=select&product={1}'.format(
+        prodType if 'ipad' in prodType else 'ipad_pro', model)
     baseBuyURL = 'https://www.apple.com/kr/shop/product/'
     baseUnivBuyURL = 'https://www.apple.com/kr-k12/shop/product/'
-    if prodType != 'ipad_pro' and prodType != 'iphone':
-        checkIpadNameURL.replace('ipad_pro', prodType)
-        checkUnivPriceURL.replace('ipad_pro', prodType)
+
     r = requests.get(checkPickURL)
     t = requests.get(checkIpadNameURL if
                      'ipad' in prodType else checkIphoneNameURL)
