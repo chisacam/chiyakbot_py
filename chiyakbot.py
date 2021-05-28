@@ -106,15 +106,18 @@ def delMessage_command(update, context):
 
 
 def checkPickup_command(update, context):
-    is_correct = update.message.text.split(' ', 1)
+    is_correct = update.message.text.split(' ')
+    length = len(is_correct)
     result = {}
     print(is_correct)
-    if len(is_correct) <= 1:
+    if length <= 1:
         result = checkPickup()
     else:
         model = is_correct[1].strip()
-        prodType = is_correct[2].strip()
-        if ipad_model.match(model):
+        if ipad_model.match(model) and length == 2:
+            result = checkPickup(model)
+        elif ipad_model.match(model) and length == 3:
+            prodType = is_correct[2].strip()
             result = checkPickup(model, prodType)
         else:
             update.message.reply_text('으엑 퉤퉤퉤')
