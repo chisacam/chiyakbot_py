@@ -273,9 +273,9 @@ def checkPickup(model='MHR43KH/A'):
             return result
         except Exception as e:
             print(e)
-            return '몬가이상함(exception)'
+            return '몬가이상함\\(exception\\)'
     else:
-        return '팀쿡이 안알랴줌(no response body)'
+        return '팀쿡이 안알랴줌\\(no response body\\)'
 
 
 def checkPickupForLoop(model):
