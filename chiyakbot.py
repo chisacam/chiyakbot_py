@@ -16,7 +16,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 # 전역변수
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
 ipad_model = re.compile('^M[0-9A-Z]{4}KH/A$')
-escape_for_md = re.compile('[.+\\-(),}{/:=&]')
+escape_for_md_compile = re.compile('[.+\\-(),}{/:=&]')
+escape_for_marketprice_compile = re.compile('[.+\\-,}{/:=&]')
+escape_for_marketprice_name_compile = re.compile('[)(]')
 alert_users = {}
 file_path = './registerd.json'
 marketPriceJsonPath = './marketPrice.json'
@@ -55,6 +57,15 @@ if os.path.exists(file_path):
 
 print(alert_users)
 # 유저 chat_id 가져오기
+
+
+def escape_for_md(text, isPickup):
+    result = ''
+    if isPickup:
+        result = escape_for_md_compile.sub('\\\\\\g<0>', text)
+    else:
+        result = escape_for_marketprice_compile.sub('\\\\\\g<0>', text)
+    return result
 
 
 def check_id(update, context):
@@ -301,8 +312,7 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
         basePickDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
         baseNameDict = n['body']['response']['summarySection']
         baseUnivDict = m['body']['response']['summarySection']
-        name = escape_for_md.sub('\\\\\\g<0>',
-                                 baseNameDict['summary']['productTitle'])
+        name = escape_for_md(baseNameDict['summary']['productTitle'], True)
         buyURL = baseNameDict['baseURL'] if 'baseURL' in baseNameDict else baseBuyURL + model
         univBuyURL = baseNameDict['baseURL'].replace(
             'kr', 'kr-k12') if 'baseURL' in baseNameDict else baseUnivBuyURL + model
@@ -335,7 +345,6 @@ def checkPickupForLoop(model):
 
 def checkMarketPrice_command(update, context):
     date = datetime.datetime.today().strftime('%Y-%m-%d')
-    print(date)
     data = {}
     if os.path.exists(marketPriceJsonPath):
         with open(marketPriceJsonPath, "r") as json_file:
@@ -353,18 +362,18 @@ def checkMarketPrice_command(update, context):
         result = {}
         for key, value in price_data:
             if key.startswith(want[1]):
-                escape_for_md('\\\\\\g<0>', result[key]) = {
-                    "modelname": escape_for_md('\\\\\\g<0>', value['modelname']),
-                    "*price*": "[*{0}*]({1})".format(escape_for_md('\\\\\\g<0>', value['price']), escape_for_md('\\\\\\g<0>', value['graphLink']))
+                result[key] = {
+                    "modelname": escape_for_marketprice_name_compile.sub('\\\\\\g<0>', value['modelname']),
+                    "*price*": "[*{}*]({})".format(value['price'], value['graphLink']),
                 }
-        pretty_result = json.dumps(
-            result, ensure_ascii=False, indent=4)
+        pretty_result = escape_for_md(json.dumps(
+            result, ensure_ascii=False, indent=4), False)
+        print(pretty_result)
         chiyak.core.sendMessage(
             chat_id=update.message.chat_id, text=pretty_result, parse_mode='MarkdownV2')
 
 
 def getMarketPrice(today):
-    print(today)
     result = {
         "version": today,
         "data": {}
