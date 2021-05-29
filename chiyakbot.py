@@ -291,6 +291,8 @@ def messagedetecter(update, context):
 def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
     checkPickURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}'.format(
         model)
+    checkPickableStoreURL = 'https://www.apple.com/kr/shop/fulfillment-messages?little=false&mt=regular&parts.0={0}&location=06028'.format(
+        model)
     checkIpadNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/{0}&step=select&product={1}'.format(
         prodType, model)
     checkIphoneNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_iphone/family/iphone_12&step=select&igt=true&product={0}'.format(
@@ -320,7 +322,15 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
         try:
             result['name'] = '[*' + name + \
                 '*]({0})'.format(buyURL)
-            result['isPickable'] = '씹가능' if basePickDict['storePickEligible'] else '불가능'
+            if basePickDict['storePickEligible']:
+                store = requests.get(checkPickURL).json()[
+                    'body']['content']['pickupMessage']['stores']
+                result['isPickable'] = json.dumps({
+                    '가로수길': '씹가능' if store[0]['partsAvailability'][model]['storeSelectionEnabled'] else '불가능',
+                    '여의도': '씹가능' if store[1]['partsAvailability'][model]['storeSelectionEnabled'] else '불가능'
+                }, ensure_ascii=False, indent=4)
+            else:
+                result['isPickable'] = '불가능'
             result['isBuyable'] = '씹가능' if baseNameDict['summary']['isBuyable'] else '불가능'
             result['price'] = format(
                 round(int(baseNameDict['summary']['seoPrice'].split('.')[0]), 0), ",")
