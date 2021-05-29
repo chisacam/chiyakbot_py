@@ -10,6 +10,7 @@ import threading
 import json
 import os.path
 import datetime
+from pytz import timezone
 from bs4 import BeautifulSoup
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -360,7 +361,7 @@ def checkPickupForLoop(model):
 
 
 def checkMarketPrice_command(update, context):
-    date = datetime.datetime.today().strftime('%Y-%m-%d')
+    date = datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d')
     data = {}
     if os.path.exists(marketPriceJsonPath):
         with open(marketPriceJsonPath, "r") as json_file:
