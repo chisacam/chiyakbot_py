@@ -175,8 +175,9 @@ def checkPickup_command(update, context):
 학생가격 : {2}
 구매 : {3}
 픽업 : {4}
-[*학생구매링크*]({5})
-        '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+픽업가능스토어 : {5}
+[*학생구매링크*]({6})
+        '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['pickableStore'], result['link'])
         update.message.reply_text(res, parse_mode='MarkdownV2')
 
 
@@ -199,8 +200,9 @@ class Worker(threading.Thread):
 학생가격 : {2}
 구매 : {3}
 픽업 : {4}
-[*학생구매링크*]({5})
-                        '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['link'])
+픽업가능스토어 : {5}
+[*학생구매링크*]({6})
+                        '''.format(result['name'], result['price'], result['univPrice'], result['isBuyable'], result['isPickable'], result['pickableStore'], result['link'])
                         chiyak.core.sendMessage(
                             chat_id=chatid, text=res, parse_mode='MarkdownV2')
                         chiyak.core.sendMessage(
@@ -325,12 +327,16 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
             if basePickDict['storePickEligible']:
                 store = requests.get(checkPickableStoreURL).json()[
                     'body']['content']['pickupMessage']['stores']
-                result['isPickable'] = json.dumps({
-                    '가로수길': '씹가능' if store[0]['partsAvailability'][model]['storeSelectionEnabled'] else '불가능',
-                    '여의도': '씹가능' if store[1]['partsAvailability'][model]['storeSelectionEnabled'] else '불가능'
-                }, ensure_ascii=False, indent=4)
+                available_store = []
+                if store[0]['partsAvailability'][model]['storeSelectionEnabled']:
+                    available_store.append('가로수길')
+                if store[1]['partsAvailability'][model]['storeSelectionEnabled']:
+                    available_store.append('여의도')
+                result['isPickable'] = '씹가능'
+                result['pickableStore'] = available_store
             else:
                 result['isPickable'] = '불가능'
+                result['pickableStore'] = '없음'
             result['isBuyable'] = '씹가능' if baseNameDict['summary']['isBuyable'] else '불가능'
             result['price'] = format(
                 round(int(baseNameDict['summary']['seoPrice'].split('.')[0]), 0), ",")
