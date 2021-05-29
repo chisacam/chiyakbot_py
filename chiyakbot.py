@@ -361,14 +361,13 @@ def checkMarketPrice_command(update, context):
         price_data = data['data'].items()
         result = {}
         for key, value in price_data:
-            if key.startswith(want[1]):
+            if key.startswith(want[1]) or key.startswith(want[1][:-1]):
                 result[key] = {
                     "modelname": escape_for_marketprice_name_compile.sub('\\\\\\g<0>', value['modelname']),
                     "*price*": "[*{}*]({})".format(value['price'], value['graphLink']),
                 }
         pretty_result = escape_for_md(json.dumps(
             result, ensure_ascii=False, indent=4), False)
-        print(pretty_result)
         chiyak.core.sendMessage(
             chat_id=update.message.chat_id, text=pretty_result, parse_mode='MarkdownV2')
 
