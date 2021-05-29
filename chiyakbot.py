@@ -25,7 +25,9 @@ file_path = './registerd.json'
 marketPriceJsonPath = './marketPrice.json'
 
 available_modeltype = ['ipad_pro', 'ipad_air',
-                       'ipad_mini', 'ipad_10_2', 'iphone']
+                       'ipad_mini', 'ipad_10_2', 'iphone_12',
+                       'iphone_12_pro', 'iphone_se', 'iphone_xr',
+                       'iphone_11']
 helpText = """/를 붙여서 사용해야하는 기능들
 
 /about 자기소개
@@ -298,8 +300,8 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
         model)
     checkIpadNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_ipad/family/{0}&step=select&product={1}'.format(
         prodType, model)
-    checkIphoneNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_iphone/family/iphone_12&step=select&igt=true&product={0}'.format(
-        model)
+    checkIphoneNameURL = 'https://www.apple.com/kr/shop/updateSummary?node=home/shop_iphone/family/{0}&step=select&igt=true&product={1}'.format(
+        prodType, model)
     checkUnivPriceURL = 'https://www.apple.com/kr-k12/shop/updateSummary?node=home%2Fshop_ipad%2Ffamily%2F{0}&step=select&product={1}'.format(
         prodType if 'ipad' in prodType else 'ipad_pro', model)
     baseBuyURL = 'https://www.apple.com/kr/shop/product/'
