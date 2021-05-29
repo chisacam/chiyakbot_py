@@ -323,7 +323,7 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
             result['name'] = '[*' + name + \
                 '*]({0})'.format(buyURL)
             if basePickDict['storePickEligible']:
-                store = requests.get(checkPickURL).json()[
+                store = requests.get(checkPickableStoreURL).json()[
                     'body']['content']['pickupMessage']['stores']
                 result['isPickable'] = json.dumps({
                     '가로수길': '씹가능' if store[0]['partsAvailability'][model]['storeSelectionEnabled'] else '불가능',
