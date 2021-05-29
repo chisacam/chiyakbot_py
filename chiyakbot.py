@@ -1,4 +1,5 @@
 from contextlib import nullcontext
+from queue import Empty
 from tabnanny import check
 import chatbotmodel
 import re
@@ -8,6 +9,8 @@ import time
 import threading
 import json
 import os.path
+import datetime
+from bs4 import BeautifulSoup
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 # 전역변수
@@ -15,6 +18,8 @@ calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
 ipad_model = re.compile('^M[0-9A-Z]{4}KH/A$')
 alert_users = {}
 file_path = './registerd.json'
+marketPriceJsonPath = './marketPrice.json'
+
 available_modeltype = ['ipad_pro', 'ipad_air',
                        'ipad_mini', 'ipad_10_2', 'iphone']
 helpText = """/를 붙여서 사용해야하는 기능들
@@ -295,12 +300,12 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
         basePickDict = d['body']['content']['pickupMessage']['pickupEligibility'][model]
         baseNameDict = n['body']['response']['summarySection']
         baseUnivDict = m['body']['response']['summarySection']
-        name = re.sub('[.+\\-(),]', '\\\\\\g<0>',
+        name = re.sub('[.+\\-(),}{]', '\\\\\\g<0>',
                       baseNameDict['summary']['productTitle'])
         buyURL = baseNameDict['baseURL'] if 'baseURL' in baseNameDict else baseBuyURL + model
         univBuyURL = baseNameDict['baseURL'].replace(
             'kr', 'kr-k12') if 'baseURL' in baseNameDict else baseUnivBuyURL + model
-        print(buyURL, univBuyURL)
+
         try:
             result['name'] = '[*' + name + \
                 '*]({0})'.format(buyURL)
@@ -327,7 +332,61 @@ def checkPickupForLoop(model):
     return d['body']['content']['pickupMessage']['pickupEligibility'][model]['storePickEligible']
 
 
+def checkMarketPrice_command(update, context):
+    date = datetime.datetime.today().strftime('%Y-%m-%d')
+    print(date)
+    data = {}
+    if os.path.exists(marketPriceJsonPath):
+        with open(marketPriceJsonPath, "r") as json_file:
+            data = json.load(json_file)
+            if data['version'] != date:
+                data = getMarketPrice(date)
+    else:
+        data = getMarketPrice(date)
+    want = update.message.text.split(' ')
+    if len(want) <= 1:
+        chiyak.sendMessage(update.message.chat_id, '어떤 모델인지 안알려줬거나 형식에 맞지않아요!')
+        return
+    else:
+        price_data = data['data'].items()
+        result = {}
+        for key, value in price_data:
+            if key.startswith(want[1]):
+                result[key] = {
+                    "modelname": value['modelname'],
+                    "*price*": "*" + value['price'] + "*"
+                }
+        pretty_result = re.sub('[.+\\-(),}{]', '\\\\\\g<0>', json.dumps(
+            result, ensure_ascii=False, indent=4))
+        chiyak.core.sendMessage(
+            chat_id=update.message.chat_id, text=pretty_result, parse_mode='MarkdownV2')
+
+
+def getMarketPrice(today):
+    print(today)
+    result = {
+        "version": today,
+        "data": {}
+    }
+    checkPriceURL = 'https://price.cetizen.com'
+    r = requests.get(checkPriceURL)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    table = soup.select('#make_0 > div > div > ul')
+    for item in table:
+        infos = item.select('li > a')
+        if len(infos) < 3:
+            continue
+        result['data'][infos[1].get_text().strip()] = {
+            "modelname": infos[0].get_text().strip(),
+            "price": infos[2].get_text().strip()
+        }
+    with open(marketPriceJsonPath, 'w') as outfile:
+        json.dump(result, outfile, indent=4, ensure_ascii=False)
+    return result
+
+
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('cmp', checkMarketPrice_command)
 chiyak.add_cmdhandler('cp', checkPickup_command)
 chiyak.add_cmdhandler('cpl', checkPickupLoop)
 chiyak.add_cmdhandler('cpr', checkPickupRegister)
