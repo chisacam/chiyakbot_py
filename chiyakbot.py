@@ -354,7 +354,7 @@ def checkMarketPrice_command(update, context):
             if key.startswith(want[1]):
                 result[key] = {
                     "modelname": value['modelname'],
-                    "*price*": "*" + value['price'] + "*"
+                    "*price*": "[*{0}*]({1})".format(value['price'], value['graphLink'])
                 }
         pretty_result = re.sub('[.+\\-(),}{]', '\\\\\\g<0>', json.dumps(
             result, ensure_ascii=False, indent=4))
@@ -378,7 +378,8 @@ def getMarketPrice(today):
             continue
         result['data'][infos[1].get_text().strip()] = {
             "modelname": infos[0].get_text().strip(),
-            "price": infos[2].get_text().strip()
+            "price": infos[2].get_text().strip(),
+            "graphLink": infos[0].get('href')
         }
     with open(marketPriceJsonPath, 'w') as outfile:
         json.dump(result, outfile, indent=4, ensure_ascii=False)
