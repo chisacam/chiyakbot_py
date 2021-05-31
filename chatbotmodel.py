@@ -1,6 +1,7 @@
 import telegram
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 
+
 class TelegramBot:
     def __init__(self, name, token):
         self.core = telegram.Bot(token)
@@ -9,7 +10,7 @@ class TelegramBot:
         self.name = name
 
     def sendMessage(self, id, text):
-        self.core.sendMessage(chat_id = id, text = text)
+        self.core.sendMessage(chat_id=id, text=text)
 
     def stop(self):
         self.updater.start_polling()
@@ -17,9 +18,11 @@ class TelegramBot:
         self.updater.job_queue.stop()
         self.updater.stop()
 
+
 class chiyakbot(TelegramBot):
     def __init__(self):
         self.token = '584670337:AAEp9NMHIV-EpECLBbCMkWA0sBt17UmWkd8'
+        #self.token = '1826793202:AAFIJHb4VsdJrCvtSzD7NYrqJStIwif29WU'
         TelegramBot.__init__(self, '치약봇', self.token)
         self.updater.stop()
 
