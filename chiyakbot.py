@@ -159,13 +159,15 @@ def koen_command(update, context):
 
 def detectSentiment_command(update, context):
     if update.message.reply_to_message is not None:
-        if update.message.reply_to_message.text != '':
+        if update.message.reply_to_message.text is not None:
             result = comprehend.detect_sentiment(
                 Text=update.message.reply_to_message.text, LanguageCode='ko')
             chiyak.core.sendMessage(
                 chat_id=update.message.chat_id,
                 text='나빠요' if result['SentimentScore']['Positive'] < result['SentimentScore']['Negative'] else '괜찮아요',
                 reply_to_message_id=update.message.reply_to_message.message_id)
+        else:
+            update.message.reply_text('텍스트에만 사용 해주세요!')
     else:
         update.message.reply_text('원하는 텍스트에 답장을 걸고 사용해주세요!')
 
