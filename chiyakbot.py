@@ -3,7 +3,6 @@ import re
 import random
 import marketPrice
 import checkPickup
-import json
 import boto3
 from inko import Inko
 
