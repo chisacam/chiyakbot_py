@@ -164,7 +164,7 @@ def detectSentiment_command(update, context):
                 Text=update.message.reply_to_message.text, LanguageCode='ko')
             chiyak.core.sendMessage(
                 text='나빠요' if result['SentimentScore']['Positive'] < result['SentimentScore']['Negative'] else '괜찮아요',
-                reply_to_msg_id=update.message.reply_to_message.message_id)
+                reply_to_message_id=update.message.reply_to_message.message_id)
     else:
         update.message.reply_text('원하는 텍스트에 답장을 걸고 사용해주세요!')
 
