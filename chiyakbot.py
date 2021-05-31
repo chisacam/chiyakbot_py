@@ -3,6 +3,8 @@ import re
 import random
 import marketPrice
 import checkPickup
+import json
+import boto3
 from inko import Inko
 
 # 전역변수
@@ -12,6 +14,9 @@ available_modeltype = ['ipad_pro', 'ipad_air',
                        'iphone_12_pro', 'iphone_se', 'iphone_xr',
                        'iphone_11']
 myInko = Inko()
+comprehend = boto3.client(service_name='comprehend', region_name='ap-northeast-2',
+                          aws_access_key_id='AKIA2475NDPROSZBLDGE',
+                          aws_secret_access_key='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')
 helpText = """/를 붙여서 사용해야하는 기능들
 
 /about 자기소개
@@ -151,6 +156,16 @@ def koen_command(update, context):
         else:
             update.message.reply_text(myInko.ko2en(text[1]))
 
+
+def detectSentiment_command(update, context):
+    if update.message.reply_to_message is not None:
+        result = comprehend.detect_sentiment(
+            Text=update.message.reply_to_message.text, LanguageCode='ko')
+        update.message.reply_text(
+            '나빠요' if result['SentimentScore']['Positive'] < result['SentimentScore']['Negative'] else '괜찮아요')
+    else:
+        update.message.reply_text('원하는 텍스트에 답장을 걸고 사용해주세요!')
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -175,6 +190,7 @@ def messagedetecter(update, context):
 
 
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('ds', detectSentiment_command)
 chiyak.add_cmdhandler('koen', koen_command)
 chiyak.add_cmdhandler('enko', enko_command)
 chiyak.add_cmdhandler('cmp', marketPrice.checkMarketPrice_command)
