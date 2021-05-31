@@ -3,6 +3,7 @@ import re
 import random
 import marketPrice
 import checkPickup
+from inko import Inko
 
 # 전역변수
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
@@ -10,6 +11,7 @@ available_modeltype = ['ipad_pro', 'ipad_air',
                        'ipad_mini', 'ipad_10_2', 'iphone_12',
                        'iphone_12_pro', 'iphone_se', 'iphone_xr',
                        'iphone_11']
+myInko = Inko()
 helpText = """/를 붙여서 사용해야하는 기능들
 
 /about 자기소개
@@ -121,6 +123,34 @@ def delMessage_command(update, context):
         target_group = update.message.reply_to_message.chat.id
         chiyak.core.deleteMessage(target_group, target_id)
 
+# 메세지 한영변환
+
+
+def enko_command(update, context):
+    if update.message.reply_to_message is not None:
+        update.message.reply_text(myInko.en2ko(
+            update.message.reply_to_message.text))
+    else:
+        text = update.message.text.split(' ')
+        if len(text) <= 1:
+            update.message.reply_text(
+                '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/enko dksl')
+        else:
+            update.message.reply_text(myInko.en2ko(text[1]))
+
+
+def koen_command(update, context):
+    if update.message.reply_to_message is not None:
+        update.message.reply_text(myInko.ko2en(
+            update.message.reply_to_message.text))
+    else:
+        text = update.message.text.split(' ')
+        if len(text) <= 1:
+            update.message.reply_text(
+                '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/koen ㅗ디ㅣㅐ')
+        else:
+            update.message.reply_text(myInko.ko2en(text[1]))
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -145,6 +175,8 @@ def messagedetecter(update, context):
 
 
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('koen', koen_command)
+chiyak.add_cmdhandler('enko', enko_command)
 chiyak.add_cmdhandler('cmp', marketPrice.checkMarketPrice_command)
 chiyak.add_cmdhandler('cp', checkPickup.checkPickup_command)
 chiyak.add_cmdhandler('cpl', checkPickup.checkPickupLoop)
