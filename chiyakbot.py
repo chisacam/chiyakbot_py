@@ -131,7 +131,7 @@ def enko_command(update, context):
         update.message.reply_text(myInko.en2ko(
             update.message.reply_to_message.text))
     else:
-        text = update.message.text.split(' ')
+        text = update.message.text.split(' ', 1)
         if len(text) <= 1:
             update.message.reply_text(
                 '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/enko dksl')
@@ -144,7 +144,7 @@ def koen_command(update, context):
         update.message.reply_text(myInko.ko2en(
             update.message.reply_to_message.text))
     else:
-        text = update.message.text.split(' ')
+        text = update.message.text.split(' ', 1)
         if len(text) <= 1:
             update.message.reply_text(
                 '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/koen ㅗ디ㅣㅐ')
