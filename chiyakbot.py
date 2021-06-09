@@ -3,6 +3,7 @@ import re
 import random
 import marketPrice
 import checkPickup
+import sauceNAO
 import boto3
 from inko import Inko
 
@@ -194,6 +195,7 @@ def messagedetecter(update, context):
 
 
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('simimg', sauceNAO.simimg_command)
 chiyak.add_cmdhandler('ds', detectSentiment_command)
 chiyak.add_cmdhandler('koen', koen_command)
 chiyak.add_cmdhandler('enko', enko_command)

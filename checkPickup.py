@@ -179,8 +179,9 @@ def checkPickup(model='MHR43KH/A', prodType='ipad_pro'):
                     available_store.append('가로수길')
                 if store[1]['partsAvailability'][model]['storeSelectionEnabled']:
                     available_store.append('여의도')
-                result['isPickable'] = '씹가능'
-                result['pickableStore'] = available_store
+                result['isPickable'] = '씹가능' if available_store != [] else '불가능'
+                result['pickableStore'] = available_store if available_store != [
+                ] else '재고없음'
             else:
                 result['isPickable'] = '불가능'
                 result['pickableStore'] = '없음'
