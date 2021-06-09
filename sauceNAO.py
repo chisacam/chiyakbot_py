@@ -127,8 +127,10 @@ def simimg_command(update, context):
     # print(best_sitelink)
     similarity = escape_for_md(
         response['results'][0]['header']['similarity'], True)
+    long_remaining = response['header']['long_remaining']
     # print(similarity)
     update.message.reply_text('''
 [*{0}*]({1}) 에서 가장 비슷한 이미지를 발견했어요\\!
 유사도: *{2}*
-'''.format(sitename, best_sitelink, similarity), parse_mode='MarkdownV2')
+남은 일일 검색횟수: *{3}*
+'''.format(sitename, best_sitelink, similarity, long_remaining), parse_mode='MarkdownV2')
