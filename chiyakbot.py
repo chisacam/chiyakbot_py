@@ -171,6 +171,36 @@ def detectSentiment_command(update, context):
     else:
         update.message.reply_text('원하는 텍스트에 답장을 걸고 사용해주세요!')
 
+
+def roll_command(update, context):
+    dice_text = update.message.text.split(' ')[-1]
+    # print(dice_text)
+    if re.match(r'^\d*[dD]\d*$', dice_text):
+        text_result = dice_text.split('d')
+        cnt = int(text_result[0])
+        upper = int(text_result[1])
+    else:
+        cnt = 2
+        upper = 6
+    #print(cnt, upper)
+    if cnt > 20:
+        reply = '주사위가 너무 많습니다'
+    elif upper > 120:
+        reply = '주사위 면이 너무 많습니다'
+    else:
+        result = roll(cnt, upper)
+        # print(result)
+        reply = (f'전체 🎲: {", ".join(str(i) for i in result)} \n'
+                 f'결과: {sum(result)}')
+    update.message.reply_text(reply)
+
+
+def roll(cnt, upper):
+    results = []
+    for i in range(0, cnt):
+        results.append(random.randint(1, upper))
+    return results
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -195,6 +225,7 @@ def messagedetecter(update, context):
 
 
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('roll', roll_command)
 chiyak.add_cmdhandler('simimg', sauceNAO.simimg_command)
 chiyak.add_cmdhandler('ds', detectSentiment_command)
 chiyak.add_cmdhandler('koen', koen_command)
