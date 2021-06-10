@@ -5,8 +5,6 @@ import marketPrice
 import checkPickup
 import sauceNAO
 import boto3
-import requests
-from bs4 import BeautifulSoup
 from inko import Inko
 
 # 전역변수
