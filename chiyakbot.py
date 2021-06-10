@@ -5,10 +5,14 @@ import marketPrice
 import checkPickup
 import sauceNAO
 import boto3
+import requests
+from bs4 import BeautifulSoup
 from inko import Inko
 
 # 전역변수
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
+isURL = re.compile(
+    'http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
 available_modeltype = ['ipad_pro', 'ipad_air',
                        'ipad_mini', 'ipad_10_2', 'iphone_12',
                        'iphone_12_pro', 'iphone_se', 'iphone_xr',
@@ -201,6 +205,16 @@ def roll(cnt, upper):
         results.append(random.randint(1, upper))
     return results
 
+
+def makeQR_command(update, context):
+    base_url = 'https://chart.apis.google.com/chart?cht=qr&chs=300x300&chl='
+    url = update.message.text.split(' ')[1]
+    if isURL.match(url):
+        chiyak.core.send_photo(
+            chat_id=update.message.chat_id, photo=base_url + url)
+    else:
+        update.message.reply_text('url형식이 아니에요!')
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -225,6 +239,7 @@ def messagedetecter(update, context):
 
 
 chiyak = chatbotmodel.chiyakbot()
+chiyak.add_cmdhandler('qr', makeQR_command)
 chiyak.add_cmdhandler('roll', roll_command)
 chiyak.add_cmdhandler('simimg', sauceNAO.simimg_command)
 chiyak.add_cmdhandler('ds', detectSentiment_command)
