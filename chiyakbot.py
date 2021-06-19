@@ -1,4 +1,5 @@
 import chatbotmodel
+from telegram import InputMediaPhoto
 import re
 import random
 import marketPrice
@@ -223,12 +224,37 @@ def roll(cnt, upper):
 
 def makeQR_command(update, context):
     base_url = 'https://chart.apis.google.com/chart?cht=qr&chs=300x300&chl='
-    url = update.message.text.split(' ')[1]
-    if isURL.match(url):
-        chiyak.core.send_photo(
-            chat_id=update.message.chat_id, photo=base_url + url)
+    if update.message.reply_to_message is not None:
+        if update.message.reply_to_message.text is not None:
+            url = update.message.reply_to_message.text.split(' ', 1)[1]
+            urls = isURL.findall(url)
+            if urls != [] and len(urls) == 1:
+                chiyak.core.send_photo(
+                    chat_id=update.message.chat_id, photo=base_url + urls[0])
+            elif urls != [] and len(urls) > 1:
+                result_urls = []
+                for target_url in urls:
+                    result_urls.append(InputMediaPhoto(base_url + target_url))
+                chiyak.core.send_media_group(
+                    chat_id=update.message.chat_id, media=result_urls)
+            else:
+                update.message.reply_text('url을 찾을 수 없어요!')
+        else:
+            update.message.reply_text('텍스트에만 사용 해주세요!')
     else:
-        update.message.reply_text('url형식이 아니에요!')
+        url = update.message.text.split(' ', 1)[1]
+        urls = isURL.findall(url)
+        if urls != [] and len(urls) == 1:
+            chiyak.core.send_photo(
+                chat_id=update.message.chat_id, photo=base_url + urls[0])
+        elif urls != [] and len(urls) > 1:
+            result_urls = []
+            for target_url in urls:
+                result_urls.append(InputMediaPhoto(base_url + target_url))
+            chiyak.core.send_media_group(
+                chat_id=update.message.chat_id, media=result_urls)
+        else:
+            update.message.reply_text('url을 찾을 수 없어요!')
 
 # 메세지 감지가 필요한 기능들
 

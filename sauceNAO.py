@@ -17,7 +17,7 @@ def getSiteName(index_id):
     elif index_id == 3:
         return 'DoujinshiDB'
 
-    elif index_id == 5:
+    elif index_id == 5 or index_id == 6:
         return 'pixiv'
 
     elif index_id == 8:
@@ -112,6 +112,9 @@ def getSiteName(index_id):
 
     elif index_id == 42:
         return 'Furry Network'
+
+    else:
+        return 'undefined yet'
 
 
 def simimg_command(update, context):
