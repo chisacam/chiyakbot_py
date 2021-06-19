@@ -226,8 +226,7 @@ def makeQR_command(update, context):
     base_url = 'https://chart.apis.google.com/chart?cht=qr&chs=300x300&chl='
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
-            url = update.message.reply_to_message.text.split(' ', 1)[1]
-            urls = isURL.findall(url)
+            urls = isURL.findall(update.message.reply_to_message.text)
             if urls != [] and len(urls) == 1:
                 chiyak.core.send_photo(
                     chat_id=update.message.chat_id, photo=base_url + urls[0])
@@ -242,8 +241,8 @@ def makeQR_command(update, context):
         else:
             update.message.reply_text('텍스트에만 사용 해주세요!')
     else:
-        url = update.message.text.split(' ', 1)[1]
-        urls = isURL.findall(url)
+        user_input = update.message.text.split(' ', 1)[1]
+        urls = isURL.findall(user_input)
         if urls != [] and len(urls) == 1:
             chiyak.core.send_photo(
                 chat_id=update.message.chat_id, photo=base_url + urls[0])
