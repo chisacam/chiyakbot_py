@@ -1,9 +1,7 @@
 import requests
 import json
-import chatbotmodel
 from escape import escape_for_md
 
-chiyak = chatbotmodel.chiyakbot()
 base_url = 'https://saucenao.com/search.php?db=999&output_type=2&testmode=1&api_key=e0bd2877c4c8fb636e2d49143ac1d02408229ca7&url='
 
 
@@ -117,26 +115,17 @@ def getSiteName(index_id):
         return 'undefined yet'
 
 
-def simimg_command(update, context):
-    if update.message.reply_to_message.photo != []:
-        img_info = chiyak.core.getFile(
-            update.message.reply_to_message.photo[-1].file_id)
-        # print(img_info)
-        response = requests.get(base_url + img_info.file_path).json()
-        # print(response)
-        sitename = escape_for_md(getSiteName(
-            response['results'][0]['header']['index_id']), True)
-        # print(sitename)
-        best_sitelink = response['results'][0]['data']['ext_urls'][0]
-        # print(best_sitelink)
-        similarity = escape_for_md(
-            response['results'][0]['header']['similarity'], True)
-        long_remaining = response['header']['long_remaining']
-        # print(similarity)
-        update.message.reply_text('''
-[*{0}*]({1}) 에서 가장 비슷한 이미지를 발견했어요\\!
-유사도: *{2}*
-남은 일일 검색횟수: *{3}*
-    '''.format(sitename, best_sitelink, similarity, long_remaining), parse_mode='MarkdownV2')
-    else:
-        update.message.reply_text('사진이 없는거같아요! 사진에 답장을 써주세요!')
+def get_similarity(img_info):
+    print(img_info)
+    response = requests.get(base_url + img_info.file_path).json()
+
+    sitename = escape_for_md(getSiteName(
+        response['results'][0]['header']['index_id']), True)
+
+    best_sitelink = response['results'][0]['data']['ext_urls'][0]
+
+    similarity = escape_for_md(
+        response['results'][0]['header']['similarity'], True)
+    long_remaining = response['header']['long_remaining']
+
+    return sitename, best_sitelink, similarity, long_remaining

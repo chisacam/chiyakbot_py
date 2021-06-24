@@ -47,8 +47,8 @@ modelcode가 없으면 5세대 12.9 128 셀룰러 스페이스 그레이 예약�
 /ds 답장을 사용한 메세지의 긍정/부정에 따라 괜찮아요/나빠요 출력
 aws는 대개 나쁘다고 생각하는듯함.
 
-/enko(koen) [some string] 영어로 쓴 문자열이나 한글로 쓴 문자열을 각각 영어, 한글로 변환
-ex) dksl -> 아니, ㅗ디ㅣㅐ -> hello
+/en2ko(ko2en) [some string] 영어로 쓴 문자열이나 한글로 쓴 문자열을 각각 영어, 한글로 변환
+ex) /en2ko dksl -> 아니, /ko2en ㅗ디ㅣㅐ -> hello
 
 /simimg 답장을 사용한 메세지의 사진 출처를 찾아주는 기능
 sauceNAO api를 사용하므로 씹덕짤만 잘찾음.
@@ -255,6 +255,32 @@ def makeQR_command(update, context):
         else:
             update.message.reply_text('url을 찾을 수 없어요!')
 
+
+def simimg_command(update, context):
+    if update.message.reply_to_message.photo != []:
+        img_info = chiyak.core.getFile(
+            update.message.reply_to_message.photo[-1].file_id)
+        sitename, best_sitelink, similarity, long_remaining = sauceNAO.get_similarity(
+            img_info)
+        update.message.reply_text('''
+[*{0}*]({1}) 에서 가장 비슷한 이미지를 발견했어요\\!
+유사도: *{2}*
+남은 일일 검색횟수: *{3}*
+    '''.format(sitename, best_sitelink, similarity, long_remaining), parse_mode='MarkdownV2')
+    else:
+        update.message.reply_text('사진이 없는거같아요! 사진에 답장을 써주세요!')
+
+
+def checkMarketPrice_command(update, context):
+    want = update.message.text.split(' ', 1)
+    if len(want) <= 1:
+        chiyak.sendMessage(update.message.chat_id, '어떤 모델인지 안알려줬거나 형식에 맞지않아요!')
+        return
+    else:
+        pretty_result = marketPrice.get_select_model_price(want[1])
+        chiyak.core.sendMessage(
+            chat_id=update.message.chat_id, text=pretty_result, parse_mode='MarkdownV2')
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -281,11 +307,11 @@ def messagedetecter(update, context):
 chiyak = chatbotmodel.chiyakbot()
 chiyak.add_cmdhandler('qr', makeQR_command)
 chiyak.add_cmdhandler('roll', roll_command)
-chiyak.add_cmdhandler('simimg', sauceNAO.simimg_command)
+chiyak.add_cmdhandler('simimg', simimg_command)
 chiyak.add_cmdhandler('ds', detectSentiment_command)
-chiyak.add_cmdhandler('koen', koen_command)
-chiyak.add_cmdhandler('enko', enko_command)
-chiyak.add_cmdhandler('cmp', marketPrice.checkMarketPrice_command)
+chiyak.add_cmdhandler('ko2en', koen_command)
+chiyak.add_cmdhandler('en2ko', enko_command)
+chiyak.add_cmdhandler('cmp', checkMarketPrice_command)
 chiyak.add_cmdhandler('cp', checkPickup.checkPickup_command)
 chiyak.add_cmdhandler('cpl', checkPickup.checkPickupLoop)
 chiyak.add_cmdhandler('cpr', checkPickup.checkPickupRegister)
