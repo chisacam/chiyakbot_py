@@ -324,6 +324,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('htm', get_hitomi_info_command)
 chiyak.add_cmdhandler('qr', makeQR_command)
 chiyak.add_cmdhandler('roll', roll_command)
 chiyak.add_cmdhandler('simimg', simimg_command)
