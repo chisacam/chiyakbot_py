@@ -5,10 +5,13 @@ import random
 import marketPrice
 import checkPickup
 import sauceNAO
+import hitomi
 import boto3
 from inko import Inko
 
 # 전역변수
+
+chiyak = chatbotmodel.chiyakbot()
 calc_p = re.compile('^=[0-9+\-*/%!^( )]+')
 isURL = re.compile(
     'http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
@@ -281,6 +284,23 @@ def checkMarketPrice_command(update, context):
         chiyak.core.sendMessage(
             chat_id=update.message.chat_id, text=pretty_result, parse_mode='MarkdownV2')
 
+
+def get_hitomi_info_command(update, context):
+    user_input = update.message.text.split(' ', 1)
+    if len(user_input) <= 1:
+        chiyak.sendMessage(update.message.chat_id, '어떤 모델인지 안알려줬거나 형식에 맞지않아요!')
+        return
+    else:
+        result = hitomi.get_info(user_input[1])
+        chiyak.sendMessage(id=update.message.chat_id, text='''
+제목: {}
+게시일: {}
+언어: {}
+종류: {}
+
+만족하시나요 휴-먼?
+'''.format(result['title'], result['date'], result['language'], result['type']))
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -304,7 +324,6 @@ def messagedetecter(update, context):
         print(e)
 
 
-chiyak = chatbotmodel.chiyakbot()
 chiyak.add_cmdhandler('qr', makeQR_command)
 chiyak.add_cmdhandler('roll', roll_command)
 chiyak.add_cmdhandler('simimg', simimg_command)
