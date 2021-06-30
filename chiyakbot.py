@@ -301,7 +301,7 @@ def get_hitomi_info_command(update, context):
 바로가기: {}
 
 만족하시나요 휴-먼?
-'''.format(result['title'], result['date'], result['language'], result['type'], result['link']))
+'''.format(result['title'], result['date'], result['language'], result['type'], result['link']) if result['result'] == 'success' else result['message'])
 
 # 메세지 감지가 필요한 기능들
 
