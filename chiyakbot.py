@@ -292,14 +292,16 @@ def get_hitomi_info_command(update, context):
         return
     else:
         result = hitomi.get_info(user_input[1])
-        chiyak.sendMessage(id=update.message.chat_id, text='''
+        chiyak.core.sendMessage(chat_id=update.message.chat_id, text='''
 제목: {}
 게시일: {}
 언어: {}
 종류: {}
 
+바로가기: {}
+
 만족하시나요 휴-먼?
-'''.format(result['title'], result['date'], result['language'], result['type']))
+'''.format(result['title'], result['date'], result['language'], result['type'], result['id']))
 
 # 메세지 감지가 필요한 기능들
 
