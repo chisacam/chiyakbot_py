@@ -6,10 +6,10 @@ import json
 def get_info(hitomi_num):
     response = requests.get(
         'https://ltn.hitomi.la/galleries/{}.js'.format(hitomi_num), verify=False)
-    print(response.status_code)
+    # print(response.status_code)
     if response.status_code == 200:
         dict_response = json.loads(response.text.split('=', 1)[1].strip())
-        print(dict_response)
+        # print(dict_response)
         return {
             'result': 'success',
             'title': dict_response['title'],

@@ -192,7 +192,16 @@ def detectSentiment_command(update, context):
         else:
             update.message.reply_text('텍스트에만 사용 해주세요!')
     else:
-        update.message.reply_text('원하는 텍스트에 답장을 걸고 사용해주세요!')
+        user_input = update.message.text.split(' ', 1)
+        if len(user_input) <= 1:
+            update.message.reply_text(
+                '원하는 텍스트에 답장을 걸고 사용하거나, 명령어 뒤에 원하는 문자열을 써주세요!')
+            return
+        else:
+            result = comprehend.detect_sentiment(
+                Text=user_input[1], LanguageCode='ko')
+            update.message.reply_text(
+                '나빠요' if result['SentimentScore']['Positive'] < result['SentimentScore']['Negative'] else '괜찮아요')
 
 
 def roll_command(update, context):
@@ -288,7 +297,7 @@ def checkMarketPrice_command(update, context):
 def get_hitomi_info_command(update, context):
     user_input = update.message.text.split(' ', 1)
     if len(user_input) <= 1:
-        chiyak.sendMessage(update.message.chat_id, '어떤 모델인지 안알려줬거나 형식에 맞지않아요!')
+        chiyak.sendMessage(update.message.chat_id, '번호가 없는거같아요!')
         return
     else:
         result = hitomi.get_info(user_input[1])
