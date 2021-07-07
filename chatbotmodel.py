@@ -1,6 +1,6 @@
 import telegram
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
-
+import sys
 
 class TelegramBot:
     def __init__(self, name, token):
@@ -21,8 +21,7 @@ class TelegramBot:
 
 class chiyakbot(TelegramBot):
     def __init__(self):
-        #self.token = '584670337:AAEp9NMHIV-EpECLBbCMkWA0sBt17UmWkd8'
-        self.token = '1826793202:AAFIJHb4VsdJrCvtSzD7NYrqJStIwif29WU'
+        self.token = '584670337:AAEp9NMHIV-EpECLBbCMkWA0sBt17UmWkd8' if sys.argv[1] != 'develop' else '1826793202:AAFIJHb4VsdJrCvtSzD7NYrqJStIwif29WU'
         TelegramBot.__init__(self, '치약봇', self.token)
         self.updater.stop()
 
