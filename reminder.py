@@ -12,7 +12,7 @@ import escape
 chiyak = chatbotmodel.chiyakbot()
 file_path = './reminded.json'
 alert_users = []
-is_only_time = re.compile('^[0-9]{4}$')
+is_only_time = re.compile('^((202[0-9]{1})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01]))?((0[0-9]|1[0-9]|2[0-3])([0-5][0-9])){1}$')
 if os.path.exists(file_path):
     with open(file_path, "r") as json_file:
         alert_users = json.load(json_file)
@@ -27,10 +27,9 @@ class Worker(threading.Thread):
         while(True):
             for remind_task in alert_users[:]:
                 now = datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y%m%d%H%M')
-                print(now, remind_task['remind_date'])
                 if now >= remind_task['remind_date']:
-                    chiyak.core.sendMessage(chat_id=remind_task['remind_chat_id'], reply_to_message_id=remind_task['remind_message_id'], text='[{}](tg://user?id={})님\\, 다시 확인해보실 시간이에요\\!\\\n메모\\: {}'.format(
-                        remind_task['reminder_user_name'], remind_task['reminder_user_id'], remind_task['remind_text']), parse_mode='MarkdownV2')
+                    chiyak.core.sendMessage(chat_id=remind_task['remind_chat_id'], reply_to_message_id=remind_task['remind_message_id'], text='다시 확인해보실 시간이에요!\n메모: {}'.format(
+                        remind_task['remind_text']))
                     alert_users.remove(remind_task)
             with open(file_path, 'w') as outfile:
                 json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
@@ -48,66 +47,27 @@ def start_remind_loop(update, context):
 
 
 def reminder_register(update, context):
-    print(update.message)
     user_id = update.message.from_user.id
-    user_name = update.message.from_user.username
     chat_id = update.message.chat_id
-    default_date = datetime.datetime.now(
-        timezone('Asia/Seoul')).strftime('%Y%m%d')
-    print(user_id, default_date)
+    remind_text_id = update.message.message_id
+    user_input = update.message.text.split(' ', 2)
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
-            user_input = update.message.text.split(' ', 1)
             if len(user_input) > 1:
-                remind_text = update.message.reply_to_message.text
-                remind_text_id = update.message.reply_to_message.message_id
-                user_date = user_input[1].strip()
-                print(user_date)
-                fin_date = default_date + \
-                    user_date if is_only_time.match(user_date) else user_date
-                print(fin_date)
-                alert_users.append({
-                    'remind_date': fin_date,
-                    'remind_chat_id': chat_id,
-                    'remind_input_type': 'reply',
-                    'reminder_user_id': user_id,
-                    'remind_message_id': remind_text_id,
-                    'remind_text': escape.escape_for_md(remind_text, True),
-                    'reminder_user_name': escape.escape_for_md(user_name, True)
-                })
-                alert_users.sort(
-                    key=lambda alert_user: alert_user['remind_text'])
-                update.message.reply_text('{}에 다시 알려드릴게요!'.format(
-                    datetime.datetime.strptime(fin_date, "%Y%m%d%H%M")))
+                result = regist(chat_id, user_id, update.message.reply_to_message.text, remind_text_id, user_input[1].strip(), 'reply')
+                update.message.reply_text(result['message'])
             else:
-                update.message.reply_text('언제 다시 알려드릴지 모르겠어요. 입력을 다시 확인해주세요!')
+                update.message.reply_text('언제 다시 알려드릴지 모르겠어요. 입력을 다시 확인해주세요!\n/remind [날짜] [리마인드할문자열]\n또는\n리마인드할 메세지에 답장후 /remind [날짜]')
                 return
         else:
             update.message.reply_text('텍스트를 찾을 수 없어요!')
+            return
     else:
-        user_input = update.message.text.split(' ', 2)
         if len(user_input) > 2:
-            remind_text = user_input[2].strip()
-            remind_text_id = update.message.message_id
-            user_date = user_input[1].strip()
-            print(user_date)
-            fin_date = default_date + \
-                user_date if is_only_time.match(user_date) else user_date
-            print(fin_date)
-            alert_users.append({
-                'remind_date': fin_date,
-                'remind_chat_id': chat_id,
-                'remind_input_type': 'param',
-                'reminder_user_id': user_id,
-                'remind_message_id': remind_text_id,
-                'remind_text': escape.escape_for_md(remind_text, True),
-                'reminder_user_name': escape.escape_for_md(user_name, True)
-            })
-            alert_users.sort(key=lambda alert_user: alert_user['remind_text'])
-            update.message.reply_text('{}에 다시 알려드릴게요!'.format(
-                datetime.datetime.strptime(fin_date, "%Y%m%d%H%M")))
+            result = regist(chat_id, user_id, user_input[2].strip(), remind_text_id, user_input[1].strip(), 'param')    
+            update.message.reply_text(result['message'])
         else:
-            update.message.reply_text('다시 알려드릴 시간이나 메모를 못찾겠어요. 입력을 다시 확인해주세요!')
+            update.message.reply_text('다시 알려드릴 시간이나 메세지를 못찾겠어요. 입력을 다시 확인해주세요!\n/remind [날짜] [리마인드할문자열]\n또는\n리마인드할 메세지에 답장후 /remind [날짜]')
             return
     with open(file_path, 'w') as outfile:
         json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
@@ -122,3 +82,36 @@ def reminder_delete(update, context):
     with open(file_path, 'w') as outfile:
         json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
         chiyak.sendMessage(update.message.chat_id, '해제했어요!')
+
+def regist(chat_id, user_id, remind_text, remind_text_id, user_date, type):
+    result = is_correct_time(user_date)
+
+    if result['result']:
+        alert_users.append({
+            'remind_date': result['date'],
+            'remind_chat_id': chat_id,
+            'remind_input_type': type,
+            'reminder_user_id': user_id,
+            'remind_message_id': remind_text_id,
+            'remind_text': remind_text
+        })
+        alert_users.sort(key=lambda alert_user: alert_user['remind_text'])
+
+    return result
+
+def is_correct_time(user_date):
+    print(user_date)
+    default_date = datetime.datetime.now(
+        timezone('Asia/Seoul')).strftime('%Y%m%d')
+    is_correct = {}
+    fin_date = default_date + user_date if len(user_date) == 4 else user_date
+    if is_only_time.match(user_date):
+        is_correct['result'] = True
+        is_correct['date'] = fin_date
+        is_correct['message'] = '{}에 다시 알려드릴게요!'.format(
+                    datetime.datetime.strptime(fin_date, "%Y%m%d%H%M"))
+    else:
+        is_correct['result'] = False
+        is_correct['message'] = '저런, 날짜형식에 맞지 않는것같아요! 아래 예시를 참고해주세요!\nYYYYmmddHHMM(예시: 202107071800)\n또는\nHHMM(예시: 1800)'
+
+    return is_correct
