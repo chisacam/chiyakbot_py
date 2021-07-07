@@ -6,6 +6,7 @@ import marketPrice
 import checkPickup
 import sauceNAO
 import hitomi
+import reminder
 import boto3
 from inko import Inko
 
@@ -335,6 +336,9 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('rmdl', reminder.start_remind_loop)
+chiyak.add_cmdhandler('remind', reminder.reminder_register)
+chiyak.add_cmdhandler('delmind', reminder.reminder_delete)
 chiyak.add_cmdhandler('htm', get_hitomi_info_command)
 chiyak.add_cmdhandler('qr', makeQR_command)
 chiyak.add_cmdhandler('roll', roll_command)
