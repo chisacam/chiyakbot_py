@@ -26,7 +26,7 @@ class Worker(threading.Thread):
     def run(self):
         while(True):
             for remind_task in alert_users[:]:
-                now = datetime.datetime.now().strftime('%Y%m%d%H%M')
+                now = datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y%m%d%H%M')
                 print(now, remind_task['remind_date'])
                 if now >= remind_task['remind_date']:
                     chiyak.core.sendMessage(chat_id=remind_task['remind_chat_id'], reply_to_message_id=remind_task['remind_message_id'], text='[{}](tg://user?id={})님\\, 다시 확인해보실 시간이에요\\!\\\n메모\\: {}'.format(
