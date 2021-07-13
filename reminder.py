@@ -6,13 +6,16 @@ import json
 import os.path
 import re
 import chatbotmodel
-import telegram
+import uuid
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton
+from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters
 import escape
 
 chiyak = chatbotmodel.chiyakbot()
 file_path = './reminded.json'
 alert_users = []
 is_only_time = re.compile('^((202[0-9]{1})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01]))?((0[0-9]|1[0-9]|2[0-3])([0-5][0-9])){1}$')
+DREMIND = 0
 if os.path.exists(file_path):
     with open(file_path, "r") as json_file:
         alert_users = json.load(json_file)
@@ -73,15 +76,43 @@ def reminder_register(update, context):
         json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
 
 
-def reminder_delete(update, context):
+def reminder_delete_command(update, context):
     user_id = update.message.from_user.id
-    registered_work = []
-    for text in alert_users[user_id]:
-        registered_work.append(text['remind_text'])
-    telegram.ReplyKeyboardMarkup(keyboard=registered_work)
-    with open(file_path, 'w') as outfile:
-        json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
-        chiyak.sendMessage(update.message.chat_id, '해제했어요!')
+    chat_id = update.message.chat_id
+    registered_work = [[KeyboardButton(text='{}\n\n{}'.format(item['remind_text'],item['remind_uuid']))] for item in alert_users if item['reminder_user_id'] == user_id]
+    if len(registered_work) == 0:
+        chiyak.core.sendMessage(chat_id=chat_id, text='삭제할 리마인더가 없어요!')
+        return ConversationHandler.END
+    registered_work.append([KeyboardButton(text='선택종료')])
+    update.message.reply_text('취소할 리마인더를 선택해주세요!', reply_markup=ReplyKeyboardMarkup(keyboard=registered_work, resize_keyboard=True))
+    return DREMIND
+
+
+def remind_delete_error(update, context):
+#    with open(file_path, 'w') as outfile:
+#        json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
+#        chiyak.sendMessage(update.message.chat_id, '해제했어요!')
+    update.message.reply_text(
+        '에러 또는 선생님의 선택으로 취소됐어요!', reply_markup=ReplyKeyboardRemove()
+    )
+    return ConversationHandler.END
+
+def remind_delete(update, context):
+    token = update.message.text.split('\n')
+    if token[0] == '선택종료':
+        update.message.reply_text(
+            '리마인더 선택 끝! 삭제할게요!', reply_markup=ReplyKeyboardRemove()
+        )
+        with open(file_path, 'w') as outfile:
+            json.dump(alert_users, outfile, indent=4, ensure_ascii=False)
+            update.message.reply_text('삭제처리 끝!')
+            return ConversationHandler.END
+    else:
+        for remind_task in alert_users[:]:
+            if token[2] == remind_task['remind_uuid']:
+                chiyak.core.sendMessage(chat_id=remind_task['remind_chat_id'], text='리마인더 {}를 선택했어요!'.format(remind_task['remind_text']))
+                alert_users.remove(remind_task)
+        return DREMIND
 
 def regist(chat_id, user_id, remind_text, remind_text_id, user_date, type):
     result = is_correct_time(user_date)
@@ -93,14 +124,14 @@ def regist(chat_id, user_id, remind_text, remind_text_id, user_date, type):
             'remind_input_type': type,
             'reminder_user_id': user_id,
             'remind_message_id': remind_text_id,
-            'remind_text': remind_text
+            'remind_text': remind_text,
+            'remind_uuid': str(uuid.uuid4())
         })
         alert_users.sort(key=lambda alert_user: alert_user['remind_text'])
 
     return result
 
 def is_correct_time(user_date):
-    print(user_date)
     default_date = datetime.datetime.now(
         timezone('Asia/Seoul')).strftime('%Y%m%d')
     is_correct = {}
@@ -115,3 +146,11 @@ def is_correct_time(user_date):
         is_correct['message'] = '저런, 날짜형식에 맞지 않는것같아요! 아래 예시를 참고해주세요!\nYYYYmmddHHMM(예시: 202107071800)\n또는\nHHMM(예시: 1800)'
 
     return is_correct
+
+rm_remind_handler = ConversationHandler(
+        entry_points=[CommandHandler('dremind', reminder_delete_command)],
+        states={
+            DREMIND: [MessageHandler(Filters.text, remind_delete)]
+        },
+        fallbacks=[CommandHandler('drcancel', remind_delete_error)],
+    )

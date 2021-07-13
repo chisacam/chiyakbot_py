@@ -1,6 +1,9 @@
 import telegram
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
-import sys
+import sys, os
+from dotenv import load_dotenv
+
+load_dotenv(verbose=True)
 
 class TelegramBot:
     def __init__(self, name, token):
@@ -21,7 +24,7 @@ class TelegramBot:
 
 class chiyakbot(TelegramBot):
     def __init__(self):
-        self.token = '584670337:AAEp9NMHIV-EpECLBbCMkWA0sBt17UmWkd8' if sys.argv[1] != 'develop' else '1826793202:AAFIJHb4VsdJrCvtSzD7NYrqJStIwif29WU'
+        self.token = os.getenv('TG_TOKEN') if sys.argv[1] != 'develop' else os.getenv('TG_BETA_TOKEN')
         TelegramBot.__init__(self, '치약봇', self.token)
         self.updater.stop()
 
@@ -33,6 +36,9 @@ class chiyakbot(TelegramBot):
 
     def add_messagehandler(self, func):
         self.updater.dispatcher.add_handler(MessageHandler(Filters.text, func))
+    
+    def add_conversationHandler(self, conversationHandler):
+        self.updater.dispatcher.add_handler(conversationHandler)
 
     def start(self):
         self.sendMessage(self.id, '안녕하세요! 일어났어요.')
