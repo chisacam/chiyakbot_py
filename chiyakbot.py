@@ -351,23 +351,20 @@ def calc_exchange_command(update, context):
     result = None
     user_input = update.message.text.split(' ')
     if exchange_data['result'] == 'success':
+        input_code = user_input[1].upper()
+        input_cur = user_input[2]
         if len(user_input) <= 2:
             update.message.reply_text('뭔가 빠진거같아요! 다시 시도해주세요!')
         else:
-            items = exchange_data['data'].items()
-            for code, item in items:
-                # print(item)
-                if code.startswith(user_input[1]):
-                    try:
-                        result = round(float(item['cur'].replace(
-                            ',', '')) * float(user_input[2]) / int(item['unit']), 3)
-                    except:
-                        update.message.reply_text(
-                            '입력값이 숫자가 아닌거같아요! 다시 시도해보세요.')
-                        return
-
-        # print(result)
-        update.message.reply_text(f'{user_input[2]} {user_input[1]} ≈ {result} KRW')
+            try:
+                item = exchange_data['data'][input_code]
+                result = round(float(item['cur'].replace(
+                    ',', '')) * float(input_cur) / int(item['unit']), 3)
+                update.message.reply_text(f'{input_cur} {input_code} ≈ {result} KRW')
+            except:
+                update.message.reply_text(
+                    '계산중에 오류가 발생했어요! 지원하지 않는 통화코드거나 값을 잘못 쓰신거같아요! 다시 시도해보세요.')
+                return
 
     else:
         message = exchange_data['message']

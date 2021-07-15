@@ -9,7 +9,7 @@ import re
 load_dotenv(verbose=True)
 exchangeJsonPath = './exchange.json'
 get_num = re.compile('(\d+)')
-
+get_code = re.compile('([A-Z]+)')
 
 def request_info():
     response = requests.get(
@@ -26,7 +26,8 @@ def request_info():
             data = {}
             for item in dict_response:
                 matched_num = get_num.findall(item['cur_unit'])
-                data[item['cur_unit']] = {
+                matched_code = get_code.findall(item['cur_unit'])
+                data[matched_code[0]] = {
                     'code': item['cur_unit'],
                     'name': item['cur_nm'],
                     'unit': 1 if matched_num == [] else matched_num[0],
