@@ -7,8 +7,11 @@ import checkPickup
 import sauceNAO
 import hitomi
 import reminder
+import exchange
 import boto3
+import json
 from inko import Inko
+import prettytable
 
 # 전역변수
 
@@ -313,6 +316,64 @@ def get_hitomi_info_command(update, context):
 만족하시나요 휴-먼?
 '''.format(result['title'], result['date'], result['language'], result['type'], result['link']) if result['result'] == 'success' else result['message'])
 
+
+def get_exchange_command(update, context):
+    exchange_data = exchange.get_info()
+    result = ''
+    user_input = update.message.text.split(' ', 1)
+    if exchange_data['result'] == 'success':
+        table = prettytable.PrettyTable(['CODE', 'KRW'])
+        table.align['CODE'] = 'l'
+        table.align['KRW'] = 'l'
+        if len(user_input) <= 1:
+            items = exchange_data['data'].items()
+            for code, item in items:
+                # print(item)
+                table.add_row([item['code'], item['cur']])
+            result = table.get_string(sortby="KRW", start=1, end=10)
+        else:
+            items = exchange_data['data'].items()
+            for code, item in items:
+                # print(item)
+                if code.startswith(user_input[1]):
+                    table.add_row([item['code'], item['cur']])
+            result = table.get_string()
+        # print(result)
+        update.message.reply_text(f'<pre>{result}</pre>', parse_mode='HTML')
+
+    else:
+        message = exchange_data['message']
+        update.message.reply_text(f'{message}')
+
+
+def calc_exchange_command(update, context):
+    exchange_data = exchange.get_info()
+    result = None
+    user_input = update.message.text.split(' ')
+    if exchange_data['result'] == 'success':
+        if len(user_input) <= 2:
+            update.message.reply_text('뭔가 빠진거같아요! 다시 시도해주세요!')
+        else:
+            items = exchange_data['data'].items()
+            for code, item in items:
+                # print(item)
+                if code.startswith(user_input[1]):
+                    try:
+                        result = round(float(item['cur'].replace(
+                            ',', '')) * int(user_input[2]), 3)
+                    except:
+                        update.message.reply_text(
+                            '입력값이 숫자가 아닌거같아요! 다시 시도해보세요.')
+                        return
+
+        # print(result)
+        update.message.reply_text(f'결과: {result}')
+
+    else:
+        message = exchange_data['message']
+        update.message.reply_text(f'{message}')
+
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -336,6 +397,8 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('exchc', calc_exchange_command)
+chiyak.add_cmdhandler('exch', get_exchange_command)
 chiyak.add_cmdhandler('rmdl', reminder.start_remind_loop)
 chiyak.add_cmdhandler('remind', reminder.reminder_register)
 chiyak.add_cmdhandler('htm', get_hitomi_info_command)
