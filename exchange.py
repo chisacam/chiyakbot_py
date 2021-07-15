@@ -21,7 +21,7 @@ def request_info():
             if dict_response[0]['result'] == 4:
                 return {
                     'result': 'error',
-                    'message': '일일 조회한도를 초과했어요!'
+                    'message': '일일 조회한도를 초과했어요! 이전 정보를 드릴게요!'
                 }
             data = {}
             for item in dict_response:
@@ -35,6 +35,7 @@ def request_info():
             result = {
                 "version": datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y%m%d'),
                 "result": "success",
+                "message": "요청을 성공했어요!",
                 "data": data
             }
             with open(exchangeJsonPath, 'w') as outfile:
@@ -43,12 +44,12 @@ def request_info():
         else:
             return {
                 'result': 'error',
-                'message': '해당 요청일의 환율정보가 없어요!'
+                'message': '해당 요청일의 환율정보가 없어요! 이전 정보를 드릴게요!'
             }
     else:
         return {
             'result': 'error',
-            'message': '통신오류 또는 잘못된 요청이래요!'
+            'message': '통신오류 또는 잘못된 요청이래요! 이전 정보를 드릴게요!'
         }
 
 
@@ -59,7 +60,8 @@ def get_info():
         with open(exchangeJsonPath, "r") as json_file:
             data = json.load(json_file)
             if data['version'] != date:
-                data = request_info()
+                temp = request_info()
+                data = temp if temp['result'] == 'success' else data
     else:
         data = request_info()
     return data
