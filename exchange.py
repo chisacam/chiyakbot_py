@@ -17,7 +17,6 @@ def request_info():
     # print(response.status_code)
     if response.status_code == 200:
         dict_response = response.json()
-        print(dict_response)
         if dict_response != []:
             if dict_response[0]['result'] == 4:
                 return {
@@ -33,7 +32,6 @@ def request_info():
                     'unit': 1 if matched_num == [] else matched_num[0],
                     'cur': item['deal_bas_r']
                 }
-            print(data)
             result = {
                 "version": datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y%m%d'),
                 "result": "success",
