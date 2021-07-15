@@ -367,7 +367,7 @@ def calc_exchange_command(update, context):
                         return
 
         # print(result)
-        update.message.reply_text(f'결과: {result}')
+        update.message.reply_text(f'{user_input[2]} {user_input[1]} ≈ {result} KRW')
 
     else:
         message = exchange_data['message']
