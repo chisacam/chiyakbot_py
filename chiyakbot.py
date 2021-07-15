@@ -360,7 +360,7 @@ def calc_exchange_command(update, context):
                 if code.startswith(user_input[1]):
                     try:
                         result = round(float(item['cur'].replace(
-                            ',', '')) * int(user_input[2]), 3)
+                            ',', '')) * float(user_input[2]), 3)
                     except:
                         update.message.reply_text(
                             '입력값이 숫자가 아닌거같아요! 다시 시도해보세요.')
