@@ -352,7 +352,7 @@ def calc_exchange_command(update, context):
     user_input = update.message.text.split(' ')
     if exchange_data['result'] == 'success':
         input_code = user_input[1].upper()
-        input_cur = user_input[2]
+        input_cur = user_input[2].replace(',', '')
         if len(user_input) <= 2:
             update.message.reply_text('뭔가 빠진거같아요! 다시 시도해주세요!')
         else:
