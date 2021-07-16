@@ -42,7 +42,7 @@ class Worker(threading.Thread):
 
 
 def start_remind_loop(update, context):
-    if update.message.from_user.id != 46674072:
+    if update.message.from_user.id != chiyak.id:
         chiyak.sendMessage(update.message.chat_id, '저런! 주인놈이 아니네요!')
         return
     chiyak.sendMessage(update.message.chat_id, '리마인드 스레드 시작!')

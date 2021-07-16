@@ -113,7 +113,7 @@ def about_command(update, context):
 
 
 def stop_command(update, context):
-    if update.message.from_user.id == 46674072:
+    if update.message.from_user.id == chiyak.id:
         chiyak.sendMessage(check_id(update, context), "안녕히주무세요!")
         chiyak.stop()
 
@@ -142,7 +142,7 @@ def pick_command(update, context):
 
 
 def exit_command(update, context):
-    if update.message.from_user.id == 46674072:
+    if update.message.from_user.id == chiyak.id:
         update.message.reply_text("안녕히 계세요!")
         chiyak.core.leave_chat(update.message.chat.id)
 
@@ -150,7 +150,7 @@ def exit_command(update, context):
 
 
 def delMessage_command(update, context):
-    if update.message.from_user.id == 46674072:
+    if update.message.from_user.id == chiyak.id:
         target_id = update.message.reply_to_message.message_id
         target_group = update.message.reply_to_message.chat.id
         chiyak.core.deleteMessage(target_group, target_id)
@@ -361,7 +361,8 @@ def calc_exchange_command(update, context):
                 item = exchange_data['data'][input_code]
                 result = format(round(float(item['cur'].replace(
                     ',', '')) * input_cur / int(item['unit'])), ",")
-                update.message.reply_text(f'{format_cur} {input_code} ≈ {result} KRW')
+                update.message.reply_text(
+                    f'{format_cur} {input_code} ≈ {result} KRW')
             except:
                 update.message.reply_text(
                     '계산중에 오류가 발생했어요! 지원하지 않는 통화코드거나 값을 잘못 쓰신거같아요! 다시 시도해보세요.')
