@@ -318,59 +318,54 @@ def get_hitomi_info_command(update, context):
 
 
 def get_exchange_command(update, context):
-    exchange_data = exchange.get_info()
     result = ''
     user_input = update.message.text.split(' ', 1)
-    if exchange_data['result'] == 'success':
-        table = prettytable.PrettyTable(['CODE', 'KRW'])
-        table.align['CODE'] = 'l'
-        table.align['KRW'] = 'l'
-        if len(user_input) <= 1:
-            items = exchange_data['data'].items()
-            for code, item in items:
-                # print(item)
-                table.add_row([item['code'], item['cur']])
-            result = table.get_string(sortby="KRW", start=1, end=10)
-        else:
-            items = exchange_data['data'].items()
-            for code, item in items:
-                # print(item)
-                if code.startswith(user_input[1]):
-                    table.add_row([item['code'], item['cur']])
-            result = table.get_string()
-        # print(result)
-        update.message.reply_text(f'<pre>{result}</pre>', parse_mode='HTML')
-
+    table = prettytable.PrettyTable(['CODE', 'KRW'])
+    table.align['CODE'] = 'l'
+    table.align['KRW'] = 'l'
+    if len(user_input) <= 1:
+        exchange_data = exchange.request_info()
+        for item in exchange_data['data']:
+            # print(item)
+            table.add_row([item['currencyCode'], item['basePrice']])
+        result = table.get_string(sortby="CODE")
     else:
-        message = exchange_data['message']
-        update.message.reply_text(f'{message}')
+        input_code = user_input[1].upper()
+        exchange_data = exchange.request_info(input_code)
+        if exchange_data['result']:
+            for item in exchange_data['data']:
+                # print(item)
+                table.add_row([item['currencyCode'], item['basePrice']])
+            result = table.get_string()
+        else:
+            message = exchange_data['message']
+            update.message.reply_text(f'{message}')
+    # print(result)
+    update.message.reply_text(f'<pre>{result}</pre>', parse_mode='HTML')
 
 
 def calc_exchange_command(update, context):
-    exchange_data = exchange.get_info()
     result = None
     user_input = update.message.text.split(' ')
-    if exchange_data['result'] == 'success':
-        if len(user_input) <= 2:
-            update.message.reply_text('뭔가 빠진거같아요! 다시 시도해주세요!')
-        else:
-            input_code = user_input[1].upper()
-            input_cur = round(float(user_input[2].replace(',', '')))
-            format_cur = format(input_cur, ",")
+    if len(user_input) <= 2:
+        update.message.reply_text('뭔가 빠진거같아요! 다시 시도해주세요!')
+    else:
+        input_code = user_input[1].upper()
+        exchange_data = exchange.request_info(input_code)
+        input_cur = round(float(user_input[2].replace(',', '')))
+        format_cur = format(input_cur, ",")
+        if exchange_data['result']:
             try:
-                item = exchange_data['data'][input_code]
-                result = format(round(float(item['cur'].replace(
-                    ',', '')) * input_cur / int(item['unit'])), ",")
-                update.message.reply_text(
-                    f'{format_cur} {input_code} ≈ {result} KRW')
+                item = exchange_data['data'][0]
+                result = format(round(float(item['basePrice']) * input_cur / int(item['currencyUnit'])), ",")
+                update.message.reply_text(f'{format_cur} {input_code} ≈ {result} KRW')
             except:
                 update.message.reply_text(
                     '계산중에 오류가 발생했어요! 지원하지 않는 통화코드거나 값을 잘못 쓰신거같아요! 다시 시도해보세요.')
                 return
-
-    else:
-        message = exchange_data['message']
-        update.message.reply_text(f'{message}')
+        else:
+            message = exchange_data['message']
+            update.message.reply_text(f'{message}')
 
 
 # 메세지 감지가 필요한 기능들

@@ -1,68 +1,38 @@
 import requests
-from dotenv import load_dotenv
-import os
-import datetime
 import json
+import datetime
 from pytz import timezone
-import re
 
-load_dotenv(verbose=True)
-exchangeJsonPath = './exchange.json'
-get_num = re.compile('(\d+)')
-get_code = re.compile('([A-Z]+)')
+all_code = 'FRX.KRWUSD,FRX.KRWCNY,FRX.KRWJPY,FRX.KRWEUR,FRX.KRWHKD,FRX.KRWTWD,FRX.KRWVND,FRX.KRWCAD,FRX.KRWRUB,FRX.KRWTHB,FRX.KRWPHP,FRX.KRWSGD,FRX.KRWAUD,FRX.KRWGBP,FRX.KRWMYR,FRX.KRWZAR,FRX.KRWNOK,FRX.KRWNZD,FRX.KRWDKK,FRX.KRWMXN,FRX.KRWMNT,FRX.KRWBHD,FRX.KRWBDT,FRX.KRWBRL,FRX.KRWBND,FRX.KRWSAR,FRX.KRWLKR,FRX.KRWSEK,FRX.KRWCHF,FRX.KRWAED,FRX.KRWDZD,FRX.KRWOMR,FRX.KRWJOD,FRX.KRWILS,FRX.KRWEGP,FRX.KRWINR,FRX.KRWIDR,FRX.KRWCZK,FRX.KRWCLP,FRX.KRWKZT,FRX.KRWQAR,FRX.KRWKES,FRX.KRWCOP,FRX.KRWKWD,FRX.KRWTZS,FRX.KRWTRY,FRX.KRWPKP,FRX.KRWPLN,FRX.KRWHUF'
+top_code = 'FRX.KRWUSD,FRX.KRWCNY,FRX.KRWJPY,FRX.KRWEUR,FRX.KRWHKD,FRX.KRWTWD,FRX.KRWGBP,FRX.KRWVND,FRX.KRWCAD,FRX.KRWRUB'
+base_code= 'FRX.KRW'
 
-def request_info():
+def request_info(req_code='TOP'):
+    req = ''
+    if req_code == 'ALL':
+        req = all_code
+    elif req_code == 'TOP':
+        req = top_code
+    else:
+        req = base_code + req_code
     response = requests.get(
-        'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey={}&data=AP01'.format(os.getenv('EXCHANGEKEY')))
+        'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes={}'.format(req))
     # print(response.status_code)
     if response.status_code == 200:
         dict_response = response.json()
         if dict_response != []:
-            if dict_response[0]['result'] == 4:
-                return {
-                    'result': 'error',
-                    'message': '일일 조회한도를 초과했어요! 이전 정보를 드릴게요!'
-                }
-            data = {}
-            for item in dict_response:
-                matched_num = get_num.findall(item['cur_unit'])
-                matched_code = get_code.findall(item['cur_unit'])
-                data[matched_code[0]] = {
-                    'code': item['cur_unit'],
-                    'name': item['cur_nm'],
-                    'unit': 1 if matched_num == [] else matched_num[0],
-                    'cur': item['deal_bas_r']
-                }
-            result = {
-                "version": datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y%m%d'),
-                "result": "success",
-                "message": "요청을 성공했어요!",
-                "data": data
+            return {
+                'result': True,
+                'message': '요청을 성공했어요!',
+                'data': dict_response
             }
-            with open(exchangeJsonPath, 'w') as outfile:
-                json.dump(result, outfile, indent=4, ensure_ascii=False)
-            return result
         else:
             return {
-                'result': 'error',
-                'message': '해당 요청일의 환율정보가 없어요! 이전 정보를 드릴게요!'
-            }
+            'result': False,
+            'message': '통신오류 또는 결과값이 없어요! 입력값을 다시 확인해보세요!'
+        }
     else:
         return {
-            'result': 'error',
-            'message': '통신오류 또는 잘못된 요청이래요! 이전 정보를 드릴게요!'
+            'result': False,
+            'message': '통신오류 또는 잘못된 요청이래요! 입력값을 다시 확인해보세요!'
         }
-
-
-def get_info():
-    date = datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y%m%d')
-    data = None
-    if os.path.exists(exchangeJsonPath):
-        with open(exchangeJsonPath, "r") as json_file:
-            data = json.load(json_file)
-            if data['version'] != date:
-                temp = request_info()
-                data = temp if temp['result'] == 'success' else data
-    else:
-        data = request_info()
-    return data
