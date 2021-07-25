@@ -8,6 +8,7 @@ import sauceNAO
 import hitomi
 import reminder
 import exchange
+import kospnamu
 import boto3
 import json
 from inko import Inko
@@ -368,6 +369,12 @@ def calc_exchange_command(update, context):
             update.message.reply_text(f'{message}')
 
 
+def kospnamu_command(update, context):
+    rank, rank_status = kospnamu.get_kospnamu()
+    res_text = '떨어진다 싶을때는 개 추해요' if '하락' in rank_status else '갇힌분은 어서 돔황챠'
+    update.message.reply_text(f'{rank}, {rank_status}\n{res_text}')
+    return
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -391,6 +398,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('kospn', kospnamu_command)
 chiyak.add_cmdhandler('exchc', calc_exchange_command)
 chiyak.add_cmdhandler('exch', get_exchange_command)
 chiyak.add_cmdhandler('rmdl', reminder.start_remind_loop)
