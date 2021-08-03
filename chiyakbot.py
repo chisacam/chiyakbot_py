@@ -329,7 +329,7 @@ def get_exchange_command(update, context):
         for item in exchange_data['data']:
             # print(item)
             table.add_row([item['currencyCode'], item['basePrice']])
-        result = table.get_string(sortby="CODE")
+        result = table.get_string()
     else:
         input_code = user_input[1].upper()
         exchange_data = exchange.request_info(input_code)
@@ -358,8 +358,10 @@ def calc_exchange_command(update, context):
         if exchange_data['result']:
             try:
                 item = exchange_data['data'][0]
-                result = format(round(float(item['basePrice']) * input_cur / int(item['currencyUnit'])), ",")
-                update.message.reply_text(f'{format_cur} {input_code} ≈ {result} KRW')
+                result = format(
+                    round(float(item['basePrice']) * input_cur / int(item['currencyUnit'])), ",")
+                update.message.reply_text(
+                    f'{format_cur} {input_code} ≈ {result} KRW')
             except:
                 update.message.reply_text(
                     '계산중에 오류가 발생했어요! 지원하지 않는 통화코드거나 값을 잘못 쓰신거같아요! 다시 시도해보세요.')
@@ -372,7 +374,7 @@ def calc_exchange_command(update, context):
 def kospnamu_command(update, context):
     rank, rank_status = kospnamu.get_kospnamu()
     res_text = '떨어진다 싶을때는 개 추해요' if '하락' in rank_status else '갇힌분은 어서 돔황챠'
-    update.message.reply_text(f'{rank}, {rank_status}\n{res_text}')
+    update.message.reply_text(f'피나무 한국 {rank}, {rank_status}\n{res_text}')
     return
 
 # 메세지 감지가 필요한 기능들
