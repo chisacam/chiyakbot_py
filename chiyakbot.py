@@ -2,7 +2,6 @@ import chatbotmodel
 from telegram import InputMediaPhoto
 import re
 import random
-import marketPrice
 import checkPickup
 import sauceNAO
 import hitomi
@@ -48,9 +47,6 @@ modelcode가 없으면 5세대 12.9 128 셀룰러 스페이스 그레이 예약�
 
 /roll [%dd%d] '정수1' + d + '정수2' 형식으로 쓰면 정수2각형 주사위 정수1개만큼 굴려서 결과 출력
 기반코드: https://github.com/superfluite/trpg-dice-bot
-
-/cmd [modelcode] 스마트폰 모델명을 입력하면 오늘 시세를 알려주는 기능
-시세는 세티즌 시세표를 받아옴.
 
 /ds 답장을 사용한 메세지의 긍정/부정에 따라 괜찮아요/나빠요 출력
 aws는 대개 나쁘다고 생각하는듯함.
@@ -288,17 +284,6 @@ def simimg_command(update, context):
         update.message.reply_text('사진이 없는거같아요! 사진에 답장을 써주세요!')
 
 
-def checkMarketPrice_command(update, context):
-    want = update.message.text.split(' ', 1)
-    if len(want) <= 1:
-        chiyak.sendMessage(update.message.chat_id, '어떤 모델인지 안알려줬거나 형식에 맞지않아요!')
-        return
-    else:
-        pretty_result = marketPrice.get_select_model_price(want[1])
-        chiyak.core.sendMessage(
-            chat_id=update.message.chat_id, text=pretty_result, parse_mode='MarkdownV2')
-
-
 def get_hitomi_info_command(update, context):
     user_input = update.message.text.split(' ', 1)
     if len(user_input) <= 1:
@@ -412,7 +397,6 @@ chiyak.add_cmdhandler('simimg', simimg_command)
 chiyak.add_cmdhandler('ds', detectSentiment_command)
 chiyak.add_cmdhandler('ko2en', koen_command)
 chiyak.add_cmdhandler('en2ko', enko_command)
-chiyak.add_cmdhandler('cmp', checkMarketPrice_command)
 chiyak.add_cmdhandler('cp', checkPickup.checkPickup_command)
 chiyak.add_cmdhandler('cpl', checkPickup.checkPickupLoop)
 chiyak.add_cmdhandler('cpr', checkPickup.checkPickupRegister)
