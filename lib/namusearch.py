@@ -26,4 +26,4 @@ def search_namu(query):
     sql = conn.cursor()
     sql.execute(f"SELECT summary FROM namu WHERE title LIKE '%{query}%'")
     result = sql.fetchone()
-    return result[0]
+    return result[0] if result != None else '검색결과가 없어요!'
