@@ -5,7 +5,7 @@ import threading
 import json
 import os.path
 import re
-import escape
+from . import escape
 
 chiyak = chatbotmodel.chiyakbot()
 alert_users = {}

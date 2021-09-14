@@ -1,5 +1,5 @@
 import telegram
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, InlineQueryHandler
 import sys, os
 from dotenv import load_dotenv
 
@@ -39,6 +39,9 @@ class chiyakbot(TelegramBot):
     
     def add_conversationHandler(self, conversationHandler):
         self.updater.dispatcher.add_handler(conversationHandler)
+    
+    def add_inlinequeryhandler(self, queryhandler):
+        self.updater.dispatcher.add_handler(InlineQueryHandler(queryhandler))
 
     def start(self):
         self.sendMessage(self.id, '안녕하세요! 일어났어요.')

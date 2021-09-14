@@ -2,12 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto
 import re
 import random
-import checkPickup
-import sauceNAO
-import hitomi
-import reminder
-import exchange
-import kospnamu
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, kospnamu, namusearch
 import boto3
 import json
 from inko import Inko
@@ -362,6 +357,16 @@ def kospnamu_command(update, context):
     update.message.reply_text(f'피나무 한국 {rank}, {rank_status}\n{res_text}')
     return
 
+def namesearch_command(update, context):
+    text = update.message.text.split(' ', 1)
+    if len(text) <= 1:
+        update.message.reply_text(
+            '명령어 뒤에 검색하고자 하는 단어를 써주세요!\n예시: /namu 나무')
+    else:
+        result = namusearch.search_namu(text[1])
+        update.message.reply_text(result)
+
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -385,6 +390,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('namu', namesearch_command)
 chiyak.add_cmdhandler('kospn', kospnamu_command)
 chiyak.add_cmdhandler('exchc', calc_exchange_command)
 chiyak.add_cmdhandler('exch', get_exchange_command)
@@ -407,6 +413,7 @@ chiyak.add_cmdhandler('stop', stop_command)
 chiyak.add_cmdhandler('pick', pick_command)
 chiyak.add_cmdhandler('exit', exit_command)
 chiyak.add_cmdhandler('del', delMessage_command)
+chiyak.add_inlinequeryhandler(namusearch.inlinequeryhandler)
 chiyak.add_conversationHandler(reminder.rm_remind_handler)
 chiyak.add_messagehandler(messagedetecter)
 

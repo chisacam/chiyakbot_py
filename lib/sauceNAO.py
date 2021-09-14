@@ -1,5 +1,5 @@
 import requests
-from escape import escape_for_md
+from .escape import escape_for_md
 
 base_url = 'https://saucenao.com/search.php?db=999&output_type=2&testmode=1&api_key=e0bd2877c4c8fb636e2d49143ac1d02408229ca7&url='
 

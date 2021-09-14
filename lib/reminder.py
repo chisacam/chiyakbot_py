@@ -9,7 +9,6 @@ import chatbotmodel
 import uuid
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters
-import escape
 
 chiyak = chatbotmodel.chiyakbot()
 file_path = './reminded.json'
