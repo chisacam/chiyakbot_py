@@ -22,10 +22,12 @@ def inlinequeryhandler(update, context):
         ))
         i += 1
     update.inline_query.answer(results)
+    sql.close()
 
 def search_namu(query):
     conn = sqlite3.connect('./namu.db')
     sql = conn.cursor()
     sql.execute(f"SELECT summary FROM namu WHERE title LIKE '%{query}%'")
     result = sql.fetchone()
+    sql.close()
     return result[0] if result != None else '검색결과가 없어요!'
