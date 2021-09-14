@@ -9,7 +9,7 @@ def inlinequeryhandler(update, context):
         return
     conn = sqlite3.connect('./namu.db')
     sql = conn.cursor()
-    sql.execute(f"SELECT * FROM namu WHERE title LIKE '%{query}%' limit 30")
+    sql.execute(f"SELECT * FROM namu WHERE title LIKE '{query}%' limit 30")
     result = sql.fetchall()
     results = []
     i = 0
