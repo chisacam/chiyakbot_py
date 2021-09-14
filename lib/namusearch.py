@@ -16,7 +16,7 @@ def inlinequeryhandler(update, context):
     for title, content in result:
         lines = content.split('.')
         get_line_limit = 5 if len(lines) >= 5 else len(lines)
-        summary = ''.join(lines[:get_line_limit])
+        summary = '.'.join(lines[:get_line_limit])
         results.append(InlineQueryResultArticle(
             id=str(uuid4()),
             title=title,
@@ -36,7 +36,7 @@ def search_namu(query):
     if content != None:
         lines = content[0].split('.')
         get_line_limit = 5 if len(lines) >= 5 else len(lines)
-        result = ''.join(lines[:get_line_limit])
+        result = '.'.join(lines[:get_line_limit])
     else:
         result = '검색결과가 없어요!'
     return result
