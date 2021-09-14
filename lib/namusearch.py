@@ -9,16 +9,18 @@ def inlinequeryhandler(update, context):
         return
     conn = sqlite3.connect('./namu.db')
     sql = conn.cursor()
-    sql.execute(f"SELECT * FROM namu WHERE title LIKE '%{query}%' limit 40")
+    sql.execute(f"SELECT * FROM namu WHERE title LIKE '%{query}%' limit 30")
     result = sql.fetchall()
     results = []
+    i = 0
     for title, content in result:
         results.append(InlineQueryResultArticle(
-            id=str(uuid4()),
+            id=str(i),
             title=title,
             input_message_content=InputTextMessageContent(f'/namu {title}'),
             description=content
         ))
+        i += 1
     update.inline_query.answer(results)
 
 def search_namu(query):
