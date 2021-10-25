@@ -158,7 +158,7 @@ def enko_command(update, context):
         text = update.message.text.split(' ', 1)
         if len(text) <= 1:
             update.message.reply_text(
-                '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/enko dksl')
+                '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/en2ko dksl')
         else:
             update.message.reply_text(myInko.en2ko(text[1]))
 
@@ -171,7 +171,7 @@ def koen_command(update, context):
         text = update.message.text.split(' ', 1)
         if len(text) <= 1:
             update.message.reply_text(
-                '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/koen ㅗ디ㅣㅐ')
+                '변환하고자 하는 메세지에 답장을 달거나, 명령어 뒤에 변환하고자 하는 문자열을 써주세요!\n ex)/ko2en ㅗ디ㅣㅐ')
         else:
             update.message.reply_text(myInko.ko2en(text[1]))
 
@@ -375,7 +375,7 @@ def messagedetecter(update, context):
         # 채팅창 계산기 기능
         is_calc = calc_p.match(update.message.text)
         if is_calc:
-            result = eval(update.message.text[1:])
+            result = round(float(eval(update.message.text[1:])))
             update.message.reply_text(result)
         else:
             # 확률대답 기능
