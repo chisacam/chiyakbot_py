@@ -9,7 +9,7 @@ class TelegramBot:
     def __init__(self, name, token):
         self.core = telegram.Bot(token)
         self.updater = Updater(token)
-        self.id = int(os.getenv('ADMIN_TG_ID'))
+        self.id = os.getenv('ADMIN_TG_ID')
         self.name = name
 
     def sendMessage(self, id, text):

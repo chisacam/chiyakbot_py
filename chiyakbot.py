@@ -2,7 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, kospnamu, namusearch
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, kospnamu, namusearch, papago
 import boto3
 import json
 from inko import Inko
@@ -366,6 +366,21 @@ def namesearch_command(update, context):
         result = namusearch.search_namu(text[1])
         update.message.reply_text(result)
 
+def papago_command(update, context):
+    if update.message.reply_to_message is not None:
+        if update.message.reply_to_message.text is not None:
+            text = update.message.reply_to_message.text
+            result = papago.get_translate(text)
+            update.message.reply_text(result)
+    else:
+        text = update.message.text.split(' ', 1)
+        if len(text) <= 1:
+            update.message.reply_text(
+                '명령어 뒤에 번역하고자 하는 문장을 쓰거나 답장으로 알려주세요!\n예시: /papago Heads up that my son\'s school closed for in-person learning for ten days, starting this afternoon, because of a covid outbreak that began at the end of last week, and all kids and staff who were in that building within the past 48 hours are advised to self-isolate for five days and then get a covid test.')
+        else:
+            result = papago.get_translate(text[1])
+            update.message.reply_text(result)
+
 
 # 메세지 감지가 필요한 기능들
 
@@ -390,6 +405,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('papago', papago_command)
 chiyak.add_cmdhandler('namu', namesearch_command)
 chiyak.add_cmdhandler('kospn', kospnamu_command)
 chiyak.add_cmdhandler('exchc', calc_exchange_command)
