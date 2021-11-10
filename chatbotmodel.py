@@ -7,10 +7,15 @@ load_dotenv(verbose=True)
 
 class TelegramBot:
     def __init__(self, name, token):
-        self.core = telegram.Bot(token)
-        self.updater = Updater(token)
-        self.id = os.getenv('ADMIN_TG_ID')
-        self.name = name
+        id = os.getenv('ADMIN_TG_ID')
+        if id is not None:
+            self.core = telegram.Bot(token)
+            self.updater = Updater(token)
+            self.id = int(id)
+            self.name = name
+        else:
+            print('admin\'s telegram id is not set')
+            sys.exit(1)
 
     def sendMessage(self, id, text):
         self.core.sendMessage(chat_id=id, text=text)
