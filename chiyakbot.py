@@ -390,7 +390,7 @@ def messagedetecter(update, context):
         # 채팅창 계산기 기능
         is_calc = calc_p.match(update.message.text)
         if is_calc:
-            result = round(float(eval(update.message.text[1:])))
+            result = round(float(eval(update.message.text[1:])), 2)
             update.message.reply_text(result)
         else:
             # 확률대답 기능
