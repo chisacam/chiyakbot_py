@@ -1,3 +1,4 @@
+from distutils.command.clean import clean
 import chatbotmodel
 from telegram import InputMediaPhoto
 import re
@@ -379,7 +380,8 @@ def papago_command(update, context):
             update.message.reply_text(
                 '명령어 뒤에 번역하고자 하는 문장을 쓰거나 답장으로 알려주세요!\n예시: /papago Heads up that my son\'s school closed for in-person learning for ten days, starting this afternoon, because of a covid outbreak that began at the end of last week, and all kids and staff who were in that building within the past 48 hours are advised to self-isolate for five days and then get a covid test.')
         else:
-            result = papago.get_translate(text[1])
+            cleaned_text = text[1].replace('\n', ' ')
+            result = papago.get_translate(cleaned_text)
             update.message.reply_text(result)
 
 
