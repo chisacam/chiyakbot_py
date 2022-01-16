@@ -370,7 +370,8 @@ def papago_command(update, context):
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
             text = update.message.reply_to_message.text
-            result = papago.get_translate(text)
+            cleaned_text = text.replace('\n', ' ')
+            result = papago.get_translate(cleaned_text)
             update.message.reply_text(result)
     else:
         text = update.message.text.split(' ', 1)
