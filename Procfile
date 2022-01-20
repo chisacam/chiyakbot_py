@@ -1,1 +1,1 @@
-web: python3 chiyakbot.py production
+worker: python3 chiyakbot.py production
