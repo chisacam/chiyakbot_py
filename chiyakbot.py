@@ -385,7 +385,7 @@ def papago_command(update, context):
 
 def corona_today_command(update, context):
     result = corona.get_today_info()
-    update.message.reply_text(f"현재 확진자수: {result['live']['today']}")
+    update.message.reply_text(f"{result['last_updated']} 기준 확진자수: {result['live']['today']}")
 
 
 # 메세지 감지가 필요한 기능들
