@@ -7,5 +7,6 @@ def get_today_info():
     req_response = requests.get(req_url)
     last_mod_response = requests.get(last_mod_url)
     data = req_response.json()
+    data['sorted_cities'] = sorted(data['cities'].items(), key=lambda x: x[1][0], reverse=True)
     data['last_updated'] = datetime.datetime.fromtimestamp(float(last_mod_response.json()['datetime'] / 1000), pytz.timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
     return data

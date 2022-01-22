@@ -62,6 +62,27 @@ ex) 오늘 일론머스크가 또 헛소리할 확률은?
 ex) 마법의 소라고둥님 오늘 도지가 화성에 갈까요?
 """.format(available_modeltype)
 
+cities = {
+    '8': '경기',
+    '0': '서울',
+    '2': '인천',
+    '3': '대구',
+    '4': '광주',
+    '1': '부산',
+    '12': '경북',
+    '13': '경남',
+    '11': '충남',
+    '15': '전남',
+    '5': '대전',
+    '14': '전북',
+    '10': '충북',
+    '9': '강원',
+    '6': '울산',
+    '16': '제주',
+    '7': '세종',
+    '17': '검역'
+}
+
 # 유저 chat_id 가져오기
 
 
@@ -383,9 +404,25 @@ def papago_command(update, context):
             result = papago.get_translate(cleaned_text)
             update.message.reply_text(result)
 
-def corona_today_command(update, context):
+def corona_today_total_command(update, context):
     result = corona.get_today_info()
-    update.message.reply_text(f"{result['last_updated']} 기준 확진자수: {result['live']['today']}")
+    update.message.reply_text(
+        f"{result['last_updated']} 기준\n \
+오늘 확진자수: {result['live']['today']}\n \
+어제 확진자수: {result['live']['yesterday']}\n \
+일주일전 확진자수: {result['live']['weekAgo']}\n \
+2주전 확진자수: {result['live']['twoWeeksAgo']}\n \
+한달전 확진자수: {result['live']['monthAgo']}\n"
+    )
+
+def corona_today_city_command(update, context):
+    result = corona.get_today_info()
+    rep_text = f"{result['last_updated']} 기준\n"
+    for item in result['sorted_cities']:
+        rep_text += f'{cities[item[0]]} : {item[1][0]}, 증감 : {item[1][1]}\n'
+    update.message.reply_text(
+        rep_text
+    )
 
 
 # 메세지 감지가 필요한 기능들
@@ -411,7 +448,8 @@ def messagedetecter(update, context):
         print(e)
 
 
-chiyak.add_cmdhandler('corona', corona_today_command)
+chiyak.add_cmdhandler('coronacity', corona_today_city_command)
+chiyak.add_cmdhandler('coronatotal', corona_today_total_command)
 chiyak.add_cmdhandler('papago', papago_command)
 chiyak.add_cmdhandler('namu', namesearch_command)
 chiyak.add_cmdhandler('kospn', kospnamu_command)
