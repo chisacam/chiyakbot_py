@@ -1,9 +1,8 @@
-from distutils.command.clean import clean
 import chatbotmodel
 from telegram import InputMediaPhoto
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, kospnamu, namusearch, papago
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, kospnamu, namusearch, papago, corona
 import boto3
 import json
 from inko import Inko
@@ -384,6 +383,10 @@ def papago_command(update, context):
             result = papago.get_translate(cleaned_text)
             update.message.reply_text(result)
 
+def corona_today_command(update, context):
+    result = corona.get_today_info()
+    update.message.reply_text(f"현재 확진자수: {result['live']['today']}")
+
 
 # 메세지 감지가 필요한 기능들
 
@@ -408,6 +411,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('corona', corona_today_command)
 chiyak.add_cmdhandler('papago', papago_command)
 chiyak.add_cmdhandler('namu', namesearch_command)
 chiyak.add_cmdhandler('kospn', kospnamu_command)

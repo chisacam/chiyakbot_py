@@ -8,3 +8,4 @@ exchange.json
 .vscode
 .env
 namu.db
+.DS_Store
