@@ -410,7 +410,7 @@ def corona_today_total_command(update, context):
         f"{result['last_updated']} 기준\n \
 오늘 확진자수: {result['live']['today']}\n \
 어제 확진자수: {result['live']['yesterday']}\n \
-일주일전 확진자수: {result['live']['weekAgo']}\n \
+1주전 확진자수: {result['live']['weekAgo']}\n \
 2주전 확진자수: {result['live']['twoWeeksAgo']}\n \
 한달전 확진자수: {result['live']['monthAgo']}\n"
     )
