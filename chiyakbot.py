@@ -83,6 +83,13 @@ cities = {
     '17': '검역'
 }
 
+# deprecated func alert
+
+
+def deprecated(update):
+    update.message.reply_text('저런, 이 기능은 더이상 지원되지 않아요!')
+
+
 # 유저 chat_id 가져오기
 
 
@@ -373,19 +380,20 @@ def calc_exchange_command(update, context):
 
 
 def kospnamu_command(update, context):
-    rank, rank_status = kospnamu.get_kospnamu()
-    res_text = '떨어진다 싶을때는 개 추해요' if '하락' in rank_status else '갇힌분은 어서 돔황챠'
-    update.message.reply_text(f'피나무 한국 {rank}, {rank_status}\n{res_text}')
-    return
+    deprecated(update)
+    #rank, rank_status = kospnamu.get_kospnamu()
+    #res_text = '떨어진다 싶을때는 개 추해요' if '하락' in rank_status else '갇힌분은 어서 돔황챠'
+    #update.message.reply_text(f'피나무 한국 {rank}, {rank_status}\n{res_text}')
 
 def namesearch_command(update, context):
-    text = update.message.text.split(' ', 1)
-    if len(text) <= 1:
-        update.message.reply_text(
-            '명령어 뒤에 검색하고자 하는 단어를 써주세요!\n예시: /namu 나무')
-    else:
-        result = namusearch.search_namu(text[1])
-        update.message.reply_text(result)
+    deprecated(update)
+    #text = update.message.text.split(' ', 1)
+    #if len(text) <= 1:
+    #    update.message.reply_text(
+    #        '명령어 뒤에 검색하고자 하는 단어를 써주세요!\n예시: /namu 나무')
+    #else:
+    #    result = namusearch.search_namu(text[1])
+    #    update.message.reply_text(result)
 
 def papago_command(update, context):
     if update.message.reply_to_message is not None:
@@ -449,7 +457,7 @@ def messagedetecter(update, context):
 
 
 chiyak.add_cmdhandler('coronacity', corona_today_city_command)
-chiyak.add_cmdhandler('coronatotal', corona_today_total_command)
+chiyak.add_cmdhandler('coronatoday', corona_today_total_command)
 chiyak.add_cmdhandler('papago', papago_command)
 chiyak.add_cmdhandler('namu', namesearch_command)
 chiyak.add_cmdhandler('kospn', kospnamu_command)
