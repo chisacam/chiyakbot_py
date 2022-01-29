@@ -449,7 +449,7 @@ def messagedetecter(update, context):
 
 
 chiyak.add_cmdhandler('coronacity', corona_today_city_command)
-chiyak.add_cmdhandler('coronatotal', corona_today_total_command)
+chiyak.add_cmdhandler('coronatoday', corona_today_total_command)
 chiyak.add_cmdhandler('papago', papago_command)
 chiyak.add_cmdhandler('namu', namesearch_command)
 chiyak.add_cmdhandler('kospn', kospnamu_command)
