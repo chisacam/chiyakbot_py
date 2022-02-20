@@ -2,7 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, kospnamu, namusearch, papago, corona
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, corona
 import boto3
 import json
 from inko import Inko
