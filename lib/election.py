@@ -12,4 +12,6 @@ def getElectionStatus():
     gook_gim_per = table.select_one('tbody > tr:nth-child(3) > td:nth-child(5)').get_text()
     election_per = table.select_one('tbody > tr:nth-child(2) > td:nth-child(19)').get_text()
     base_time = datetime.datetime.now(pytz.timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
-    return f'{the_min_name} {the_min_per}%', f'{gook_gim_name} {gook_gim_per}%', f'{election_per}%', base_time
+    diff = float(the_min_per) - float(gook_gim_per)
+    diff_per = diff * -1 if diff < 0 else diff
+    return f'{the_min_name} {the_min_per}%', f'{gook_gim_name} {gook_gim_per}%', f'{election_per}%', base_time, diff_per
