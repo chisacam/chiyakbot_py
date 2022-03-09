@@ -2,7 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, corona
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, corona, election
 import boto3
 import json
 from inko import Inko
@@ -432,6 +432,11 @@ def corona_today_city_command(update, context):
         rep_text
     )
 
+def election_command(update, context):
+    the_min, gook_gim = election.getElectionStatus()
+    rep_text = f'{the_min}\n{gook_gim}'
+    update.message.reply_text(rep_text)
+
 
 # 메세지 감지가 필요한 기능들
 
@@ -456,6 +461,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('election', election_command)
 chiyak.add_cmdhandler('coronacity', corona_today_city_command)
 chiyak.add_cmdhandler('coronatoday', corona_today_total_command)
 chiyak.add_cmdhandler('papago', papago_command)
