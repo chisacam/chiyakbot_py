@@ -4,7 +4,6 @@ import re
 import random
 from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, corona, election
 import boto3
-import json
 from inko import Inko
 import prettytable
 
@@ -433,8 +432,8 @@ def corona_today_city_command(update, context):
     )
 
 def election_command(update, context):
-    the_min, gook_gim = election.getElectionStatus()
-    rep_text = f'{the_min}\n{gook_gim}'
+    the_min, gook_gim, election_per, base_time = election.getElectionStatus()
+    rep_text = f'{the_min}\n{gook_gim}\n\n개표율 {election_per}\n기준일 {base_time}'
     update.message.reply_text(rep_text)
 
 
