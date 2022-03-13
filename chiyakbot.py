@@ -432,9 +432,10 @@ def corona_today_city_command(update, context):
     )
 
 def election_command(update, context):
-    the_min, gook_gim, election_per, base_time, diff = election.getElectionStatus()
-    rep_text = f'{the_min}\n{gook_gim}\n득표차 {diff:2.2f}%p\n\n개표율 {election_per}\n기준일 {base_time}'
-    update.message.reply_text(rep_text)
+    deprecated(update)
+    #the_min, gook_gim, election_per, base_time, diff = election.getElectionStatus()
+    #rep_text = f'{the_min}\n{gook_gim}\n득표차 {diff:2.2f}%p\n\n개표율 {election_per}\n기준일 {base_time}'
+    #update.message.reply_text(rep_text)
 
 
 # 메세지 감지가 필요한 기능들
