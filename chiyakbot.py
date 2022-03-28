@@ -437,6 +437,9 @@ def election_command(update, context):
     #rep_text = f'{the_min}\n{gook_gim}\n득표차 {diff:2.2f}%p\n\n개표율 {election_per}\n기준일 {base_time}'
     #update.message.reply_text(rep_text)
 
+def here_command(update, context):
+    chiyak.core.sendMessage(chat_id=update.message.chat_id, text='/wol@Wolfpaw_bot')
+
 
 # 메세지 감지가 필요한 기능들
 
@@ -461,6 +464,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('here', here_command)
 chiyak.add_cmdhandler('election', election_command)
 chiyak.add_cmdhandler('coronacity', corona_today_city_command)
 chiyak.add_cmdhandler('coronatoday', corona_today_total_command)
