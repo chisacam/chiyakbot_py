@@ -457,7 +457,7 @@ def get_reply_command(update, context):
 def get_message_id_command(update, context):
     if update.message.reply_to_message is not None:
         update.message.reply_text(
-            f'이 메세지의 id는{update.message.reply_to_message.message_id} 이에요!'
+            f'이 메세지의 id는 {update.message.reply_to_message.message_id} 이에요!'
         )
     else:
         update.message.reply_text(
