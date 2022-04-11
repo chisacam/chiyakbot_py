@@ -1,5 +1,5 @@
 import chatbotmodel
-from telegram import InputMediaPhoto
+from telegram import InputMediaPhoto, error
 import re
 import random
 from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, corona, election
@@ -443,7 +443,12 @@ def here_command(update, context):
 def get_reply_command(update, context):
     input_text = update.message.text.split(' ', 1)
     if len(input_text) > 1 and input_text[1].isdigit():
-        chiyak.core.sendMessage(chat_id=update.message.chat_id, text=f'{input_text[1]}번째 메세지에요!', reply_to_message_id=input_text[1])
+        try:
+            chiyak.core.sendMessage(chat_id=update.message.chat_id, text=f'{input_text[1]}번째 메세지에요!', reply_to_message_id=input_text[1])
+        except error.BadRequest:
+            update.message.reply_text(
+                '저런, 해당하는 메세지가 없네요!'
+            )
     else:
         update.message.reply_text(
             '저런, id가 올바르지 않네요! 숫자로만 구성해주세요!'
