@@ -440,6 +440,14 @@ def election_command(update, context):
 def here_command(update, context):
     chiyak.core.sendMessage(chat_id=update.message.chat_id, text='/wol@Wolfpaw_bot')
 
+def get_reply_command(update, context):
+    input_text = update.message.text.split(' ', 1)
+    if len(input_text) > 1 and input_text[1].isdigit():
+        chiyak.core.sendMessage(chat_id=update.message.chat_id, text=f'{input_text[1]}번째 메세지에요!', reply_to_message_id=input_text[1])
+    else:
+        update.message.reply_text(
+            '저런, id가 올바르지 않네요! 숫자로만 구성해주세요!'
+        )
 
 # 메세지 감지가 필요한 기능들
 
@@ -464,6 +472,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('getmsg', get_reply_command)
 chiyak.add_cmdhandler('here', here_command)
 chiyak.add_cmdhandler('election', election_command)
 chiyak.add_cmdhandler('coronacity', corona_today_city_command)
