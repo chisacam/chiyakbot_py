@@ -454,7 +454,7 @@ def get_reply_command(update, context):
             '저런, id가 올바르지 않네요! 숫자로만 구성해주세요!'
         )
 
-def get_message_id(update, context):
+def get_message_id_command(update, context):
     if update.message.reply_to_message is not None:
         update.message.reply_text(
             f'이 메세지의 id는{update.message.reply_to_message.message_id} 이에요!'
@@ -487,6 +487,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('getmsgid', get_message_id_command)
 chiyak.add_cmdhandler('getmsg', get_reply_command)
 chiyak.add_cmdhandler('here', here_command)
 chiyak.add_cmdhandler('election', election_command)
