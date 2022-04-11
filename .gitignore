@@ -2,7 +2,7 @@ __pycache__
 .python-version
 registerd.json
 reminded.json
-chiyakbotLog.log
+*.log
 marketPrice.json
 exchange.json
 .vscode

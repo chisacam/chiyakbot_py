@@ -454,6 +454,16 @@ def get_reply_command(update, context):
             '저런, id가 올바르지 않네요! 숫자로만 구성해주세요!'
         )
 
+def get_message_id(update, context):
+    if update.message.reply_to_message is not None:
+        update.message.reply_text(
+            f'이 메세지의 id는{update.message.reply_to_message.message_id} 이에요!'
+        )
+    else:
+        update.message.reply_text(
+            '저런, 답장형식이 아니네요! 원하는 메세지에 답장으로 사용해주세요!'
+        )
+
 # 메세지 감지가 필요한 기능들
 
 
