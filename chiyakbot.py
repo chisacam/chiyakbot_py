@@ -6,6 +6,7 @@ from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, p
 import boto3
 from inko import Inko
 import prettytable
+import time
 
 # 전역변수
 
@@ -277,7 +278,7 @@ def makeQR_command(update, context):
             update.message.reply_text('텍스트에만 사용 해주세요!')
     else:
         user_input = update.message.text.split(' ', 1)[1]
-        urls = isURL.findall(user_input)
+        urlOBs = isURL.findall(user_input)
         if urls != [] and len(urls) == 1:
             chiyak.core.send_photo(
                 chat_id=update.message.chat_id, photo=base_url + urls[0])
@@ -482,7 +483,10 @@ def messagedetecter(update, context):
 
             # 소라고둥님
             if '마법의 소라고둥님' in update.message.text:
-                update.message.reply_text(random.choice(['그래.', '아니.']))
+                #update.message.reply_text(random.choice(['그래.', '아니.']))
+                update.message.reply_sticker('CAACAgUAAxkBAAEUGcBig96Z7Obt7mu7albA4-zCFQsnvQACUAUAAsRjUVfojFwLEBPkxSQE')
+                time.sleep(2)
+                update.message.reply_sticker(random.choice(['CAACAgUAAxkBAAEUGcJig96khtnGOROnGS2kFFWB4FyQRAACQwUAAlWUUVd3VQrU2D4MfCQE', 'CAACAgUAAxkBAAEUGcRig96lW0y8cZn67cJdXDyuPOQNqAACegUAAlsaUFdsdbIubvudISQE']))
     except Exception as e:
         print(e)
 
