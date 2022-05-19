@@ -413,24 +413,26 @@ def papago_command(update, context):
             update.message.reply_text(result)
 
 def corona_today_total_command(update, context):
-    result = corona.get_today_info()
-    update.message.reply_text(
-        f"{result['last_updated']} 기준\n \
-오늘 확진자수: {result['live']['today']}\n \
-어제 확진자수: {result['live']['yesterday']}\n \
-1주전 확진자수: {result['live']['weekAgo']}\n \
-2주전 확진자수: {result['live']['twoWeeksAgo']}\n \
-한달전 확진자수: {result['live']['monthAgo']}\n"
-    )
+    deprecated(update)
+#    result = corona.get_today_info()
+#    update.message.reply_text(
+#        f"{result['last_updated']} 기준\n \
+#오늘 확진자수: {result['live']['today']}\n \
+#어제 확진자수: {result['live']['yesterday']}\n \
+#1주전 확진자수: {result['live']['weekAgo']}\n \
+#2주전 확진자수: {result['live']['twoWeeksAgo']}\n \
+#한달전 확진자수: {result['live']['monthAgo']}\n"
+#    )
 
 def corona_today_city_command(update, context):
-    result = corona.get_today_info()
-    rep_text = f"{result['last_updated']} 기준\n"
-    for item in result['sorted_cities']:
-        rep_text += f'{cities[item[0]]} : {item[1][0]}, 증감 : {item[1][1]}\n'
-    update.message.reply_text(
-        rep_text
-    )
+    deprecated(update)
+    #result = corona.get_today_info()
+    #rep_text = f"{result['last_updated']} 기준\n"
+    #for item in result['sorted_cities']:
+    #    rep_text += f'{cities[item[0]]} : {item[1][0]}, 증감 : {item[1][1]}\n'
+    #update.message.reply_text(
+    #    rep_text
+    #)
 
 def election_command(update, context):
     deprecated(update)
