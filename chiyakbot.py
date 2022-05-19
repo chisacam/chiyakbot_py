@@ -468,7 +468,7 @@ def get_message_id_command(update, context):
 # 메세지 감지가 필요한 기능들
 
 
-async def messagedetecter(update, context):
+def messagedetecter(update, context):
     try:
         # 채팅창 계산기 기능
         is_calc = calc_p.match(update.message.text)
