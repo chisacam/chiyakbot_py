@@ -468,7 +468,7 @@ def get_message_id_command(update, context):
 # 메세지 감지가 필요한 기능들
 
 
-def messagedetecter(update, context):
+async def messagedetecter(update, context):
     try:
         # 채팅창 계산기 기능
         is_calc = calc_p.match(update.message.text)
@@ -486,7 +486,10 @@ def messagedetecter(update, context):
                 #update.message.reply_text(random.choice(['그래.', '아니.']))
                 update.message.reply_sticker('CAACAgUAAxkBAAEUGcBig96Z7Obt7mu7albA4-zCFQsnvQACUAUAAsRjUVfojFwLEBPkxSQE')
                 time.sleep(2)
-                update.message.reply_sticker(random.choice(['CAACAgUAAxkBAAEUGcJig96khtnGOROnGS2kFFWB4FyQRAACQwUAAlWUUVd3VQrU2D4MfCQE', 'CAACAgUAAxkBAAEUGcRig96lW0y8cZn67cJdXDyuPOQNqAACegUAAlsaUFdsdbIubvudISQE']))
+                if random.choices([True, False], weights=[0.2, 0.8])[0]:
+                    update.message.reply_sticker('CAACAgUAAxkBAAEUKWBihi70wSv8O0LB_wp460MurNq7-gACOwQAAjloUVfvJCcbD0Mk4iQE')
+                    time.sleep(2)
+                update.message.reply_sticker(random.choices(['CAACAgUAAxkBAAEUGcJig96khtnGOROnGS2kFFWB4FyQRAACQwUAAlWUUVd3VQrU2D4MfCQE', 'CAACAgUAAxkBAAEUGcRig96lW0y8cZn67cJdXDyuPOQNqAACegUAAlsaUFdsdbIubvudISQE', 'CAACAgUAAxkBAAEUKWhihjGtpLDaatZuCzXcWQ8-IXxiWgACrQUAAtc9yFc1WwupLBD6niQE'], weights=[0.45, 0.45, 0.1]))
     except Exception as e:
         print(e)
 
