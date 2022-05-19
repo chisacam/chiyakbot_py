@@ -489,7 +489,7 @@ def messagedetecter(update, context):
                 if random.choices([True, False], weights=[0.2, 0.8])[0]:
                     update.message.reply_sticker('CAACAgUAAxkBAAEUKWBihi70wSv8O0LB_wp460MurNq7-gACOwQAAjloUVfvJCcbD0Mk4iQE')
                     time.sleep(2)
-                update.message.reply_sticker(random.choices(['CAACAgUAAxkBAAEUGcJig96khtnGOROnGS2kFFWB4FyQRAACQwUAAlWUUVd3VQrU2D4MfCQE', 'CAACAgUAAxkBAAEUGcRig96lW0y8cZn67cJdXDyuPOQNqAACegUAAlsaUFdsdbIubvudISQE', 'CAACAgUAAxkBAAEUKWhihjGtpLDaatZuCzXcWQ8-IXxiWgACrQUAAtc9yFc1WwupLBD6niQE'], weights=[0.45, 0.45, 0.1]))
+                update.message.reply_sticker(random.choices(['CAACAgUAAxkBAAEUGcJig96khtnGOROnGS2kFFWB4FyQRAACQwUAAlWUUVd3VQrU2D4MfCQE', 'CAACAgUAAxkBAAEUGcRig96lW0y8cZn67cJdXDyuPOQNqAACegUAAlsaUFdsdbIubvudISQE', 'CAACAgUAAxkBAAEUKWhihjGtpLDaatZuCzXcWQ8-IXxiWgACrQUAAtc9yFc1WwupLBD6niQE'], weights=[0.45, 0.45, 0.1])[0])
     except Exception as e:
         print(e)
 
