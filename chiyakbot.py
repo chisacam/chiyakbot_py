@@ -486,10 +486,10 @@ def messagedetecter(update, context):
             # 소라고둥님
             if '마법의 소라고둥님' in update.message.text:
                 #update.message.reply_text(random.choice(['그래.', '아니.']))
-                update.message.reply_sticker('CAACAgUAAxkBAAEUKdRihkHdVZHwJGV6JP75anPeMPB77AACJwMAAlr8uVaK5eUwUQeuUyQE')
+                update.message.reply_sticker('CAACAgUAAxkBAAEUGcBig96Z7Obt7mu7albA4-zCFQsnvQACUAUAAsRjUVfojFwLEBPkxSQE')
                 time.sleep(2)
                 if random.choices([True, False], weights=[0.2, 0.8])[0]:
-                    update.message.reply_sticker('CAACAgUAAxkBAAEUKdRihkHdVZHwJGV6JP75anPeMPB77AACJwMAAlr8uVaK5eUwUQeuUyQE')
+                    update.message.reply_sticker('CAACAgUAAxkBAAEUKWBihi70wSv8O0LB_wp460MurNq7-gACOwQAAjloUVfvJCcbD0Mk4iQE')
                     time.sleep(2)
                 update.message.reply_sticker(random.choices(['CAACAgUAAxkBAAEUKcpihkF6RHdtOS24z9DMc2qF4ZjHPQAC8gQAAjqYyFfcus59q-EwJiQE', 'CAACAgUAAxkBAAEUKcxihkF8uQewGgABK5awbAhQ1qnqnIsAAtIDAAJrUMlXERp-qMX1H_UkBA', 'CAACAgUAAxkBAAEUKWhihjGtpLDaatZuCzXcWQ8-IXxiWgACrQUAAtc9yFc1WwupLBD6niQE'], weights=[0.45, 0.45, 0.1])[0])
     except Exception as e:
