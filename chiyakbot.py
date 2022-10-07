@@ -26,31 +26,15 @@ helpText = """/를 붙여서 사용해야하는 기능들
 
 /about 자기소개
 /pick 구분자(, | . 등등)과 함께 입력하면 하나를 골라주는 기능
-
-/cp [modelcode?] [modeltype?] 모델코드 입력하면 애플스토어 구매/픽업 가능여부 알려주는 기능
-modelcode가 없으면 기본값은 5세대 12.9 128 셀룰러 스페이스그레이 모델
-modeltype이 없으면 기본값은 ipad_pro, 가능한 모델타입은 아래와 같음
-{0}
-
-/cpr [modelcode] 모델코드 입력하면 애플스토어 픽업 가능할때 해당 채팅방에 알려주는 기능
-modelcode가 없으면 기본값은 5세대 12.9 128 셀룰러 스페이스그레이 모델
-
-/cpd [modelcode] 모델코드 입력하면 픽업 감시 취소
-modelcode가 없으면 5세대 12.9 128 셀룰러 스페이스 그레이 예약한것 취소
-
 /qr [url] url을 qr코드 이미지로 변환해주는 기능
-
 /roll [%dd%d] '정수1' + d + '정수2' 형식으로 쓰면 정수2각형 주사위 정수1개만큼 굴려서 결과 출력
-기반코드: https://github.com/superfluite/trpg-dice-bot
-
 /ds 답장을 사용한 메세지의 긍정/부정에 따라 괜찮아요/나빠요 출력
-aws는 대개 나쁘다고 생각하는듯함.
-
 /en2ko(ko2en) [some string] 영어로 쓴 문자열이나 한글로 쓴 문자열을 각각 영어, 한글로 변환
-ex) /en2ko dksl -> 아니, /ko2en ㅗ디ㅣㅐ -> hello
-
 /simimg 답장을 사용한 메세지의 사진 출처를 찾아주는 기능
-sauceNAO api를 사용하므로 씹덕짤만 잘찾음.
+/papago [some string] 언어감지 후 한국어로 번역
+/exch [code?] 현재 환율표
+/exchc [code] [amount] 현재 환율 기반으로 원화 변환
+/dtd [name] [track id] 택배조회
 
 '='다음에 수식을 쓰면 계산해주는 계산기
 ex) =1+1 or =2*2
@@ -470,8 +454,7 @@ def get_message_id_command(update, context):
 def get_delevery_info_command(update, context):
     text = update.message.text.split(' ')
     if len(text) <= 1:
-        update.message.reply_text(
-            '조회 대상과 번호를 모두 입력해주세요!')
+        update.message.reply_text('조회 대상과 번호를 모두 입력해주세요!\n사용가능 택배사: cj, 한진, 우체국, 롯데, 로젠, cu, dhl')
     else:
         result = doortodoor.get_delivery_info(text[1], text[2])
         text = ''
