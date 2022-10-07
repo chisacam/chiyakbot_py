@@ -2,7 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto, error
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, corona, election
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, doortodoor
 import boto3
 from inko import Inko
 import prettytable
@@ -467,6 +467,27 @@ def get_message_id_command(update, context):
             '저런, 답장형식이 아니네요! 원하는 메세지에 답장으로 사용해주세요!'
         )
 
+def get_delevery_info_command(update, context):
+    text = update.message.text.split(' ')
+    if len(text) <= 1:
+        update.message.reply_text(
+            '조회 대상과 번호를 모두 입력해주세요!')
+    else:
+        result = doortodoor.get_delivery_info(text[1], text[2])
+        text = ''
+        for progress in result['progresses']:
+            text += f"{progress['location']['name']} {progress['status']['text']} {(progress['time'])}\n\n"
+        reply_text = f'''
+발송인: {result['from']['name']}
+수신인: {result['to']['name']}
+상태: {result['state']['text']}
+
+현황
+
+{text}
+        '''
+        update.message.reply_text(reply_text)
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -496,6 +517,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('dtd', get_delevery_info_command)
 chiyak.add_cmdhandler('getmsgid', get_message_id_command)
 chiyak.add_cmdhandler('getmsg', get_reply_command)
 chiyak.add_cmdhandler('here', here_command)
