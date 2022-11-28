@@ -2,8 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto, error
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, doortodoor
-import boto3
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, doortodoor, aws
 from inko import Inko
 import prettytable
 import time
@@ -19,9 +18,6 @@ available_modeltype = ['ipad_pro', 'ipad_air',
                        'iphone_12_pro', 'iphone_se', 'iphone_xr',
                        'iphone_11']
 myInko = Inko()
-comprehend = boto3.client(service_name='comprehend', region_name='ap-northeast-2',
-                          aws_access_key_id='AKIA2475NDPROSZBLDGE',
-                          aws_secret_access_key='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')
 helpText = """/를 붙여서 사용해야하는 기능들
 
 /about 자기소개
@@ -191,8 +187,7 @@ def koen_command(update, context):
 def detectSentiment_command(update, context):
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
-            result = comprehend.detect_sentiment(
-                Text=update.message.reply_to_message.text, LanguageCode='ko')
+            result = aws.detect_sentiment(update.message.reply_to_message.text)
             chiyak.core.sendMessage(
                 chat_id=update.message.chat_id,
                 text='나빠요' if result['SentimentScore']['Positive'] < result['SentimentScore']['Negative'] else '괜찮아요',
@@ -206,8 +201,7 @@ def detectSentiment_command(update, context):
                 '원하는 텍스트에 답장을 걸고 사용하거나, 명령어 뒤에 원하는 문자열을 써주세요!')
             return
         else:
-            result = comprehend.detect_sentiment(
-                Text=user_input[1], LanguageCode='ko')
+            result = aws.detect_sentiment(user_input[1])
             update.message.reply_text(
                 '나빠요' if result['SentimentScore']['Positive'] < result['SentimentScore']['Negative'] else '괜찮아요')
 
@@ -345,13 +339,13 @@ def calc_exchange_command(update, context):
     else:
         input_code = user_input[1].upper()
         exchange_data = exchange.request_info(input_code)
-        input_cur = round(float(user_input[2].replace(',', '')))
+        input_cur = round(float(user_input[2].replace(',', '')), 2)
         format_cur = format(input_cur, ",")
         if exchange_data['result']:
             try:
                 item = exchange_data['data'][0]
                 result = format(
-                    round(float(item['basePrice']) * input_cur / int(item['currencyUnit'])), ",")
+                    round(float(item['basePrice']) * input_cur / int(item['currencyUnit']), 2), ",")
                 update.message.reply_text(
                     f'{format_cur} {input_code} ≈ {result} KRW')
             except:
@@ -457,9 +451,9 @@ def get_delevery_info_command(update, context):
         update.message.reply_text('조회 대상과 번호를 모두 입력해주세요!\n사용가능 택배사: cj, 한진, 우체국, 롯데, 로젠, cu, dhl')
     else:
         result = doortodoor.get_delivery_info(text[1], text[2])
-        text = ''
+        progress_text = ''
         for progress in result['progresses']:
-            text += f"{progress['location']['name']} {progress['status']['text']} {(progress['time'])}\n\n"
+            progress_text += f"{progress['location']['name']} {progress['status']['text']} {(progress['time'])}\n\n"
         reply_text = f'''
 발송인: {result['from']['name']}
 수신인: {result['to']['name']}
@@ -467,7 +461,7 @@ def get_delevery_info_command(update, context):
 
 현황
 
-{text}
+{progress_text}
         '''
         update.message.reply_text(reply_text)
 
