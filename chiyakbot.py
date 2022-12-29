@@ -6,6 +6,8 @@ from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, p
 from inko import Inko
 import prettytable
 import time
+from PIL import Image, ImageDraw, ImageFont
+import io
 
 # 전역변수
 
@@ -306,29 +308,36 @@ def get_hitomi_info_command(update, context):
 
 def get_exchange_command(update, context):
     result = ''
+    input_code = 'TOP'
     user_input = update.message.text.split(' ', 1)
-    table = prettytable.PrettyTable(['CODE', 'KRW'])
+    table = prettytable.PrettyTable(['CODE', 'BASE', 'BUY', 'SELL'])
     table.align['CODE'] = 'l'
-    table.align['KRW'] = 'l'
-    if len(user_input) <= 1:
-        exchange_data = exchange.request_info()
+    table.align['BASE'] = 'r'
+    table.align['BUY'] = 'r'
+    table.align['SELL'] = 'r'
+    if len(user_input) > 1:
+        input_code = user_input[1].upper()
+    exchange_data = exchange.request_info(input_code)
+    if exchange_data['result']:
+        result += ('date: ' + exchange_data['data'][0]['date'] + '\n')
+        result += ('time: ' + exchange_data['data'][0]['time'] + '\n')
         for item in exchange_data['data']:
             # print(item)
-            table.add_row([item['currencyCode'], item['basePrice']])
-        result = table.get_string()
+            table.add_row([item['currencyCode'], round(item['basePrice']), round(item['cashBuyingPrice']), round(item['cashSellingPrice'])])
+        result += table.get_string()
     else:
-        input_code = user_input[1].upper()
-        exchange_data = exchange.request_info(input_code)
-        if exchange_data['result']:
-            for item in exchange_data['data']:
-                # print(item)
-                table.add_row([item['currencyCode'], item['basePrice']])
-            result = table.get_string()
-        else:
-            message = exchange_data['message']
-            update.message.reply_text(f'{message}')
+        message = exchange_data['message']
+        update.message.reply_text(f'{message}')
     # print(result)
-    update.message.reply_text(f'<pre>{result}</pre>', parse_mode='HTML')
+    im = Image.new("RGB", (280, 270), "white")
+    draw = ImageDraw.Draw(im)
+    font = ImageFont.truetype("FreeMono.ttf", 15)
+    draw.text((10, 10), result, font=font, fill="black")
+    im_byte = io.BytesIO()
+    im.save(im_byte, format="png", bitmap_format="png")
+    chiyak.core.send_photo(chat_id=update.message.chat_id, photo=im_byte.getvalue())
+    im.close()
+    im_byte.close()
 
 
 def calc_exchange_command(update, context):
