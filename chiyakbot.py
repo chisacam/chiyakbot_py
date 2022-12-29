@@ -329,9 +329,9 @@ def get_exchange_command(update, context):
         message = exchange_data['message']
         update.message.reply_text(f'{message}')
     # print(result)
-    im = Image.new("RGB", (280, 270), "white")
+    im = Image.new("RGB", (280, 300), "white")
     draw = ImageDraw.Draw(im)
-    font = ImageFont.truetype("FreeMono.ttf", 15)
+    font = ImageFont.truetype("DejaVuSansMono.ttf", 15)
     draw.text((10, 10), result, font=font, fill="black")
     im_byte = io.BytesIO()
     im.save(im_byte, format="png", bitmap_format="png")
