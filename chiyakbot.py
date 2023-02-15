@@ -2,7 +2,7 @@ import chatbotmodel
 from telegram import InputMediaPhoto, error
 import re
 import random
-from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, doortodoor, aws
+from lib import checkPickup, sauceNAO, hitomi, reminder, exchange, namusearch, papago, doortodoor, aws, chatgpt
 from inko import Inko
 import prettytable
 import time
@@ -474,6 +474,14 @@ def get_delevery_info_command(update, context):
         '''
         update.message.reply_text(reply_text)
 
+def ask_gpt_command(update, context):
+    text = update.message.text.split(' ', 1)
+    if len(text) <= 1:
+        update.message.reply_text('물어볼 말을 써주세요!')
+    else:
+        result = chatgpt.ask_chatbot(question=text[1])
+        update.message.reply_text(result)
+
 # 메세지 감지가 필요한 기능들
 
 
@@ -503,6 +511,7 @@ def messagedetecter(update, context):
         print(e)
 
 
+chiyak.add_cmdhandler('ask', ask_gpt_command)
 chiyak.add_cmdhandler('dtd', get_delevery_info_command)
 chiyak.add_cmdhandler('getmsgid', get_message_id_command)
 chiyak.add_cmdhandler('getmsg', get_reply_command)
