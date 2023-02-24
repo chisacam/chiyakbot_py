@@ -10,6 +10,7 @@ from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
 
 class HitomiModel(AbstractChatbotModel):
+    name = "Hitomi"
     def list_available_handlers(self) -> List[BaseAnswerMachine]:
         return [CommandAnswerMachine(self.get_hitomi_info_command, "htm")]
 

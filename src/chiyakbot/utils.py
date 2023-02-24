@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes
 from .chatbots import AbstractChatbotModel
 
 
-async def privileged_message(method):
+def privileged_message(method):
     @functools.wraps(method)
     async def decorated(
         self: AbstractChatbotModel,

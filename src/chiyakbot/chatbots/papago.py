@@ -9,6 +9,7 @@ from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
 
 class PapagoModel(AbstractChatbotModel):
+    name = "Papago"
     def list_available_handlers(self) -> List[BaseAnswerMachine]:
         return [
             CommandAnswerMachine(

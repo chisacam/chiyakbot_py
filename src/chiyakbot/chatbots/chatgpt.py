@@ -11,6 +11,7 @@ openai.api_key = os.getenv("CHAT_GPT_SECRET_KEY")
 
 
 class ChatGPTModel(AbstractChatbotModel):
+    name = "Chat GPT"
     def list_available_handlers(self) -> List[BaseAnswerMachine]:
         return [CommandAnswerMachine(self.handler, "ask")]
 

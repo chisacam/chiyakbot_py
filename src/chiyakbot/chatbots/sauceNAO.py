@@ -53,6 +53,7 @@ sites = {
 
 
 class SimilarImageModel(AbstractChatbotModel):
+    name = "sauceNAO"
     def list_available_handlers(self) -> List[BaseAnswerMachine]:
         return [
             CommandAnswerMachine(

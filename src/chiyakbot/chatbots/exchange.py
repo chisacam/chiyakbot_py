@@ -15,6 +15,7 @@ base_code = "FRX.KRW"
 
 
 class ExchangeModel(AbstractChatbotModel):
+    name = "Exchange"
     async def request_info(self, req_code="TOP") -> Mapping[str, Any]:
         match req_code:
             case "ALL":

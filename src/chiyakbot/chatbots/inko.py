@@ -9,7 +9,7 @@ from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
 class InkoModel(AbstractChatbotModel):
     my_inko: Inko
-
+    name = "Inko"
     def __init__(self, bot: Bot, owner_id: str) -> None:
         super().__init__(bot, owner_id)
         self.my_inko = Inko()
