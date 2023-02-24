@@ -83,7 +83,6 @@ from .exchange import ExchangeModel
 from .hitomi import HitomiModel
 from .inko import InkoModel
 from .message_detector import MessageDetectorModel
-from .namusearch import NamuSearchModel
 from .papago import PapagoModel
 from .sauceNAO import SimilarImageModel
 
@@ -95,7 +94,6 @@ defined_models: List[Type[AbstractChatbotModel]] = [
     ExchangeModel,
     HitomiModel,
     MessageDetectorModel,
-    NamuSearchModel,
     PapagoModel,
     SimilarImageModel,
     InkoModel,

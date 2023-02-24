@@ -19,6 +19,7 @@ file_path = "./registerd.json"
 class AppleStorePickupModel(AbstractChatbotModel):
     watch_task: Optional[asyncio.Task]
     alert_users: Dict[str, List]
+    name = "Apple Store Pickup Check"
 
     def __init__(self, bot: Bot, owner_id: str) -> None:
         super().__init__(bot, owner_id)

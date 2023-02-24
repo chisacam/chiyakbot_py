@@ -25,6 +25,7 @@ INDETERMINATE_STICKER: Final[
 
 
 class MessageDetectorModel(AbstractChatbotModel):
+    name = "Message Detector"
     def list_available_handlers(self) -> List[BaseAnswerMachine]:
         return [MessageAnswerMachine(self.detect_message, description="확률 계산기")]
 
