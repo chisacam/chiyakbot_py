@@ -307,9 +307,35 @@ class IntrinsicChatbotModel(AbstractChatbotModel):
                 await message.reply_text("url을 찾을 수 없어요!")
 
 
-async def setup_bot() -> Application:
+async def post_init(app: Application) -> None:
     from .chatbots import defined_models
 
+    owner_id = os.getenv("ADMIN_TG_ID")
+    assert owner_id is not None
+
+    my_commands: List[BotCommand] = []
+    for model_cls in [IntrinsicChatbotModel, *defined_models]:
+        m = model_cls(app.bot, owner_id)
+        for handler in m.list_available_handlers():
+            if isinstance(handler, CommandAnswerMachine):
+                app.add_handler(CommandHandler(handler.command, handler.handler))
+                my_commands.append(
+                    BotCommand(handler.command, handler.description or handler.command)
+                )
+            elif isinstance(handler, InlineQueryAnswerMachine):
+                app.add_handler(InlineQueryHandler(handler.handler))
+            elif isinstance(handler, MessageAnswerMachine):
+                app.add_handler(
+                    MessageHandler(filters.TEXT & ~filters.COMMAND, handler.handler)
+                )
+            print("Registered", handler)
+        for conversation in m.list_available_conversations():
+            app.add_handler(conversation)
+
+    await app.bot.set_my_commands(my_commands)
+
+
+if __name__ == "__main__":
     token = (
         os.getenv("TG_TOKEN")
         if sys.argv[1] != "develop"
@@ -323,32 +349,6 @@ async def setup_bot() -> Application:
         print("admin's telegram id is not set")
         exit(1)
 
-    app = Application.builder().token(token).build()
+    app = Application.builder().token(token).post_init(post_init).build()
 
-    my_commands: List[BotCommand] = []
-    for model_cls in defined_models:
-        m = model_cls(app.bot, owner_id)
-        for handler in m.list_available_handlers():
-            if isinstance(handler, MessageAnswerMachine):
-                app.add_handler(MessageHandler(filters.TEXT, handler.handler))
-            elif isinstance(handler, CommandAnswerMachine):
-                app.add_handler(
-                    CommandHandler(
-                        handler.command, handler.handler, filters=filters.TEXT
-                    )
-                )
-                my_commands.append(
-                    BotCommand(handler.command, handler.description or "")
-                )
-            elif isinstance(handler, InlineQueryAnswerMachine):
-                app.add_handler(InlineQueryHandler(handler.handler))
-        for conversation in m.list_available_conversations():
-            app.add_handler(conversation)
-
-    await app.bot.set_my_commands(my_commands)
-    return app
-
-
-if __name__ == "__main__":
-    app = asyncio.run(setup_bot())
     app.run_polling()

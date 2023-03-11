@@ -64,7 +64,7 @@ class SimilarImageModel(AbstractChatbotModel):
     async def get_similarity(self, img_info) -> Tuple[str, str, str, str]:
         async with httpx.AsyncClient() as client:
             resp = await client.get(base_url + img_info.file_path)
-            data = await resp.json()
+            data = resp.json()
 
         sitename = escape_for_md(
             sites.get(data["results"][0]["header"]["index_id"], "undefined yet"), True

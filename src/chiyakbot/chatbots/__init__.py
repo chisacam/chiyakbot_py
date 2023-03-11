@@ -52,6 +52,12 @@ class CommandAnswerMachine(MessageAnswerMachine):
         super().__init__(handler, description)
         self.command = command
 
+    def __str__(self) -> str:
+        return f"CommandAnswerMachine(/{self.command})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 
 class InlineQueryAnswerMachine(BaseAnswerMachine):
     pass
@@ -64,7 +70,7 @@ class AbstractChatbotModel:
 
     def __init__(self, bot: Bot, owner_id: str) -> None:
         if not hasattr(self, "name"):
-            self.name = self.__class__.name
+            self.name = ""
         self.bot = bot
         self.owner_id = owner_id
 

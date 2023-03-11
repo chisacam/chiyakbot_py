@@ -31,7 +31,7 @@ class DeliveryInfoModel(AbstractChatbotModel):
         )
         async with httpx.AsyncClient() as client:
             resp = await client.get(req_url)
-            return await resp.json()
+            return resp.json()
 
     async def handler(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE

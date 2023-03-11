@@ -10,8 +10,7 @@ from telegram.ext import ContextTypes
 
 from chiyakbot.utils import privileged_message
 
-from . import (AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine,
-               escape)
+from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine, escape
 
 file_path = "./registerd.json"
 
@@ -201,11 +200,11 @@ class AppleStorePickupModel(AbstractChatbotModel):
 
         async with httpx.AsyncClient() as client:
             resp = await client.get(check_pickup_url)
-            pickup_status = await resp.json()
+            pickup_status = resp.json()
             resp = await client.get(name_url)
-            model_name_json = await resp.json()
+            model_name_json = resp.json()
             resp = await client.get(k12_price_url)
-            k12_price = await resp.json()
+            k12_price = resp.json()
 
         result = {}
         if (
@@ -230,7 +229,7 @@ class AppleStorePickupModel(AbstractChatbotModel):
                 if model_pickup_status["storePickEligible"]:
                     async with httpx.AsyncClient() as client:
                         resp = await client.get(check_available_stores_url)
-                        store_info = await resp.json()
+                        store_info = resp.json()
 
                     store = store_info["body"]["content"]["pickupMessage"]["stores"]
                     available_store = []
@@ -262,7 +261,7 @@ class AppleStorePickupModel(AbstractChatbotModel):
         )
         async with httpx.AsyncClient() as client:
             resp = await client.get(check_pickup_url)
-            data = await resp.json()
+            data = resp.json()
         result = (
             data["body"]["content"]["pickupMessage"]["pickupEligibility"][model][
                 "storePickEligible"
