@@ -81,24 +81,18 @@ class AbstractChatbotModel:
         return []
 
 
-from .apple_store import AppleStorePickupModel
-from .aws import AWSModel
 from .chatgpt import ChatGPTModel
 from .doortodoor import DeliveryInfoModel
 from .exchange import ExchangeModel
-from .hitomi import HitomiModel
 from .inko import InkoModel
 from .message_detector import MessageDetectorModel
 from .papago import PapagoModel
 from .sauceNAO import SimilarImageModel
 
 defined_models: List[Type[AbstractChatbotModel]] = [
-    AppleStorePickupModel,
-    AWSModel,
     ChatGPTModel,
     DeliveryInfoModel,
     ExchangeModel,
-    HitomiModel,
     MessageDetectorModel,
     PapagoModel,
     SimilarImageModel,

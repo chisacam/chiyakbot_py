@@ -32,17 +32,7 @@ calc_p = re.compile("^=[0-9+\-*/%!^( )]+")
 is_url = re.compile(
     "http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
 )
-available_apple_models = [
-    "ipad_pro",
-    "ipad_air",
-    "ipad_mini",
-    "ipad_10_2",
-    "iphone_12",
-    "iphone_12_pro",
-    "iphone_se",
-    "iphone_xr",
-    "iphone_11",
-]
+
 HELP_TEXT: Final[
     str
 ] = """/를 붙여서 사용해야하는 기능들
@@ -58,33 +48,9 @@ ex) 오늘 일론머스크가 또 헛소리할 확률은?
 
 '마법의 소라고둥님'으로 시작하면 그래, 아니중 하나로 대답해주는 소라고둥님
 ex) 마법의 소라고둥님 오늘 도지가 화성에 갈까요?
-""".format(
-    available_apple_models
-)
-
-cities = {
-    "8": "경기",
-    "0": "서울",
-    "2": "인천",
-    "3": "대구",
-    "4": "광주",
-    "1": "부산",
-    "12": "경북",
-    "13": "경남",
-    "11": "충남",
-    "15": "전남",
-    "5": "대전",
-    "14": "전북",
-    "10": "충북",
-    "9": "강원",
-    "6": "울산",
-    "16": "제주",
-    "7": "세종",
-    "17": "검역",
-}
+""".format()
 
 # deprecated func alert
-
 
 async def deprecated(
     update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
