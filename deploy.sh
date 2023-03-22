@@ -1,4 +1,4 @@
 git pull
-kill $(ps -ef | grep chiyakbot.py | gawk '/python3/ { print $2 }')
-sleep 5
+kill $(ps -ef | grep chiyakbot.bot | gawk '/python/ { print $2 }')
+sleep 10
 nohup python -m chiyakbot.bot production > chiyakbot.log &
