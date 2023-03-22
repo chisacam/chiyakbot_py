@@ -1,4 +1,3 @@
-import asyncio
 import os
 import random
 import re
@@ -25,7 +24,7 @@ from .chatbots import (
 )
 from .utils import privileged_message
 
-load_dotenv(verbose=True)
+load_dotenv()
 
 # 전역변수
 

@@ -1,14 +1,14 @@
 import os
 from typing import List
-
+from dotenv import load_dotenv
 import openai
 from telegram import Message, Update
 from telegram.ext import ContextTypes
 
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
-openai.api_key = os.getenv("CHAT_GPT_SECRET_KEY")
-
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class ChatGPTModel(AbstractChatbotModel):
     name = "Chat GPT"
