@@ -280,7 +280,7 @@ async def post_init(app: Application) -> None:
 
     my_commands: List[BotCommand] = []
     for model_cls in [IntrinsicChatbotModel, *defined_models]:
-        m = model_cls(app.bot, owner_id)
+        m = model_cls(app.bot, int(owner_id))
         for handler in m.list_available_handlers():
             if isinstance(handler, CommandAnswerMachine):
                 app.add_handler(CommandHandler(handler.command, handler.handler))

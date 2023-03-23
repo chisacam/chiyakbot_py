@@ -88,6 +88,7 @@ from .inko import InkoModel
 from .message_detector import MessageDetectorModel
 from .papago import PapagoModel
 from .sauceNAO import SimilarImageModel
+from .reminder import ReminderModel
 
 defined_models: List[Type[AbstractChatbotModel]] = [
     ChatGPTModel,
@@ -97,4 +98,5 @@ defined_models: List[Type[AbstractChatbotModel]] = [
     PapagoModel,
     SimilarImageModel,
     InkoModel,
+    ReminderModel,
 ]

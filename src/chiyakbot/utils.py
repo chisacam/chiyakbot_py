@@ -14,9 +14,10 @@ def privileged_message(method):
         message: Message,
         context: ContextTypes.DEFAULT_TYPE,
     ):
+        print(self)
         if message.from_user is None or message.from_user.id != self.owner_id:
             await self.bot.send_message(message.chat.id, "저런! 주인놈이 아니네요!")
             return
-        await method(update, message, context)
+        await self.method(self, update, message, context)
 
     return decorated

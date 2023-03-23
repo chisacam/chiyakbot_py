@@ -31,7 +31,7 @@ class ExchangeModel(AbstractChatbotModel):
             )
             # print(response.status_code)
             if response.status_code == 200:
-                dict_response = await response.json()
+                dict_response = response.json()
                 if dict_response != []:
                     return {
                         "result": True,
@@ -90,8 +90,7 @@ class ExchangeModel(AbstractChatbotModel):
         else:
             message = exchange_data["message"]
             await message.reply_text(f"{message}")
-        # print(result)
-        im = Image.new("RGB", (280, 300), "white")
+        im = Image.new("RGB", (280, len(exchange_data["data"]) * 30), "white")
         draw = ImageDraw.Draw(im)
         font = ImageFont.truetype("DejaVuSansMono.ttf", 15)
         draw.text((10, 10), result, font=font, fill="black")
