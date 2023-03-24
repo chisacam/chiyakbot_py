@@ -52,7 +52,7 @@ class PapagoModel(AbstractChatbotModel):
             if detect_response.status_code != 200:
                 return "Error Code:" + str(detect_response.status_code)
 
-            detect_result = await detect_response.json()
+            detect_result = detect_response.json()
             lang = detect_result["langCode"]
             trans_data = {"text": text, "source": lang, "target": "ko"}
             translate_response = await client.post(
@@ -61,7 +61,7 @@ class PapagoModel(AbstractChatbotModel):
             if translate_response.status_code != 200:
                 return "Error Code:" + str(translate_response.status_code)
 
-            translated_data = await translate_response.json()
+            translated_data = translate_response.json()
             translated_text = translated_data["message"]["result"]["translatedText"]
             return translated_text
 
