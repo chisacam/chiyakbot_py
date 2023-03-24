@@ -70,9 +70,7 @@ class PapagoModel(AbstractChatbotModel):
     ) -> None:
         if message.reply_to_message is not None:
             if message.reply_to_message.text is not None:
-                text = message.reply_to_message.text
-                cleaned_text = text.replace("\n", " ")
-                result = await self.get_translate(cleaned_text)
+                result = await self.get_translate(message.reply_to_message.text)
                 await message.reply_text(result)
         else:
             text = (message.text or "").split(" ", 1)
