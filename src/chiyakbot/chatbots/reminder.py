@@ -24,12 +24,14 @@ DREMIND = 0
 
 
 class ReminderModel(AbstractChatbotModel):
+    name = "reminder"
     reminder_task: Optional[asyncio.Task]
-    alert_users: List[Mapping[str, Any]]
+    alert_users: List[dict]
 
     def __init__(self, bot: Bot, owner_id: str) -> None:
         super().__init__(bot, owner_id)
         self.reminder_task = None
+        self.alert_users = []
         if os.path.exists(file_path):
             with open(file_path, "r") as json_file:
                 self.alert_users = json.load(json_file)
@@ -74,24 +76,28 @@ class ReminderModel(AbstractChatbotModel):
 
     async def reminder(self):
         while True:
-            for remind_task in self.alert_users[:]:
-                now = datetime.datetime.now(timezone("Asia/Seoul")).strftime(
-                    "%Y%m%d%H%M"
-                )
-                if now >= remind_task["remind_date"]:
-                    await self.bot.send_message(
-                        chat_id=remind_task["remind_chat_id"],
-                        reply_to_message_id=remind_task["remind_message_id"],
-                        text=f'다시 확인해보실 시간이에요!\n메모: {remind_task["remind_text"]}',
+            try:
+                for remind_task in self.alert_users[:]:
+                    now = datetime.datetime.now(timezone("Asia/Seoul")).strftime(
+                        "%Y%m%d%H%M"
                     )
-                    self.alert_users.remove(remind_task)
+                    if now >= remind_task["remind_date"]:
+                        await self.bot.send_message(
+                            chat_id=remind_task["remind_chat_id"],
+                            reply_to_message_id=remind_task["remind_message_id"],
+                            text=f'다시 확인해보실 시간이에요!\n메모: {remind_task["remind_text"]}',
+                        )
+                        self.alert_users.remove(remind_task)
 
-            def _write():
-                with open(file_path, "w") as outfile:
-                    json.dump(self.alert_users, outfile, indent=4, ensure_ascii=False)
+                def _write():
+                    with open(file_path, "w") as outfile:
+                        json.dump(self.alert_users, outfile, indent=4, ensure_ascii=False)
 
-            await asyncio.get_running_loop().run_in_executor(None, _write)
-            await asyncio.sleep(60)
+                await asyncio.get_running_loop().run_in_executor(None, _write)
+                await asyncio.sleep(10)
+            except Exception as e:
+                print(e)
+                break
 
     @privileged_message
     async def start_remind_loop(
@@ -150,7 +156,7 @@ class ReminderModel(AbstractChatbotModel):
                 )
                 return
 
-        async def _write():
+        def _write():
             with open(file_path, "w") as outfile:
                 json.dump(self.alert_users, outfile, indent=4, ensure_ascii=False)
 

@@ -90,7 +90,7 @@ from .papago import PapagoModel
 from .sauceNAO import SimilarImageModel
 from .reminder import ReminderModel
 
-defined_models: List[Type[AbstractChatbotModel]] = [
+defined_models: List = [
     ChatGPTModel,
     DeliveryInfoModel,
     ExchangeModel,

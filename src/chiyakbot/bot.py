@@ -283,7 +283,7 @@ async def post_init(app: Application) -> None:
         m = model_cls(app.bot, int(owner_id))
         for handler in m.list_available_handlers():
             if isinstance(handler, CommandAnswerMachine):
-                app.add_handler(CommandHandler(handler.command, handler.handler))
+                app.add_handler(CommandHandler(handler.command, handler.handler, block=False))
                 my_commands.append(
                     BotCommand(handler.command, handler.description or handler.command)
                 )
@@ -291,7 +291,7 @@ async def post_init(app: Application) -> None:
                 app.add_handler(InlineQueryHandler(handler.handler))
             elif isinstance(handler, MessageAnswerMachine):
                 app.add_handler(
-                    MessageHandler(filters.TEXT & ~filters.COMMAND, handler.handler)
+                    MessageHandler(filters.TEXT & ~filters.COMMAND, handler.handler, block=False)
                 )
             print("Registered", handler)
         for conversation in m.list_available_conversations():
