@@ -24,7 +24,7 @@ class ChatGPTModel(AbstractChatbotModel):
         else:
             response = await openai.Completion.acreate(
                 prompt=text[1],
-                engine="text-davinci-003",
+                engine="gpt-3.5-turbo",
                 max_tokens=2048,
                 temperature=0.3,
                 top_p=1.0,
