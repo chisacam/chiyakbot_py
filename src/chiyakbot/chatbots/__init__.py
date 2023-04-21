@@ -89,6 +89,7 @@ from .message_detector import MessageDetectorModel
 from .papago import PapagoModel
 from .sauceNAO import SimilarImageModel
 from .reminder import ReminderModel
+from .deepl import DeeplModel
 
 defined_models: List = [
     ChatGPTModel,
@@ -99,4 +100,5 @@ defined_models: List = [
     SimilarImageModel,
     InkoModel,
     ReminderModel,
+    DeeplModel,
 ]
