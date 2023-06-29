@@ -296,6 +296,7 @@ async def post_init(app: Application) -> None:
             print("Registered", handler)
         for conversation in m.list_available_conversations():
             app.add_handler(conversation)
+            print("Registered", conversation)
 
     await app.bot.set_my_commands(my_commands)
 

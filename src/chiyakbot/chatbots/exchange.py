@@ -90,9 +90,9 @@ class ExchangeModel(AbstractChatbotModel):
         else:
             message = exchange_data["message"]
             await message.reply_text(f"{message}")
-        im = Image.new("RGB", (270, 110 + len(exchange_data["data"]) * 19), "white")
+        im = Image.new("RGB", (250, 110 + len(exchange_data["data"]) * 19), "white")
         draw = ImageDraw.Draw(im)
-        font = ImageFont.truetype("DejaVuSansMono.ttf", 14)
+        font = ImageFont.truetype("./JetBrainsMonoNL-Regular.ttf", 13)
         draw.text((10, 10), result, font=font, fill="black")
         im_byte = io.BytesIO()
         im.save(im_byte, format="png", bitmap_format="png")
