@@ -117,7 +117,7 @@ class ExchangeModel(AbstractChatbotModel):
                     item = exchange_data["data"][0]
                     result = format(
                         round(
-                            float(item["basePrice"])
+                            float(item["cashBuyingPrice"])
                             * input_cur
                             / int(item["currencyUnit"]),
                             2,

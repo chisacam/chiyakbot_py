@@ -13,6 +13,9 @@ calc_p = re.compile("^=[0-9+\-*/%!^( )]+")
 NEUTRAL_STICKER: Final[
     str
 ] = "CAACAgUAAxkBAAEUGcBig96Z7Obt7mu7albA4-zCFQsnvQACUAUAAsRjUVfojFwLEBPkxSQE"
+ONE_MORE_NEUTRAL_STICKER: Final[
+    str
+] = "CAACAgUAAxkBAAEUKWBihi70wSv8O0LB_wp460MurNq7-gACOwQAAjloUVfvJCcbD0Mk4iQE"
 POSITIVE_STICKER: Final[
     str
 ] = "CAACAgUAAxkBAAEUKcpihkF6RHdtOS24z9DMc2qF4ZjHPQAC8gQAAjqYyFfcus59q-EwJiQE"
@@ -53,7 +56,7 @@ class MessageDetectorModel(AbstractChatbotModel):
                     await message.reply_sticker(NEUTRAL_STICKER)
                     await asyncio.sleep(2)
                     if random.choices([True, False], weights=[0.2, 0.8])[0]:
-                        await message.reply_sticker(NEUTRAL_STICKER)
+                        await message.reply_sticker(ONE_MORE_NEUTRAL_STICKER)
                         await asyncio.sleep(2)
                     await message.reply_sticker(
                         random.choices(
