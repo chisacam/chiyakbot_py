@@ -20,44 +20,22 @@ class DeeplModel(AbstractChatbotModel):
 
     async def get_translate(self, text):
         trans_secret = os.getenv("DEEPL_TRANS_SECRET")
-        detect_id = os.getenv("NAVER_DETECT_ID")
-        detect_secret = os.getenv("NAVER_DETECT_SECRET")
 
         assert trans_secret is not None
-        assert detect_id is not None
-        assert detect_secret is not None
 
-        detect_url = "https://openapi.naver.com/v1/papago/detectLangs"
-        trans_url = "https://deepl-translator.p.rapidapi.com/translate"
+        trans_url = "https://api-free.deepl.com/v2/translate"
 
         trans_header = {
             "content-type": "application/json",
-            "X-RapidAPI-Key": trans_secret,
-            "X-RapidAPI-Host": "deepl-translator.p.rapidapi.com"
-        }
-
-        detect_header = {
-            "X-Naver-Client-Id": detect_id,
-            "X-Naver-Client-Secret": detect_secret,
+            "Authorization": f"DeepL-Auth-Key {trans_secret}",
         }
 
         translated_text = ""
 
-        detect_data = {"query": text}
-
         async with httpx.AsyncClient() as client:
-            detect_response = await client.post(
-                detect_url, headers=detect_header, data=detect_data
-            )
-            if detect_response.status_code != 200:
-                return "Error Code:" + str(detect_response.status_code)
-
-            detect_result = detect_response.json()
-            lang = detect_result["langCode"]
             trans_data = {
-                "text": text,
-                "source": lang,
-                "target": "KO"
+                "text": [text],
+                "target_lang": "KO"
             }
             translate_response = await client.post(
                 trans_url, headers=trans_header, json=trans_data
@@ -66,7 +44,7 @@ class DeeplModel(AbstractChatbotModel):
                 return "Error Code:" + str(translate_response.status_code)
 
             translated_data = translate_response.json()
-            translated_text = translated_data["text"]
+            translated_text = translated_data["translations"][0]["text"]
             return translated_text
 
     async def deepl_command(
