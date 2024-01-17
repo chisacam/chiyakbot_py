@@ -22,7 +22,7 @@ class SpellerModel(AbstractChatbotModel):
     async def generate_message(self, response_json):
         result = ""
         for err in response_json:
-            result = f"{result}\n~~{err['orgStr']}~~ -> {err['candWord']}"
+            result = f"{result}\n~{err['orgStr']}~ -> {err['candWord']}"
         return escape_for_md(result, True)
 
     async def request_speller(self, text):
