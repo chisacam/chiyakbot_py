@@ -90,6 +90,7 @@ from .papago import PapagoModel
 from .sauceNAO import SimilarImageModel
 from .reminder import ReminderModel
 from .deepl import DeeplModel
+from .speller import SpellerModel
 
 defined_models: List = [
     ChatGPTModel,
@@ -101,4 +102,5 @@ defined_models: List = [
     InkoModel,
     ReminderModel,
     DeeplModel,
+    SpellerModel,
 ]

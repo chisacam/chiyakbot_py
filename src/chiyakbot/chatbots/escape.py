@@ -1,6 +1,6 @@
 import re
 
-escape_for_md_compile = re.compile("[.+\\-()!,}{/:=&_]")
+escape_for_md_compile = re.compile("[.+\\-()!,<>\\|}{/:=&_]")
 escape_for_marketprice_compile = re.compile("[.+\\-,}{/:=&]")
 escape_for_marketprice_name_compile = re.compile("[)(]")
 
