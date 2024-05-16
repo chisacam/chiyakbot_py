@@ -91,6 +91,7 @@ from .sauceNAO import SimilarImageModel
 from .reminder import ReminderModel
 from .deepl import DeeplModel
 from .speller import SpellerModel
+from .chzzk import ChzzkModel
 
 defined_models: List = [
     ChatGPTModel,
@@ -103,4 +104,5 @@ defined_models: List = [
     ReminderModel,
     DeeplModel,
     SpellerModel,
+    ChzzkModel,
 ]
