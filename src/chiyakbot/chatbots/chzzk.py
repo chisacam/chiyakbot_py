@@ -68,7 +68,7 @@ class ChzzkModel(AbstractChatbotModel):
             result = await self.make_m3u8_url(self.stellive_channel_id["리제"])
             await message.reply_text(result)
         else:
-            result = await self.get_m3u8_path(text[1])
+            result = await self.make_m3u8_url(text[1])
             await message.reply_text(result)
     
     async def get_chzzk_stellive_id_command(
