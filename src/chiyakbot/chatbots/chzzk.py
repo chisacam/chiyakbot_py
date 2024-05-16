@@ -74,4 +74,4 @@ class ChzzkModel(AbstractChatbotModel):
     async def get_chzzk_stellive_id_command(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
-        await message.reply_text(f"스텔라이브 채널 아이디: {json.dump(self.stellive_channel_id, indent=2, ensure_ascii=False)}")
+        await message.reply_text(f"스텔라이브 채널 아이디: {json.dumps(self.stellive_channel_id, indent=2, ensure_ascii=False)}")
