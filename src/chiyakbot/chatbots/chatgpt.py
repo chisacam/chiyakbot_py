@@ -27,4 +27,4 @@ class ChatGPTModel(AbstractChatbotModel):
                     {"role": "user", "content": text[1]}
                 ])
             result = response.choices[0].message.content.strip()
-            await message.reply_text(result)
+            await message.reply_text(result, parse_mode="MarkdownV2")
