@@ -5,8 +5,6 @@ from openai import AsyncOpenAI
 from telegram import Message, Update
 from telegram.ext import ContextTypes
 
-from chiyakbot.chatbots.escape import escape_for_md
-
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
 load_dotenv()
@@ -29,5 +27,4 @@ class ChatGPTModel(AbstractChatbotModel):
                     {"role": "user", "content": text[1]}
                 ])
             result = response.choices[0].message.content.strip()
-            result = escape_for_md(result, True)
-            await message.reply_text(result, parse_mode="MarkdownV2")
+            await message.reply_text(result)
