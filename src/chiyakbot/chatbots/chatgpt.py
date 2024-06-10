@@ -22,7 +22,7 @@ class ChatGPTModel(AbstractChatbotModel):
         if len(text) <= 1:
             await message.reply_text("물어볼 말을 써주세요!")
         else:
-            response = await aclient.chat.completions.create(model="gpt-3.5-turbo-1106",
+            response = await aclient.chat.completions.create(model="gpt-4o",
                 messages=[
                     {"role": "user", "content": text[1]}
                 ])
