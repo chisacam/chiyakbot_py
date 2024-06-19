@@ -5,6 +5,8 @@ import httpx
 from telegram import Message, Update
 from telegram.ext import ContextTypes
 
+from .regex import is_uuid
+
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
 class ChzzkModel(AbstractChatbotModel):
@@ -30,9 +32,6 @@ class ChzzkModel(AbstractChatbotModel):
             CommandAnswerMachine(
                 self.get_chzzk_stellive_id_command, "chzzk_stellive_id", description="스텔라이브 채널 아이디 확인"
             ),
-            CommandAnswerMachine(
-                self.chzzk_search_command, "chzzk_search", description="치지직 채널 검색 후 m3u8 주소 따기"
-            )
         ]
 
     async def search_channel(self, keyword: str):
@@ -96,33 +95,25 @@ class ChzzkModel(AbstractChatbotModel):
     ) -> None:
         text = (message.text or "").split(" ", 1)
         if len(text) <= 1:
-            live_detail = await self.get_live_detail(self.stellive_channel_id["리제"])
-            result = self.make_m3u8_url(live_detail)
-            await message.reply_text(result, parse_mode="MarkdownV2")
+            await message.reply_text("명령어 뒤에 채널명이나 채널id를 써주세요!")
         else:
-            live_detail = await self.get_live_detail(text[1])
-            result = self.make_m3u8_url(live_detail)
-            await message.reply_text(result, parse_mode="MarkdownV2")
+            if is_uuid.match(text[1]):
+                live_detail = await self.get_live_detail(text[1])
+                result = self.make_m3u8_url(live_detail)
+                await message.reply_text(result, parse_mode="MarkdownV2")
+            else:
+                search_result = await self.search_channel(text[1])
+                details = self.parse_channel_live_detail(search_result)
+                if len(details) == 0:
+                    await message.reply_text("저런, 방송중이 아닌거같아요!")
+                else:
+                    result = []
+                    for detail in details:
+                        result.append(self.make_m3u8_url(detail))
+                    await message.reply_text("\n".join(result), parse_mode="MarkdownV2")
+
     
     async def get_chzzk_stellive_id_command(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         await message.reply_text(f"스텔라이브 채널 아이디: {json.dumps(self.stellive_channel_id, indent=2, ensure_ascii=False)}")
-
-    async def chzzk_search_command(
-        self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
-    ) -> None:
-        text = (message.text or "").split(" ", 1)
-        if len(text) <= 1:
-            await message.reply_text("검색할 채널 이름을 써주세요!")
-        else:
-            search_result = await self.search_channel(text[1])
-            print(search_result)
-            details = self.parse_channel_live_detail(search_result)
-            if len(details) == 0:
-                await message.reply_text("저런, 방송중이 아닌거같아요!")
-            else:
-                result = []
-                for detail in details:
-                    result.append(self.make_m3u8_url(detail))
-                await message.reply_text("\n".join(result), parse_mode="MarkdownV2")

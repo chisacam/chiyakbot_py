@@ -23,15 +23,9 @@ from .chatbots import (
     MessageAnswerMachine,
 )
 from .utils import privileged_message
+from .chatbots.regex import is_url
 
 load_dotenv()
-
-# 전역변수
-
-calc_p = re.compile("^=[0-9+\-*/%!^( )]+")
-is_url = re.compile(
-    "http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
-)
 
 HELP_TEXT: Final[
     str

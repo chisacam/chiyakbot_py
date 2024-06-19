@@ -8,7 +8,7 @@ from telegram.ext import ContextTypes
 
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
-from .escape import escape_for_md
+from .regex import escape_for_md
 
 class SpellerModel(AbstractChatbotModel):
     name = "Speller"

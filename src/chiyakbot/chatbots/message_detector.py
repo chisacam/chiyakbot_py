@@ -1,14 +1,12 @@
 import asyncio
 import random
-import re
+from .regex import calc_p
 from typing import Final, List
 
 from telegram import Message, Update
 from telegram.ext import ContextTypes
 
 from . import AbstractChatbotModel, BaseAnswerMachine, MessageAnswerMachine
-
-calc_p = re.compile("^=[0-9+\-*/%!^( )]+")
 
 NEUTRAL_STICKER: Final[
     str

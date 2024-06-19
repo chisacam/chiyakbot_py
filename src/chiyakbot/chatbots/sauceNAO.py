@@ -7,7 +7,7 @@ from telegram import Message, Update
 from telegram.ext import ContextTypes
 
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
-from .escape import escape_for_md
+from .regex import escape_for_md
 
 api_key = os.getenv("SAUCENAO_API_KEY")
 base_url = f"https://saucenao.com/search.php?db=999&output_type=2&testmode=1&api_key={api_key}&url="
