@@ -29,8 +29,26 @@ class ChzzkModel(AbstractChatbotModel):
             ),
             CommandAnswerMachine(
                 self.get_chzzk_stellive_id_command, "chzzk_stellive_id", description="스텔라이브 채널 아이디 확인"
+            ),
+            CommandAnswerMachine(
+                self.chzzk_search_command, "chzzk_search", description="치지직 채널 검색 후 m3u8 주소 따기"
             )
         ]
+
+    async def search_channel(self, keyword: str):
+        async with httpx.AsyncClient() as client:
+            res = await client.get(
+                "https://api.chzzk.naver.com/service/v1/search/channels",
+                params={
+                    "keyword": keyword,
+                    "offset": 0,
+                    "size": 5,
+                    "withFirstChannelContent": "true",
+                },
+                headers=self.default_headers,
+            )
+            resJson = res.json()
+            return resJson["content"]["data"]
 
     async def get_channel_info(self, channel_id: str):
         async with httpx.AsyncClient() as client:
@@ -46,32 +64,65 @@ class ChzzkModel(AbstractChatbotModel):
                 f"https://api.chzzk.naver.com/service/v2/channels/{channel_id}/live-detail",
                 headers=self.default_headers,
             )
-            return res.json()
+            live = res.json()
+            return live["content"]
 
-    async def get_m3u8_path(self, live_detail):
-        playback = json.loads(live_detail["content"]["livePlaybackJson"])
+    def get_m3u8_path(self, live_detail):
+        playback = json.loads(live_detail["livePlaybackJson"])
         for media in playback["media"]:
             if media["mediaId"] == "HLS":
                 return media["path"]
-        raise Exception("media not found")
+        return ""
+
+    def get_title(self, live_detail):
+        return live_detail["liveTitle"]
     
-    async def make_m3u8_url(self, channel_id):
-        live_detail = await self.get_live_detail(channel_id)
-        m3u8_path = await self.get_m3u8_path(live_detail)
-        return m3u8_path
+    def parse_channel_live_detail(self, search_result):
+        details = []
+        for data in search_result:
+            if data["channel"]["openLive"] == True:
+                details.append(data["content"]["live"])
+        return details
+    
+    def make_m3u8_url(self, live_detail):
+        title = self.get_title(live_detail)
+        m3u8_path = self.get_m3u8_path(live_detail)
+        if m3u8_path == "":
+            return "저런, 방송중이 아닌것같아요!"
+        return f"[{title}]({m3u8_path})"
 
     async def chzzk_command(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         text = (message.text or "").split(" ", 1)
         if len(text) <= 1:
-            result = await self.make_m3u8_url(self.stellive_channel_id["리제"])
-            await message.reply_text(result)
+            live_detail = await self.get_live_detail(self.stellive_channel_id["리제"])
+            result = self.make_m3u8_url(live_detail)
+            await message.reply_text(result, parse_mode="MarkdownV2")
         else:
-            result = await self.make_m3u8_url(text[1])
-            await message.reply_text(result)
+            live_detail = await self.get_live_detail(text[1])
+            result = self.make_m3u8_url(live_detail)
+            await message.reply_text(result, parse_mode="MarkdownV2")
     
     async def get_chzzk_stellive_id_command(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         await message.reply_text(f"스텔라이브 채널 아이디: {json.dumps(self.stellive_channel_id, indent=2, ensure_ascii=False)}")
+
+    async def chzzk_search_command(
+        self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
+    ) -> None:
+        text = (message.text or "").split(" ", 1)
+        if len(text) <= 1:
+            await message.reply_text("검색할 채널 이름을 써주세요!")
+        else:
+            search_result = await self.search_channel(text[1])
+            print(search_result)
+            details = self.parse_channel_live_detail(search_result)
+            if len(details) == 0:
+                await message.reply_text("저런, 방송중이 아닌거같아요!")
+            else:
+                result = []
+                for detail in details:
+                    result.append(self.make_m3u8_url(detail))
+                await message.reply_text("\n".join(result), parse_mode="MarkdownV2")
