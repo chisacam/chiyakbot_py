@@ -79,7 +79,7 @@ class ChzzkModel(AbstractChatbotModel):
     def parse_channel_live_detail(self, search_result):
         details = []
         for data in search_result:
-            if data["channel"]["openLive"] == True:
+            if data["channel"]["openLive"] == True and "content" in data:
                 details.append(data["content"]["live"])
         return details
     
