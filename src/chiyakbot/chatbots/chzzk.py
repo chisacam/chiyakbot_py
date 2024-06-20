@@ -5,7 +5,7 @@ import httpx
 from telegram import Message, Update
 from telegram.ext import ContextTypes
 
-from .regex import is_uuid
+from .regex import is_uuid, escape_for_md
 
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
@@ -88,7 +88,7 @@ class ChzzkModel(AbstractChatbotModel):
         m3u8_path = self.get_m3u8_path(live_detail)
         if m3u8_path == "":
             return "저런, 방송중이 아닌것같아요!"
-        return f"[{title}]({m3u8_path})"
+        return f"{title}\n\n{m3u8_path}"
 
     async def chzzk_command(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
@@ -100,7 +100,7 @@ class ChzzkModel(AbstractChatbotModel):
             if is_uuid.match(text[1]):
                 live_detail = await self.get_live_detail(text[1])
                 result = self.make_m3u8_url(live_detail)
-                await message.reply_text(result, parse_mode="MarkdownV2")
+                await message.reply_text(result)
             else:
                 search_result = await self.search_channel(text[1])
                 details = self.parse_channel_live_detail(search_result)
@@ -110,7 +110,7 @@ class ChzzkModel(AbstractChatbotModel):
                     result = []
                     for detail in details:
                         result.append(self.make_m3u8_url(detail))
-                    await message.reply_text("\n".join(result), parse_mode="MarkdownV2")
+                    await message.reply_text("\n".join(result))
 
     
     async def get_chzzk_stellive_id_command(
