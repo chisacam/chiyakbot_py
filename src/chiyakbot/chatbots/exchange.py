@@ -1,4 +1,6 @@
+from datetime import datetime
 import io
+import os
 from typing import Any, List, Mapping
 
 import httpx
@@ -9,25 +11,25 @@ from telegram.ext import ContextTypes
 
 from . import AbstractChatbotModel, BaseAnswerMachine, CommandAnswerMachine
 
-all_code = "FRX.KRWUSD,FRX.KRWCNY,FRX.KRWJPY,FRX.KRWEUR,FRX.KRWHKD,FRX.KRWTWD,FRX.KRWVND,FRX.KRWCAD,FRX.KRWRUB,FRX.KRWTHB,FRX.KRWPHP,FRX.KRWSGD,FRX.KRWAUD,FRX.KRWGBP,FRX.KRWMYR,FRX.KRWZAR,FRX.KRWNOK,FRX.KRWNZD,FRX.KRWDKK,FRX.KRWMXN,FRX.KRWMNT,FRX.KRWBHD,FRX.KRWBDT,FRX.KRWBRL,FRX.KRWBND,FRX.KRWSAR,FRX.KRWLKR,FRX.KRWSEK,FRX.KRWCHF,FRX.KRWAED,FRX.KRWDZD,FRX.KRWOMR,FRX.KRWJOD,FRX.KRWILS,FRX.KRWEGP,FRX.KRWINR,FRX.KRWIDR,FRX.KRWCZK,FRX.KRWCLP,FRX.KRWKZT,FRX.KRWQAR,FRX.KRWKES,FRX.KRWCOP,FRX.KRWKWD,FRX.KRWTZS,FRX.KRWTRY,FRX.KRWPKP,FRX.KRWPLN,FRX.KRWHUF"
-top_code = "FRX.KRWUSD,FRX.KRWCNY,FRX.KRWJPY,FRX.KRWEUR,FRX.KRWHKD,FRX.KRWTWD,FRX.KRWGBP,FRX.KRWVND,FRX.KRWCAD,FRX.KRWRUB"
-base_code = "FRX.KRW"
+all_code = ["USD","CNY","JPY","EUR","HKD","TWD","VND","CAD","RUB","THB","PHP","SGD","AUD","GBP","MYR","ZAR","NOK","NZD","DKK","MXN","MNT","BHD","BDT","BRL","BND","SAR","LKR","SEK","CHF","AED","DZD","OMR","JOD","ILS","EGP","INR","IDR","CZK","CLP","KZT","QAR","KES","COP","KWD","TZS","TRY","PKP","PLN","HUF"]
+top_code = ["USD","CNY","JPY(100)","EUR","HKD","TWD","GBP","VND","CAD","RUB"]
 
 
 class ExchangeModel(AbstractChatbotModel):
     name = "Exchange"
-    async def request_info(self, req_code="TOP") -> Mapping[str, Any]:
+    api_key = os.getenv("EXCHANGE_API_KEY")
+    async def request_info(self, req_code="USD") -> Mapping[str, Any]:
         match req_code:
             case "ALL":
                 req = all_code
             case "TOP":
                 req = top_code
             case _:
-                req = base_code + req_code
+                req = req_code
 
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes={req}"
+                f"https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey={self.api_key}&data=AP01"
             )
             # print(response.status_code)
             if response.status_code == 200:
@@ -59,11 +61,19 @@ class ExchangeModel(AbstractChatbotModel):
             ),
         ]
 
+    def get_target_exchange_data(self, exchange_data, target_code):
+        target_data = []
+        for item in exchange_data:
+            if item["cur_unit"].replace("(100)", "") in target_code:
+                item["cur_unit"] = item["cur_unit"].replace("(100)", "")
+                target_data.append(item)
+        return target_data
+
     async def get_exchange_command(
         self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
     ):
         result = ""
-        input_code = "TOP"
+        input_code = "USD"
         user_input = (message.text or "").split(" ", 1)
         table = prettytable.PrettyTable(["CODE", "BASE", "BUY", "SELL"])
         table.align["CODE"] = "l"
@@ -72,25 +82,28 @@ class ExchangeModel(AbstractChatbotModel):
         table.align["SELL"] = "r"
         if len(user_input) > 1:
             input_code = user_input[1].upper()
-        exchange_data = await self.request_info(input_code)
+        exchange_data = await self.request_info()
+        target_data = []
         if exchange_data["result"]:
-            result += "date: " + exchange_data["data"][0]["date"] + "\n"
-            result += "time: " + exchange_data["data"][0]["time"] + "\n"
-            for item in exchange_data["data"]:
+            now = datetime.now()
+            target_data = self.get_target_exchange_data(exchange_data["data"], input_code)
+            result += "date: " + now.date().strftime("%Y%m%d") + "\n"
+            result += "time: " + now.timetz().strftime("%H:%M:%S") + "\n"
+            for item in target_data:
                 # print(item)
                 table.add_row(
                     [
-                        item["currencyCode"],
-                        round(item["basePrice"]),
-                        round(item["cashBuyingPrice"]),
-                        round(item["cashSellingPrice"]),
+                        item["cur_unit"],
+                        item["deal_bas_r"],
+                        item["ttb"],
+                        item["tts"],
                     ]
                 )
             result += table.get_string()
         else:
             message = exchange_data["message"]
             await message.reply_text(f"{message}")
-        im = Image.new("RGB", (250, 110 + len(exchange_data["data"]) * 19), "white")
+        im = Image.new("RGB", (250, 110 + len(target_data) * 19), "white")
         draw = ImageDraw.Draw(im)
         font = ImageFont.truetype("./JetBrainsMonoNL-Regular.ttf", 13)
         draw.text((10, 10), result, font=font, fill="black")
@@ -109,17 +122,17 @@ class ExchangeModel(AbstractChatbotModel):
             await message.reply_text("뭔가 빠진거같아요! 다시 시도해주세요!")
         else:
             input_code = user_input[1].upper()
-            exchange_data = await self.request_info(input_code)
+            exchange_data = await self.request_info()
             input_cur = round(float(user_input[2].replace(",", "")), 2)
             format_cur = format(input_cur, ",")
             if exchange_data["result"]:
                 try:
-                    item = exchange_data["data"][0]
+                    item = self.get_target_exchange_data(exchange_data["data"], input_code)[0]
                     result = format(
                         round(
-                            float(item["basePrice"])
+                            float(item["deal_bas_r"].replace(",", ""))
                             * input_cur
-                            / int(item["currencyUnit"]),
+                            / (100 if item["cur_unit"] == "JPY" else 1),
                             2,
                         ),
                         ",",
