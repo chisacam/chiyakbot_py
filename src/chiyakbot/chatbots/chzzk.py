@@ -15,22 +15,10 @@ class ChzzkModel(AbstractChatbotModel):
     default_headers = {
         "User-Agent": UA,
     }
-    # 스텔라이브 채널 아이디
-    stellive_channel_id = {
-        "칸나": "f722959d1b8e651bd56209b343932c01",
-        "유니": "45e71a76e949e16a34764deb962f9d9f",
-        "리제": "4325b1d5bbc321fad3042306646e2e50",
-        "타비": "a6c4ddb09cdb160478996007bff35296",
-        "히나": "b044e3a3b9259246bc92e863e7d3f3b8",
-        "마시로": "4515b179f86b67b4981e16190817c580",
-    }
     def list_available_handlers(self) -> List[BaseAnswerMachine]:
         return [
             CommandAnswerMachine(
                 self.chzzk_command, "chzzk", description="치지직 m3u8 주소 따기"
-            ),
-            CommandAnswerMachine(
-                self.get_chzzk_stellive_id_command, "chzzk_stellive_id", description="스텔라이브 채널 아이디 확인"
             ),
         ]
 
@@ -112,8 +100,3 @@ class ChzzkModel(AbstractChatbotModel):
                         result.append(self.make_m3u8_url(detail))
                     await message.reply_text("\n".join(result))
 
-    
-    async def get_chzzk_stellive_id_command(
-        self, update: Update, message: Message, context: ContextTypes.DEFAULT_TYPE
-    ) -> None:
-        await message.reply_text(f"스텔라이브 채널 아이디: {json.dumps(self.stellive_channel_id, indent=2, ensure_ascii=False)}")
